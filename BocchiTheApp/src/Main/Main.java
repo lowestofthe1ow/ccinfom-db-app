@@ -21,6 +21,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		//inserting stuff.
 		String insertSql = "INSERT INTO performer (id, performer_name, contact_first_name, contact_last_name, contact_no) VALUES ('1', 'Haachama', 'Akai', 'Haato', '810')";
         try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
  
@@ -30,7 +31,7 @@ public class Main {
         	e.printStackTrace();
         }
         
-        
+        //selecting stuff
         String selectSql = "SELECT * FROM performer";
         try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(selectSql)) {
             while (resultSet.next()) {
