@@ -10,6 +10,8 @@ DROP DATABASE IF EXISTS livehouse;
 CREATE DATABASE livehouse;
 USE livehouse;
 
+SET SQL_MODE='ALLOW_INVALID_DATES'; -- Allow '0000-00-00'
+
 -- Standalone tables
 
 CREATE TABLE performer (
@@ -40,7 +42,7 @@ CREATE TABLE staff (
 	id INT NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255), -- TODO: Nullable?
-    contact_information VARCHAR(255) NOT NULL,
+    contact_no DECIMAL(11, 0) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -96,17 +98,17 @@ CREATE TABLE equipment_rental (
     equipment_id INT NOT NULL,
     start_date DATE NOT NULL, -- Equipment is unavailable by this date
     end_date DATE NOT NULL, -- Equipment is available by this date
-    rental_status VARCHAR(9) NOT NULL,
+    equipment_status VARCHAR(9) NOT NULL,
 		-- UNDAMAGED
 		-- MIN_DMG
 		-- MAJ_DMG
 		-- MISSING
-		-- PENDING
-		-- CANCELLED
-	use_type VARCHAR(11) NOT NULL,
-		-- AUDITION
-        -- PERFORMANCE
-	PRIMARY KEY (performer_id, equipment_id, start_date, end_date),
+		-- IN_USE
+	payment_status VARCHAR(11) NOT NULL,
+		-- PAID
+        -- NOT_PAID
+        -- CANCELLED
+	PRIMARY KEY (performer_id, equipment_id, start_date),
     FOREIGN KEY (performer_id) REFERENCES performer(id),
     FOREIGN KEY (equipment_id) REFERENCES equipment(id)
 );
@@ -126,6 +128,6 @@ CREATE TABLE staff_position (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL, -- TODO: NULL if currently employed?
                             -- 9999-99-99 if currently employed
-    PRIMARY KEY (staff_id, start_date, end_date),
+    PRIMARY KEY (staff_id, start_date),
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );

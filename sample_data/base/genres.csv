@@ -1,0 +1,21 @@
+id,genre_name,genre_description
+1,Pop,Includes Pop music.
+2,Electronic,Includes Electronic music.
+3,Hip-hop,Includes Hip-hop music.
+4,R&B,Includes R&B music.
+5,Latin,Includes Latin music.
+6,Rock,Includes Rock music.
+7,Metal,Includes Metal music.
+8,Country,Includes Country music.
+9,Folk,Includes Folk music.
+10,Classical,Includes Classical music.
+11,Jazz,Includes Jazz music.
+12,Blues,Includes Blues music.
+13,New Age,Includes New Age music.
+14,EDM,Includes EDM music.
+15,Electro,Includes Electro music.
+16,Disco,Includes Disco music.
+17,Dubstep,Includes Dubstep music.
+18,Rap,Includes Rap music.
+19,Acapella,Includes Acapella music.
+20,Synthpop,Includes Synthpop music.

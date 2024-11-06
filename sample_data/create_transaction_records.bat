@@ -1,0 +1,7 @@
+del "transaction_records.sql"
+python3 csv_to_sql_insert.py "transaction_records.sql" "transaction/audition.csv" "audition"
+python3 csv_to_sql_insert.py "transaction_records.sql" "transaction/performance.csv" "performance"
+python3 csv_to_sql_insert.py "transaction_records.sql" "transaction/performance_revenue.csv" "performance_revenue"
+python3 csv_to_sql_insert.py "transaction_records.sql" "transaction/equipment_rental.csv" "equipment_rental"
+python3 csv_to_sql_insert.py "transaction_records.sql" "transaction/staff_assignment.csv" "staff_assignment"
+python3 csv_to_sql_insert.py "transaction_records.sql" "transaction/staff_position.csv" "staff_position"
