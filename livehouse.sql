@@ -15,7 +15,7 @@ SET SQL_MODE='ALLOW_INVALID_DATES'; -- Allow '0000-00-00'
 -- Standalone tables
 
 CREATE TABLE performer (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     performer_name VARCHAR(255) NOT NULL,
     contact_first_name VARCHAR(255) NOT NULL,
     contact_last_name VARCHAR(255), -- TODO: Nullable?
@@ -24,7 +24,7 @@ CREATE TABLE performer (
 );
 
 CREATE TABLE equipment (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     equipment_name VARCHAR(255) NOT NULL,
     equipment_type VARCHAR(255) NOT NULL,
     rental_fee DECIMAL(10, 2) NOT NULL,
@@ -32,14 +32,14 @@ CREATE TABLE equipment (
 );
 
 CREATE TABLE genre (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     genre_name VARCHAR(255) NOT NULL,
     genre_description VARCHAR(255),
     PRIMARY KEY (id)
 );
 
 CREATE TABLE staff (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255), -- TODO: Nullable?
     contact_no DECIMAL(11, 0) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE staff (
 );
 
 CREATE TABLE performance_slot (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     slot_date DATE NOT NULL,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE performance_slot (
 -- Junction tables
 
 CREATE TABLE audition (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     performer_id INT NOT NULL,
     target_slot_id INT NOT NULL,
     submission_link VARCHAR(255) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE audition (
 );
 
 CREATE TABLE performance (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
     performer_id INT NOT NULL,
     genre_id INT NOT NULL,
     performance_slot_id INT NOT NULL,
