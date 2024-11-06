@@ -75,7 +75,7 @@ CREATE TABLE performance (
     performer_id INT NOT NULL,
     genre_id INT NOT NULL,
     performance_slot_id INT NOT NULL,
-    base_quota DECIMAL(10, 2), -- TODO: Nullable?
+    base_quota DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (performer_id) REFERENCES performer(id),
     FOREIGN KEY (genre_id) REFERENCES genre(id),
@@ -86,6 +86,7 @@ CREATE TABLE performance_revenue (
 	performance_id INT NOT NULL,
     ticket_price DECIMAL(10, 2) NOT NULL,
     tickets_sold INT NOT NULL,
+    cut_percent DECIMAL(2, 2) NOT NULL,
     PRIMARY KEY (performance_id),
     FOREIGN KEY (performance_id) REFERENCES performance(id)
 );
@@ -123,7 +124,8 @@ CREATE TABLE staff_position (
     staff_position_name VARCHAR(255) NOT NULL,
     staff_salary DECIMAL(10, 2) NOT NULL,
     start_date DATE NOT NULL,
-    end_date DATE, -- TODO: NULL if currently employed?
+    end_date DATE NOT NULL, -- TODO: NULL if currently employed?
+                            -- 9999-99-99 if currently employed
     PRIMARY KEY (staff_id, start_date, end_date),
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
