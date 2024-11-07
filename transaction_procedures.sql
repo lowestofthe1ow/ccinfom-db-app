@@ -38,7 +38,7 @@ BEGIN
 			SET end_date = DATE(NOW())
 			WHERE end_date IS NULL;
 		INSERT INTO staff_position (`staff_id`, `staff_position_name`, `staff_salary`, `start_date`, `end_date`)
-			VALUES (staff_id, position_name, salary, DATE(NOW()), '0000-00-00');
+			VALUES (staff_id, position_name, salary, DATE(NOW()), NULL);
 	END IF;
 END //
 DELIMITER ;
