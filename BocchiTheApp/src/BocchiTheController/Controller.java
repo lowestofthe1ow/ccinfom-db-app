@@ -5,7 +5,7 @@ import java.sql.*;
 public class Controller {
 	private Connection connection = null;
 
-
+	//cont
     private void hireStaff(String firstName, String lastName, String contactNo, String positionName, double salary) {
         String callSql = "{CALL hire(?, ?, ?, ?, ?)}"; 
         try (CallableStatement cs = connection.prepareCall(callSql)) {
