@@ -12,7 +12,7 @@ BEGIN
 	INSERT INTO staff (`first_name`, `last_name`, `contact_no`) 
 		VALUES (first_name, last_name, contact_no);
 	INSERT INTO staff_position (`staff_id`, `staff_position_name`, `staff_salary`, `start_date`, `end_date`)
-		VALUES (LAST_INSERT_ID(), position_name, salary, DATE(NOW()), '0000-00-00');
+		VALUES (LAST_INSERT_ID(), position_name, salary, DATE(NOW()), NULL);
 END //
 DELIMITER ;
 
