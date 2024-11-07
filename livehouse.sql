@@ -10,8 +10,6 @@ DROP DATABASE IF EXISTS livehouse;
 CREATE DATABASE livehouse;
 USE livehouse;
 
-SET SQL_MODE='ALLOW_INVALID_DATES'; -- Allow '0000-00-00'
-
 -- Standalone tables
 
 CREATE TABLE performer (
@@ -54,12 +52,13 @@ CREATE TABLE audition (
     performer_id INT NOT NULL,
     target_timeslot_id INT NOT NULL,
     submission_link VARCHAR(255) NOT NULL,
-    audition_status VARCHAR(16) NOT NULL,
-		-- PASSED_RESOLVED
-		-- PASSED_CANCELLED
-		-- PASSED_PENDING
-		-- PENDING
-		-- REJECTED
+    audition_status ENUM(
+		'PASSED_RESOLVED',
+        'PASSED_CANCELLED',
+        'PASSED_PENDING',
+        'PENDING',
+        'REJECTED'
+    ) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (performer_id) REFERENCES performer(id),
     FOREIGN KEY (target_timeslot_id) REFERENCES performance_timeslot(id)
@@ -89,16 +88,18 @@ CREATE TABLE equipment_rental (
     equipment_id INT NOT NULL,
     start_date DATE NOT NULL, -- Equipment is unavailable by this date
     end_date DATE NOT NULL, -- Equipment is available by this date
-    equipment_status VARCHAR(9) NOT NULL,
-		-- UNDAMAGED
-		-- MIN_DMG
-		-- MAJ_DMG
-		-- MISSING
-		-- IN_USE
-	payment_status VARCHAR(11) NOT NULL,
-		-- PAID
-        -- NOT_PAID
-        -- CANCELLED
+    equipment_status ENUM (
+		'UNDAMAGED',
+        'MIN_DMG',
+        'MAJ_DMG',
+        'MISSING',
+        'IN_USE'
+    ) NOT NULL,
+	payment_status ENUM (
+		'PAID',
+        'NOT_PAID',
+        'CANCELLED'
+    ) NOT NULL,
 	PRIMARY KEY (performer_id, equipment_id, start_date),
     FOREIGN KEY (performer_id) REFERENCES performer(id),
     FOREIGN KEY (equipment_id) REFERENCES equipment(id)
@@ -117,8 +118,7 @@ CREATE TABLE staff_position (
     staff_position_name VARCHAR(255) NOT NULL,
     staff_salary DECIMAL(10, 2) NOT NULL,
     start_date DATE NOT NULL,
-    end_date DATE NOT NULL, -- TODO: NULL if currently employed?
-                            -- 9999-99-99 if currently employed
+    end_date DATE, -- NULL if currently employed?
     PRIMARY KEY (staff_id, start_date),
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );

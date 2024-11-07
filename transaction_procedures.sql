@@ -34,11 +34,28 @@ BEGIN
 	) >= DATE(NOW()) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 	ELSE
-		UPDATE staff_position
-			SET end_date = DATE(NOW())
-			WHERE end_date IS NULL;
+		UPDATE staff_position sp
+			SET sp.end_date = DATE(NOW())
+			WHERE sp.end_date IS NULL AND sp.staff_id = staff_id;
 		INSERT INTO staff_position (`staff_id`, `staff_position_name`, `staff_salary`, `start_date`, `end_date`)
-			VALUES (staff_id, position_name, salary, DATE(NOW()), '0000-00-00');
+			VALUES (staff_id, position_name, salary, DATE(NOW()), NULL);
 	END IF;
+END //
+DELIMITER ;
+
+-- Resolving the status of a booking 
+
+DELIMITER //
+CREATE PROCEDURE accept_audition (
+	IN audition_id INT
+)
+BEGIN
+	IF (
+		SELECT audition_status
+        FROM audition a
+        WHERE a.id = audition_id
+	) <> 'PENDING' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Audition is not waiting to be resolved';
+    END IF;
 END //
 DELIMITER ;
