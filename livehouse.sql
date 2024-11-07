@@ -96,7 +96,7 @@ CREATE TABLE equipment_rental (
         'MIN_DMG',
         'MAJ_DMG',
         'MISSING',
-        'IN_USE'
+        'PENDING'
     ) NOT NULL,
 	payment_status ENUM (
 		'PAID',
