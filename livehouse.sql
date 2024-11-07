@@ -53,9 +53,7 @@ CREATE TABLE audition (
     target_timeslot_id INT NOT NULL,
     submission_link VARCHAR(255) NOT NULL,
     audition_status ENUM(
-		'PASSED_RESOLVED',
-        'PASSED_CANCELLED',
-        'PASSED_PENDING',
+		'PASSED',
         'PENDING',
         'REJECTED'
     ) NOT NULL,
@@ -68,7 +66,12 @@ CREATE TABLE performance (
 	id INT NOT NULL AUTO_INCREMENT,
     performer_id INT NOT NULL,
     performance_timeslot_id INT NOT NULL,
-    base_quota DECIMAL(10, 2) NOT NULL,
+    base_quota DECIMAL(10, 2) NOT NULL, 	
+    performance_status ENUM(
+		'COMPLETE',
+		'PENDING',
+        'CANCELLED'
+    ) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (performer_id) REFERENCES performer(id),
     FOREIGN KEY (performance_timeslot_id) REFERENCES performance_timeslot(id)

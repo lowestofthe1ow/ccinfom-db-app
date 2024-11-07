@@ -63,14 +63,14 @@ BEGIN
 			SELECT a.target_timeslot_id
 			FROM audition a
 			WHERE a.id = audition_id
-		)
+		) AND p.performance_status = 'PENDING'
     ) > 0 THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance slot is taken';
 	ELSE
 		UPDATE audition a
-			SET a.audition_status = 'PASSED_PENDING'
+			SET a.audition_status = 'PASSED'
             WHERE a.id = audition_id;
-		INSERT INTO performance (`performer_id`, `performance_timeslot_id`, `base_quota`)
+		INSERT INTO performance (`performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`)
 			VALUES ((
 				SELECT p.id
                 FROM audition a
@@ -81,7 +81,49 @@ BEGIN
 				SELECT a.target_timeslot_id
 				FROM audition a
 				WHERE a.id = audition_id
-			), '5000.00');
+			), '5000.00', 'PENDING');
     END IF;
+END //
+DELIMITER ;
+
+-- Rejecting an audition
+
+DELIMITER //
+CREATE PROCEDURE reject_audition (
+	IN audition_id INT
+)
+BEGIN
+	IF (
+		SELECT a.audition_status
+        FROM audition a
+        WHERE a.id = audition_id
+	) <> 'PENDING' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Audition is not waiting to be resolved';
+	ELSE
+		UPDATE audition a
+			SET a.audition_status = 'REJECTED'
+            WHERE a.id = audition_id;
+	END IF;
+END //
+DELIMITER ;
+
+-- Cancelling a performance
+
+DELIMITER //
+CREATE PROCEDURE cancel_performance (
+	IN performance_id INT
+)
+BEGIN
+	IF (
+		SELECT p.performance_status
+        FROM performance p
+        WHERE p.id = performance_id
+	) <> 'PENDING' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
+	ELSE
+		UPDATE performance p
+			SET p.performance_status = 'CANCELLED'
+            WHERE p.id = performance_id;
+	END IF;
 END //
 DELIMITER ;
