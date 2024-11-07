@@ -43,7 +43,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- Resolving the status of a booking 
+-- Accepting an audition 
 
 DELIMITER //
 CREATE PROCEDURE accept_audition (
@@ -51,11 +51,37 @@ CREATE PROCEDURE accept_audition (
 )
 BEGIN
 	IF (
-		SELECT audition_status
+		SELECT a.audition_status
         FROM audition a
         WHERE a.id = audition_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Audition is not waiting to be resolved';
+	ELSEIF (
+		SELECT COUNT(performance_timeslot_id)
+		FROM performance p
+		WHERE p.performance_timeslot_id = (
+			SELECT a.target_timeslot_id
+			FROM audition a
+			WHERE a.id = audition_id
+		)
+    ) > 0 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance slot is taken';
+	ELSE
+		UPDATE audition a
+			SET a.audition_status = 'PASSED_PENDING'
+            WHERE a.id = audition_id;
+		INSERT INTO performance (`performer_id`, `performance_timeslot_id`, `base_quota`)
+			VALUES ((
+				SELECT p.id
+                FROM audition a
+                JOIN performer p
+                ON a.performer_id = p.id
+                WHERE a.id = audition_id
+            ), (
+				SELECT a.target_timeslot_id
+				FROM audition a
+				WHERE a.id = audition_id
+			), '5000.00');
     END IF;
 END //
 DELIMITER ;
