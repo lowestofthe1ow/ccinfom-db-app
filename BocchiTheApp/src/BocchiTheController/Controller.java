@@ -1,13 +1,36 @@
 package BocchiTheController;
 
+import java.awt.event.ActionListener;
 import java.sql.*;
+import BocchiTheGUI.GUI;
 
 public class Controller {
 	private Connection connection = null;
+	private GUI gui;
+	
+	private void initializeListeners() {
+        
+        gui.setBtnAActionListener(e -> {
+            gui.showDialog("Hire Staff");
+        });
 
-
+    }
+	
+	/*
+	 * String firstName = gui.getHireStaff().getFirstName();
+            String lastName = gui.getHireStaff().getLastName();
+            String contactNo = gui.getHireStaff().getContactNo();
+            String positionName = gui.getHireStaff().getPositionName();
+            double salary = gui.getHireStaff().getSalary();
+            
+         
+            hireStaff(firstName, lastName, contactNo, positionName, salary);
+	 */
+	
     private void hireStaff(String firstName, String lastName, String contactNo, String positionName, double salary) {
         String callSql = "{CALL hire(?, ?, ?, ?, ?)}"; 
+        
+        
         try (CallableStatement cs = connection.prepareCall(callSql)) {
            
             cs.setString(1, firstName);
@@ -66,12 +89,17 @@ public class Controller {
 	
 	
 	
-	public Controller(Connection connection) {
+	public Controller(Connection connection, GUI gui) {
 		
 		this.connection = connection;
-		hireStaff("Akai", "Haato", "09156271555", "Manager", 810.810);
+		this.gui = gui;
+		
+		initializeListeners();
         selectStaff();
         selectStaffPosition();
 	}
+
+	
+	
 	
 }

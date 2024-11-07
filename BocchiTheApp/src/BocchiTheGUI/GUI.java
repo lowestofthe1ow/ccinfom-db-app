@@ -1,5 +1,8 @@
+package BocchiTheGUI;
+
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
@@ -10,9 +13,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GUI {
+public class GUI extends JFrame {
     // Main components
-    private JFrame frame;
+    
     private JPanel contentPanel;
 
     // Buttons
@@ -20,8 +23,10 @@ public class GUI {
     private JButton resolveBookingBtn, cancelBookingBtn, recordRevenueBtn, generateReportsBtn; 
 
     // The other pages
-    /*
+    
     private HireStaffUI hireStaffUI;
+    
+    /*
     private UpdateStaffPosUI updateStaffPosUI;
     private RentEquipmentUI rentEquipmentUI;
     private SchedAuditionUI schedAuditionUI;
@@ -30,16 +35,16 @@ public class GUI {
     private RecordRevenue recordRevenueUI;
     private GenerateReportsUI generateReportsUI;
     */
-
+   
     public GUI() {
         this.contentPanel = new JPanel();
-
-
+        this.hireStaffUI = new HireStaffUI();
+        
         //Set up the frame
-        this.frame = new JFrame("Bocchi the GUI");
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setLayout(new FlowLayout(FlowLayout.LEFT));
-        this.frame.setSize(960, 600);
+        this.setTitle("Bocchi the GUI");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.setSize(960, 600);
 
 
         //Set up the buttons
@@ -92,8 +97,10 @@ public class GUI {
 
         
         //Add main button panel to frame
-        this.frame.add(mainBtnPanel);
-        this.frame.setVisible(true);
+        this.add(mainBtnPanel);
+        this.setVisible(true);
+        
+        
     }
 
     public void setBtnAActionListener(ActionListener actionListener) {
@@ -126,5 +133,20 @@ public class GUI {
 
     public void setBtnHActionListener(ActionListener actionListener) {
         this.generateReportsBtn.addActionListener(actionListener);
+    }
+    
+    public HireStaffUI getHireStaff() {
+    	return this.hireStaffUI;
+    }
+    
+    public void showDialog(String command) {
+    	switch(command) {
+    	case "Hire Staff": JDialog hireStaffDialog = new JDialog(this, "Hire New Staff", true); 
+					        hireStaffDialog.setContentPane(hireStaffUI); 
+					        hireStaffDialog.setSize(400, 300); 
+					        hireStaffDialog.setLocationRelativeTo(this);
+					        hireStaffDialog.setVisible(true); 
+					        break;
+    	}
     }
 }

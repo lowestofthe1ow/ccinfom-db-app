@@ -10,9 +10,14 @@ public class Main {
         
         Connection connection = createConnection();
         
-        new Controller(connection);
-   
-        closeConnection(connection);
+        GUI gui = new GUI();  
+        new Controller(connection, gui);
+       
+        
+        /* OK SO FOR OSME REASON IT CLOSES CONNECTION IMMEDIATELY, ADD A WINDOW LISTENER TOMORROW LAMO */
+        
+        
+       // closeConnection(connection);
         
        
     }
