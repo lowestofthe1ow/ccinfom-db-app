@@ -26,6 +26,12 @@ CREATE TABLE equipment (
     equipment_name VARCHAR(255) NOT NULL,
     equipment_type VARCHAR(255) NOT NULL,
     rental_fee DECIMAL(10, 2) NOT NULL,
+    equipment_status ENUM (
+		'UNDAMAGED',
+        'MIN_DMG',
+        'MAJ_DMG',
+        'MISSING'
+    ),
     PRIMARY KEY (id)
 );
 

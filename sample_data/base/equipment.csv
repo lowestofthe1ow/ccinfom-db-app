@@ -1,21 +1,22 @@
-id,equipment_name,equipment_type,rental_fee
-1,Fender Vintera II Tele,Electric Guitar,1000.00
-2,Squier Bullet Mustang,Electric Guitar,1000.00
-3,PRS SE Custom 24,Electric Guitar,1000.00
-4,Epiphone LP Special,Electric Guitar,1000.00
-5,Gibson Les Paul Custom,Electric Guitar,1000.00
-6,SX SJB62+ J Style Vintage Series,Bass,1000.00
-7,Squier Classic Vibe '60s,Bass,1000.00
-8,Yamaha BB435,Bass,1000.00
-9,G&L Tribute L-2000,Bass,1000.00
-10,Schecter Stiletto Studio 6,Bass,1000.00
-11,Casiotone CT-S300,Keyboard,800.00
-12,Yamaha PSR-E283,Keyboard,800.00
-13,Roland FP-10,Keyboard,800.00
-14,Alesis Recital Pro,Keyboard,800.00
-15,Kurzweil KP10,Keyboard,800.00
-16,Ludwig Breakbeats,Drum kit,2000.00
-17,Yamaha Stage Custom Birch ,Drum kit,2000.00
-18,Gretsch Catalina Club,Drum kit,2000.00
-19,Tama Imperialstar,Drum kit,2000.00
-20,Pearl Export EXX ,Drum kit,2000.00
+id,equipment_name,equipment_type,rental_fee,equipment_status
+1,Fender Vintera II Tele,Electric Guitar,1000.00,UNDAMAGED
+2,Squier Bullet Mustang,Electric Guitar,1000.00,UNDAMAGED
+3,PRS SE Custom 24,Electric Guitar,1000.00,UNDAMAGED
+4,Epiphone LP Special,Electric Guitar,1000.00,UNDAMAGED
+5,Gibson Les Paul Custom,Electric Guitar,1000.00,UNDAMAGED
+6,SX SJB62+ J Style Vintage Series,Bass,1000.00,UNDAMAGED
+7,Squier Classic Vibe '60s,Bass,1000.00,UNDAMAGED
+8,Yamaha BB435,Bass,1000.00,UNDAMAGED
+9,G&L Tribute L-2000,Bass,1000.00,UNDAMAGED
+10,Schecter Stiletto Studio 6,Bass,1000.00,UNDAMAGED
+11,Casiotone CT-S300,Keyboard,800.00,UNDAMAGED
+12,Yamaha PSR-E283,Keyboard,800.00,UNDAMAGED
+13,Roland FP-10,Keyboard,800.00,UNDAMAGED
+14,Alesis Recital Pro,Keyboard,800.00,UNDAMAGED
+15,Kurzweil KP10,Keyboard,800.00,UNDAMAGED
+16,Ludwig Breakbeats,Drum kit,2000.00,UNDAMAGED
+17,Yamaha Stage Custom Birch ,Drum kit,2000.00,UNDAMAGED
+18,Gretsch Catalina Club,Drum kit,2000.00,UNDAMAGED
+19,Tama Imperialstar,Drum kit,2000.00,UNDAMAGED
+20,Pearl Export EXX ,Drum kit,2000.00,UNDAMAGED
+21,Wilson Audio Alexandria X-2 Series 2,Speakers,3000.00,MAJ_DMG
