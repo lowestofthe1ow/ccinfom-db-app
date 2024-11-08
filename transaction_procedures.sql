@@ -1,5 +1,6 @@
 -- Hiring staff
 
+DROP PROCEDURE IF EXISTS hire;
 DELIMITER //
 CREATE PROCEDURE hire (
 	IN first_name VARCHAR(255),
@@ -18,6 +19,7 @@ DELIMITER ;
 
 -- Updating staff positions
 
+DROP PROCEDURE IF EXISTS add_position;
 DELIMITER //
 CREATE PROCEDURE add_position (
 	IN staff_id INT,
@@ -45,6 +47,7 @@ DELIMITER ;
 
 -- Accepting an audition 
 
+DROP PROCEDURE IF EXISTS accept_audition;
 DELIMITER //
 CREATE PROCEDURE accept_audition (
 	IN audition_id INT
@@ -88,6 +91,7 @@ DELIMITER ;
 
 -- Rejecting an audition
 
+DROP PROCEDURE IF EXISTS reject_audition;
 DELIMITER //
 CREATE PROCEDURE reject_audition (
 	IN audition_id INT
@@ -109,6 +113,7 @@ DELIMITER ;
 
 -- Cancelling a performance
 
+DROP PROCEDURE IF EXISTS cancel_performance;
 DELIMITER //
 CREATE PROCEDURE cancel_performance (
 	IN performance_id INT
