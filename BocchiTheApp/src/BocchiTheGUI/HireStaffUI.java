@@ -14,10 +14,11 @@ public class HireStaffUI extends JPanel {
 
     //Hire staff inputs
     private JTextField staffFirstNameTf, staffLastNameTf, staffContactInfoTf;
-    private JTextField staffPositionTf, staffSalaryTf, staffStartDateTf, staffEndDateTf;
+    private JTextField staffPositionTf, staffSalaryTf;
+   //  private JTextField staffStartDateTf, staffEndDateTf;
 
     //Confirm button
-    private JButton hireStaffConfirmBtn;
+   // private JButton hireStaffConfirmBtn;
 
     public HireStaffUI() {
         
@@ -53,7 +54,7 @@ public class HireStaffUI extends JPanel {
         this.staffSalaryTf = new JTextField();
         this.staffSalaryTf.setColumns(15);
         staffSalaryPanel.add(this.staffSalaryTf);
-
+/*
         JPanel staffStartDatePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         staffStartDatePanel.add(new JLabel("Start date: "));
         this.staffStartDateTf = new JTextField();
@@ -65,8 +66,8 @@ public class HireStaffUI extends JPanel {
         this.staffEndDateTf = new JTextField();
         this.staffEndDateTf.setColumns(15);
         staffEndDatePanel.add(this.staffEndDateTf);
-
-        this.hireStaffConfirmBtn = new JButton("Confirm");
+*/
+        //this.hireStaffConfirmBtn = new JButton("Confirm");
 
 
         //Add panels into main hire staff panel
@@ -75,28 +76,35 @@ public class HireStaffUI extends JPanel {
         this.add(staffContactInfoPanel);
         this.add(staffPositionPanel);
         this.add(staffSalaryPanel);
-        this.add(staffStartDatePanel);
-        this.add(staffEndDatePanel);
-        this.add(this.hireStaffConfirmBtn);
+        //this.add(staffStartDatePanel);
+        //this.add(staffEndDatePanel);
+        //this.add(this.hireStaffConfirmBtn);
     }
     
     public String getFirstName() {
-    	return staffFirstNameTf.getName();
+    	return staffFirstNameTf.getText();
     }
     
     public String getLastName() {
-    	return staffFirstNameTf.getName();
+    	return staffLastNameTf.getText();
     }
-    public String getContactNo() {
-    	return staffFirstNameTf.getName();
+    public Long getContactNo() {
+    	return Long.parseLong(staffContactInfoTf.getText());
     }
   
     public String getPositionName() {
-    	return staffFirstNameTf.getName();
+    	return staffPositionTf.getText();
     }
     public Double getSalary() {
     	return Double.parseDouble(staffSalaryTf.getText());
     }
-    
+    public void removeText() {
+    	staffFirstNameTf.setText("");
+    	staffLastNameTf.setText("");
+    	staffPositionTf.setText("");
+    	staffContactInfoTf.setText("");
+    	staffSalaryTf.setText("");
+    	
+    }
 }
 

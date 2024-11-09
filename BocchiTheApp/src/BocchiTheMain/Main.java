@@ -1,6 +1,8 @@
 package BocchiTheMain;
 import java.sql.*;
 
+import javax.swing.SwingUtilities;
+
 import BocchiTheController.Controller;
 import BocchiTheGUI.GUI;
 
@@ -10,11 +12,15 @@ public class Main {
         
         Connection connection = createConnection();
         
-        GUI gui = new GUI();  
-        new Controller(connection, gui);
-       
-        
-        /* OK SO FOR OSME REASON IT CLOSES CONNECTION IMMEDIATELY, ADD A WINDOW LISTENER TOMORROW LAMO */
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                GUI gui = new GUI();  
+                // Code to run on EDT (e.g., update UI)
+            	new Controller(connection, gui);
+            }
+        });
+        /* OK SO FOR OSME REASON IT CLOSES CONNECTION IMMEDIATELY, ADD A WINDOW LISTENER TOMORROW LMAO */
         
         
        // closeConnection(connection);
@@ -53,16 +59,6 @@ public class Main {
 	}
 
 
-    private static void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Database connection closed.");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
    
  
     

@@ -1,17 +1,26 @@
 package BocchiTheGUI;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
 import java.awt.Font;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GUI extends JFrame {
     // Main components
@@ -21,13 +30,15 @@ public class GUI extends JFrame {
     // Buttons
     private JButton hireStaffBtn, updateStaffPosBtn, rentEquipmentBtn, schedAuditionBtn;
     private JButton resolveBookingBtn, cancelBookingBtn, recordRevenueBtn, generateReportsBtn; 
-
+    private JButton acceptAuditionBtn;
+    private JButton confirmButton;
     // The other pages
     
     private HireStaffUI hireStaffUI;
-    
-    /*
     private UpdateStaffPosUI updateStaffPosUI;
+    private AuditionUI acceptAuditionUI;
+    /*
+   
     private RentEquipmentUI rentEquipmentUI;
     private SchedAuditionUI schedAuditionUI;
     private ResolveBookingUI ResolveBookingUI;
@@ -39,6 +50,12 @@ public class GUI extends JFrame {
     public GUI() {
         this.contentPanel = new JPanel();
         this.hireStaffUI = new HireStaffUI();
+        this.updateStaffPosUI = new UpdateStaffPosUI();
+        this.acceptAuditionUI = new AuditionUI();
+        //Set up confirm button for optionpane
+        confirmButton = new JButton();
+    	confirmButton.setText("Confirm");
+        
         
         //Set up the frame
         this.setTitle("Bocchi the GUI");
@@ -46,13 +63,19 @@ public class GUI extends JFrame {
         this.setLayout(new FlowLayout(FlowLayout.LEFT));
         this.setSize(960, 600);
 
+        this.acceptAuditionBtn = new JButton("Accept Audition");
+        this.acceptAuditionBtn.setActionCommand("accept_audition");
 
+        this.acceptAuditionBtn.setPreferredSize(new Dimension(350, 30));
+        this.acceptAuditionBtn.setFont(new Font("Dialog", Font.PLAIN, 15));
         //Set up the buttons
         this.hireStaffBtn = new JButton("Hire staff");
+        this.hireStaffBtn.setActionCommand("hire");
         this.hireStaffBtn.setPreferredSize(new Dimension(350, 30));
         this.hireStaffBtn.setFont(new Font("Dialog", Font.PLAIN, 15));
 
         this.updateStaffPosBtn = new JButton("Update staff positions");
+        this.updateStaffPosBtn.setActionCommand("add_position");
         this.updateStaffPosBtn.setPreferredSize(new Dimension(350, 30));
         this.updateStaffPosBtn.setFont(new Font("Dialog", Font.PLAIN, 15));
 
@@ -88,21 +111,29 @@ public class GUI extends JFrame {
         //Add buttons to main button panel
         mainBtnPanel.add(this.hireStaffBtn);
         mainBtnPanel.add(this.updateStaffPosBtn);
+        mainBtnPanel.add(this.acceptAuditionBtn);
+        /*
         mainBtnPanel.add(this.rentEquipmentBtn);
         mainBtnPanel.add(this.schedAuditionBtn);
         mainBtnPanel.add(this.resolveBookingBtn);
         mainBtnPanel.add(this.cancelBookingBtn);
         mainBtnPanel.add(this.recordRevenueBtn);
         mainBtnPanel.add(this.generateReportsBtn);
-
+         */
+        
+     
+        
         
         //Add main button panel to frame
         this.add(mainBtnPanel);
         this.setVisible(true);
         
-        
+        dialogInit();
     }
-
+    public void setWindowListener(WindowAdapter windowAdapter) {
+    	this.addWindowListener(windowAdapter);
+    }
+    
     public void setBtnAActionListener(ActionListener actionListener) {
         this.hireStaffBtn.addActionListener(actionListener);
     }
@@ -112,8 +143,80 @@ public class GUI extends JFrame {
     }
 
     public void setBtnCActionListener(ActionListener actionListener) {
-        this.rentEquipmentBtn.addActionListener(actionListener);
+        this.acceptAuditionBtn.addActionListener(actionListener);
     }
+
+    public void setConfirmButtonActionListener(ActionListener listener) {
+    	this.confirmButton.addActionListener(listener);
+    }
+    public HireStaffUI getHireStaff() {
+    	return this.hireStaffUI;
+    }
+    public void dialogInit() {
+    	
+    	
+    	dialog.getContentPane().setLayout(new BorderLayout());
+        dialog.setLocationRelativeTo(null); 
+        dialog.setModal(true); 
+        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    	
+    	btnPanel.add(confirmButton);
+    	btnPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+    	dialog.setSize(400, 360);
+    	
+    	
+    	dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
+    	
+        dialog.addWindowListener(new WindowAdapter() {
+             @Override
+            public void windowClosing(WindowEvent e) {
+            	
+            	 
+                dialog.setVisible(false);
+                removeText();
+             }
+        });
+    	
+    	confirmButton.addActionListener(e -> {
+   	     	
+    		
+    		    dialog.setVisible(false);
+            removeText();
+        });
+    }
+    
+
+    public void removeText() {
+    	hireStaffUI.removeText();
+    }
+    
+    private JDialog dialog = new JDialog();
+    private JPanel btnPanel = new JPanel();
+    
+    public void showDialog(String command) {
+    	
+    	confirmButton.setActionCommand(command);
+    	System.out.println("Command that is passed in setActionCommand is " + command  + ".");
+    	dialog.getContentPane().removeAll();
+    	 SwingUtilities.invokeLater(new Runnable() {
+    	        public void run() {
+    	            switch(command) {
+    	                case "hire":
+    	                    dialog.getContentPane().add(hireStaffUI, BorderLayout.CENTER); 
+    	                    break;
+    	                case "add_position":
+    	                    dialog.getContentPane().add(updateStaffPosUI, BorderLayout.CENTER); 
+    	                    break;
+    	                case "accept_audition":
+    	                	dialog.getContentPane().add(acceptAuditionUI, BorderLayout.CENTER);
+    	                   
+    	            }
+    	            dialog.getContentPane().add(btnPanel, BorderLayout.SOUTH);
+    	            dialog.setVisible(true);
+    	        }
+    	    });
+    }
+    
 
     public void setBtnDActionListener(ActionListener actionListener) {
         this.schedAuditionBtn.addActionListener(actionListener);
@@ -133,20 +236,5 @@ public class GUI extends JFrame {
 
     public void setBtnHActionListener(ActionListener actionListener) {
         this.generateReportsBtn.addActionListener(actionListener);
-    }
-    
-    public HireStaffUI getHireStaff() {
-    	return this.hireStaffUI;
-    }
-    
-    public void showDialog(String command) {
-    	switch(command) {
-    	case "Hire Staff": JDialog hireStaffDialog = new JDialog(this, "Hire New Staff", true); 
-					        hireStaffDialog.setContentPane(hireStaffUI); 
-					        hireStaffDialog.setSize(400, 300); 
-					        hireStaffDialog.setLocationRelativeTo(this);
-					        hireStaffDialog.setVisible(true); 
-					        break;
-    	}
     }
 }

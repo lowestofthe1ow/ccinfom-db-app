@@ -14,7 +14,7 @@ public class UpdateStaffPosUI extends JPanel {
     private JTextField staffNewPositionTf, staffNewSalaryTf;
 
     //Confirm button
-    private JButton updateStaffPosConfirmBtn;
+    //private JButton updateStaffPosConfirmBtn;
 
     public UpdateStaffPosUI() {
         this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -44,14 +44,14 @@ public class UpdateStaffPosUI extends JPanel {
         this.staffNewSalaryTf.setColumns(15);
         staffNewSalaryPanel.add(this.staffNewSalaryTf);
 
-        this.updateStaffPosConfirmBtn = new JButton("Confirm");
+       // this.updateStaffPosConfirmBtn = new JButton("Confirm");
 
         //Add panels into main update staff position panel
         this.add(staffFirstNamePanel);
         this.add(staffLastNamePanel);
         this.add(staffNewPositionPanel);
         this.add(staffNewSalaryPanel);
-        this.add(this.updateStaffPosConfirmBtn);
+        //this.add(this.updateStaffPosConfirmBtn);
     }
 
     public String getFirstName() {
