@@ -37,6 +37,7 @@ public class GUI extends JFrame {
     private HireStaffUI hireStaffUI;
     private UpdateStaffPosUI updateStaffPosUI;
     private AuditionUI acceptAuditionUI;
+    private AuditionUI cancelPerformanceUI;
     /*
    
     private RentEquipmentUI rentEquipmentUI;
@@ -217,6 +218,9 @@ public class GUI extends JFrame {
     	    });
     }
     
+    public AuditionUI getAccAud() {
+    	return acceptAuditionUI;
+    }
 
     public void setBtnDActionListener(ActionListener actionListener) {
         this.schedAuditionBtn.addActionListener(actionListener);

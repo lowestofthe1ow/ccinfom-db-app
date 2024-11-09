@@ -4,12 +4,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+
 import BocchiTheGUI.GUI;
 
 public class Controller {
 	private Connection connection = null;
 	private GUI gui;
-	
+	//private List<String> staffNames;
 	private void initializeListeners() {
         
         gui.setBtnAActionListener(e -> {
@@ -22,6 +26,7 @@ public class Controller {
         
         gui.setBtnCActionListener(e -> {
         	gui.showDialog("accept_audition");
+        	gui.getAccAud().updateTable(updateAuditionPendingList());
         });
         /*
         gui.setBtnCActionListener(e -> {
@@ -47,7 +52,8 @@ public class Controller {
 	
 	
 
-    public void executeProcedure(String procedureName, Object... params) throws SQLException {
+
+	public void executeProcedure(String procedureName, Object... params) throws SQLException {
         String callSql = generateCallSql(procedureName, params.length);
         
         try (CallableStatement cs = connection.prepareCall(callSql)) {
@@ -113,14 +119,15 @@ public class Controller {
 	    		                          gui.getHireStaff().getPositionName(),
 	    		                          gui.getHireStaff().getSalary());
 	    				   break;
+	    	case "accept_audition": executeProcedure(eventString, 
+				         gui.getAccAud().getSelectedID()); 
+	    					break;
 	    	/* case "add_position": executeProcedure(eventString, 
 					  	   				          gui.getStaffPos().getStaffID(),
 					  	   				          gui.getStaffPos().getPositionName(),
 					  	   				          gui.getStaffPos().getSalary()); 
 	    				   break;
-	    	case "accept_audition": executeProcedure(eventString, 
-				          					         gui.getAccAud().getAuditionID()); 
-	    				   break;
+	    	
 	    	case "reject_audition": executeProcedure(eventString, 
 				         							 gui.getRejAud().getAuditionID()); 
 	    				   break;
@@ -149,7 +156,32 @@ public class Controller {
 	}
 
 	
-    
+	 public Object[][] updateAuditionPendingList() {
+	        String selectSql = "SELECT a.id, p.performer_name, a.submission_link "
+	                         + "FROM audition a "
+	                         + "LEFT JOIN performer p ON p.id = a.performer_id "
+	                         + "WHERE a.audition_status = 'PENDING';";
+
+	        List<Object[]> rows = new ArrayList<>();
+
+	        try (Statement statement = this.connection.createStatement();
+	             ResultSet resultSet = statement.executeQuery(selectSql)) {
+
+	            while (resultSet.next()) {
+	                int id = resultSet.getInt("id");
+	                String performerName = resultSet.getString("performer_name");
+	                String submissionLink = resultSet.getString("submission_link");
+
+	                Object[] row = {id, performerName, submissionLink};
+	                rows.add(row);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return rows.toArray(new Object[0][]);
+	    }
+	
     private void selectStaff() {
     	String selectSql = "SELECT * FROM staff";
     	try (Statement statement = this.connection.createStatement(); ResultSet resultSet = statement.executeQuery(selectSql)) {
