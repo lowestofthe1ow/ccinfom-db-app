@@ -20,12 +20,7 @@ public class Main {
             	new Controller(connection, gui);
             }
         });
-        /* OK SO FOR OSME REASON IT CLOSES CONNECTION IMMEDIATELY, ADD A WINDOW LISTENER TOMORROW LMAO */
         
-        
-       // closeConnection(connection);
-        
-       
     }
 	
 	private static Connection createConnection() {
