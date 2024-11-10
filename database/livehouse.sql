@@ -93,6 +93,7 @@ CREATE TABLE performance_revenue (
 );
 
 CREATE TABLE equipment_rental (
+	rental_id INT NOT NULL AUTO_INCREMENT,
 	performer_id INT NOT NULL,
     equipment_id INT NOT NULL,
     start_date DATE NOT NULL, -- Equipment is unavailable by this date
@@ -109,7 +110,7 @@ CREATE TABLE equipment_rental (
         'NOT_PAID',
         'CANCELLED'
     ) NOT NULL,
-	PRIMARY KEY (performer_id, equipment_id, start_date),
+	PRIMARY KEY (rental_id),
     FOREIGN KEY (performer_id) REFERENCES performer(id),
     FOREIGN KEY (equipment_id) REFERENCES equipment(id)
 );
