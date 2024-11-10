@@ -32,12 +32,13 @@ public class GUI extends JFrame {
     private JButton resolveBookingBtn, cancelBookingBtn, recordRevenueBtn, generateReportsBtn; 
     private JButton acceptAuditionBtn;
     private JButton confirmButton;
+    private JButton acceptButton, rejectButton;
     // The other pages
     
     private HireStaffUI hireStaffUI;
-    private UpdateStaffPosUI updateStaffPosUI;
-    private AuditionUI acceptAuditionUI;
-    private AuditionUI cancelPerformanceUI;
+    private TableSelectionUI updateStaffPosUI;
+    private TableSelectionUI acceptAuditionUI;
+    private TableSelectionUI cancelPerformanceUI;
     /*
    
     private RentEquipmentUI rentEquipmentUI;
@@ -47,16 +48,26 @@ public class GUI extends JFrame {
     private RecordRevenue recordRevenueUI;
     private GenerateReportsUI generateReportsUI;
     */
-   
+    public void initTableColumnNames() {
+    	this.updateStaffPosUI = new TableSelectionUI(new String[] {"ID", "Staff Name", "Current Position"});
+    	this.acceptAuditionUI = new TableSelectionUI(new String[] {"ID", "Performer Name", "Submission Link"});
+    	this.cancelPerformanceUI = new TableSelectionUI(new String[] {"ID", "Performer", "Date", "Start Time", "End Time"});    	
+    }
+    
     public GUI() {
         this.contentPanel = new JPanel();
-        this.hireStaffUI = new HireStaffUI();
-        this.updateStaffPosUI = new UpdateStaffPosUI();
-        this.acceptAuditionUI = new AuditionUI();
+        hireStaffUI = new HireStaffUI();
+        initTableColumnNames();
+        
         //Set up confirm button for optionpane
         confirmButton = new JButton();
     	confirmButton.setText("Confirm");
-        
+    	acceptButton = new JButton();
+     	acceptButton.setText("Accept");
+     	rejectButton = new JButton();
+     	rejectButton.setText("Reject");
+     	
+     	
         
         //Set up the frame
         this.setTitle("Bocchi the GUI");
@@ -147,8 +158,10 @@ public class GUI extends JFrame {
         this.acceptAuditionBtn.addActionListener(actionListener);
     }
 
-    public void setConfirmButtonActionListener(ActionListener listener) {
+    public void setButtonPanelActionListener(ActionListener listener) {
     	this.confirmButton.addActionListener(listener);
+    	this.acceptButton.addActionListener(listener);
+    	this.rejectButton.addActionListener(listener);
     }
     public HireStaffUI getHireStaff() {
     	return this.hireStaffUI;
@@ -161,10 +174,16 @@ public class GUI extends JFrame {
         dialog.setModal(true); 
         dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     	
-    	btnPanel.add(confirmButton);
-    	btnPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+    	confirmBtnPanel.add(confirmButton);
+    	confirmBtnPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+    	acceptRejectBtnPanel.add(acceptButton);
+    	acceptRejectBtnPanel.add(rejectButton);
+    	acceptRejectBtnPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+    	
     	dialog.setSize(400, 360);
     	
+    	acceptButton.setActionCommand("accept_audition");
+    	rejectButton.setActionCommand("reject_audition");
     	
     	dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); 
     	
@@ -172,19 +191,32 @@ public class GUI extends JFrame {
              @Override
             public void windowClosing(WindowEvent e) {
             	
-            	 
                 dialog.setVisible(false);
                 removeText();
              }
         });
     	
     	confirmButton.addActionListener(e -> {
-   	     	
     		
     		    dialog.setVisible(false);
-            removeText();
+    		    removeText();
         });
+    	
+    	acceptButton.addActionListener(e -> {
+   	     	
+    		
+		    dialog.setVisible(false);
+		    removeText();
+    	});
+    	rejectButton.addActionListener(e -> {
+   	     	
+    		
+		    dialog.setVisible(false);
+		    removeText();
+    	});
     }
+    
+   
     
 
     public void removeText() {
@@ -192,11 +224,10 @@ public class GUI extends JFrame {
     }
     
     private JDialog dialog = new JDialog();
-    private JPanel btnPanel = new JPanel();
+    private JPanel confirmBtnPanel = new JPanel();
+    private JPanel acceptRejectBtnPanel = new JPanel();
     
     public void showDialog(String command) {
-    	
-    	confirmButton.setActionCommand(command);
     	System.out.println("Command that is passed in setActionCommand is " + command  + ".");
     	dialog.getContentPane().removeAll();
     	 SwingUtilities.invokeLater(new Runnable() {
@@ -212,13 +243,20 @@ public class GUI extends JFrame {
     	                	dialog.getContentPane().add(acceptAuditionUI, BorderLayout.CENTER);
     	                   
     	            }
-    	            dialog.getContentPane().add(btnPanel, BorderLayout.SOUTH);
+    	            switch(command) {
+    	            case "accept_audition":
+    	            	dialog.getContentPane().add(acceptRejectBtnPanel, BorderLayout.SOUTH);
+    	            	break;
+    	            default:  dialog.getContentPane().add(confirmBtnPanel, BorderLayout.SOUTH);
+    	            		  confirmButton.setActionCommand(command);
+    	            }
+    	            
     	            dialog.setVisible(true);
     	        }
     	    });
     }
     
-    public AuditionUI getAccAud() {
+    public TableSelectionUI getAccAud() {
     	return acceptAuditionUI;
     }
 
