@@ -22,3 +22,4 @@ JDBC_PASSWORD=tobisawamisaki
 ## References
 
 -   [JDBC API tutorial](https://www.youtube.com/watch?v=BOUMR85B-V0&list=PLhs1urmduZ2-yp3zID5rMEmXDETN8xvMo&pp=iAQB)
+-   [Flatlaf website](https://www.formdev.com/flatlaf/)

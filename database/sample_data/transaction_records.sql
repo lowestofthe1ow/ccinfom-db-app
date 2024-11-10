@@ -43,17 +43,17 @@ INSERT INTO performance_revenue (`performance_id`, `ticket_price`, `tickets_sold
 INSERT INTO performance_revenue (`performance_id`, `ticket_price`, `tickets_sold`, `cut_percent`) VALUES ('9', '100.00', '22', '0.10');
 INSERT INTO performance_revenue (`performance_id`, `ticket_price`, `tickets_sold`, `cut_percent`) VALUES ('10', '100.00', '22', '0.10');
 
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '4', '2024-11-10', '2024-11-11', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '7', '2024-11-10', '2024-11-10', 'UNDAMAGED', 'CANCELLED');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '6', '2024-11-10', '2024-11-11', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '14', '2024-11-10', '2024-11-11', 'MIN_DMG', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '16', '2024-11-10', '2024-11-11', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('1', '5', '2024-11-14', '2024-11-17', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '4', '2024-11-17', '2024-11-18', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '6', '2024-11-17', '2024-11-18', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '14', '2024-11-17', '2024-11-18', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '16', '2024-11-17', '2024-11-18', 'UNDAMAGED', 'PAID');
-INSERT INTO equipment_rental (`performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('1', '5', '2024-11-19', '2024-11-20', 'MAJ_DMG', 'PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('1', '2', '4', '2024-11-10', '2024-11-11', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('2', '2', '7', '2024-11-10', '2024-11-11', 'UNDAMAGED', 'CANCELLED');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('3', '2', '6', '2024-11-10', '2024-11-11', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('4', '2', '14', '2024-11-10', '2024-11-11', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('5', '2', '16', '2024-11-10', '2024-11-11', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('6', '1', '5', '2024-11-14', '2024-11-17', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('7', '2', '4', '2024-11-17', '2024-11-18', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('8', '2', '6', '2024-11-17', '2024-11-18', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('9', '2', '14', '2024-11-17', '2024-11-18', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('10', '2', '16', '2024-11-17', '2024-11-18', 'PENDING', 'NOT_PAID');
+INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('11', '1', '5', '2024-11-19', '2024-11-20', 'PENDING', 'NOT_PAID');
 
 INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('4', '1');
 INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('7', '1');
