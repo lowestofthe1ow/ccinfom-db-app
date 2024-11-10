@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import BocchiTheController.Controller;
 import BocchiTheGUI.GUI;
@@ -13,7 +14,13 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class Main {
 	public static void main(String[] args) {
 		Connection connection = createConnection();
-
+		
+		 try {
+		        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+		    } catch (Exception ex) {
+		       
+		    }
+		 System.setProperty( "flatlaf.menuBarEmbedded", "true" );
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

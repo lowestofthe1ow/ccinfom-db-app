@@ -19,7 +19,7 @@ public class Controller {
         gui.setBtnAActionListener(e -> {
             gui.showDialog("hire");
         });
-        
+        /*
         gui.setBtnBActionListener(e -> {
             gui.showDialog("add_position");
         });
@@ -27,7 +27,7 @@ public class Controller {
         gui.setBtnCActionListener(e -> {
         	gui.showDialog("accept_audition");
         	gui.getAccAud().updateTable(updateAuditionPendingList());
-        });
+        });*/
         /*
         gui.setBtnCActionListener(e -> {
         	gui.showDialog("reject_audition");
@@ -150,8 +150,8 @@ public class Controller {
 		initializeListeners();
 		//hireStaff("Akai Haato", "", "09156621444", "Staff", 200);
 		//addPosition(1, "HEAD", 500);
-        selectStaff();
-        selectStaffPosition();
+        //selectStaff();
+        //selectStaffPosition();
 	}
 
 	

@@ -5,9 +5,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
@@ -28,11 +33,15 @@ public class GUI extends JFrame {
     private JPanel contentPanel;
 
     // Buttons
-    private JButton hireStaffBtn, updateStaffPosBtn, rentEquipmentBtn, schedAuditionBtn;
+    private JButton updateStaffPosBtn, rentEquipmentBtn, schedAuditionBtn;
     private JButton resolveBookingBtn, cancelBookingBtn, recordRevenueBtn, generateReportsBtn; 
     private JButton acceptAuditionBtn;
     private JButton confirmButton;
     private JButton acceptButton, rejectButton;
+    
+    //Menu Item
+    
+    private JMenuItem hireStaffBtn;
     // The other pages
     
     private HireStaffUI hireStaffUI;
@@ -54,12 +63,51 @@ public class GUI extends JFrame {
     	this.cancelPerformanceUI = new TableSelectionUI(new String[] {"ID", "Performer", "Date", "Start Time", "End Time"});    	
     }
     
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        
+        // Staff Management
+        JMenu staffMenu = new JMenu("Staff");
+        hireStaffBtn = new JMenuItem("Hire Staff");
+        hireStaffBtn.setActionCommand("hire");
+        staffMenu.add(hireStaffBtn);
+        staffMenu.add(new JMenuItem("Remove Staff"));
+        staffMenu.add(new JMenuItem("Update Staff"));
+        menuBar.add(staffMenu);
+       
+        // Scheduling & Bookings
+        JMenu bookingMenu = new JMenu("Booking");
+        bookingMenu.add(new JMenuItem("Add Performer"));
+        bookingMenu.add(new JMenuItem("Add Timeslot"));
+        bookingMenu.add(new JMenuItem("Rent Equipment"));
+        bookingMenu.add(new JMenuItem("Cancel Booking"));
+        bookingMenu.add(new JMenuItem("Resolve Booking"));
+        menuBar.add(bookingMenu);
+        
+        // Auditions
+        JMenu auditionsMenu = new JMenu("Auditions");
+        auditionsMenu.add(new JMenuItem("Accept Audition"));
+        auditionsMenu.add(new JMenuItem("Reject Audition"));
+        menuBar.add(auditionsMenu);
+
+        // Financials
+        JMenu financialsMenu = new JMenu("Financials");
+        financialsMenu.add(new JMenuItem("Record Revenue"));
+        financialsMenu.add(new JMenuItem("Generate Reports"));
+        menuBar.add(financialsMenu);
+        
+        return menuBar;
+    }
+
+    
+    
+    
     public GUI() {
         this.contentPanel = new JPanel();
         hireStaffUI = new HireStaffUI();
         initTableColumnNames();
-        
-        //Set up confirm button for optionpane
+        //setUndecorated(true);
+        //Set up confirm button for option pane
         confirmButton = new JButton();
     	confirmButton.setText("Confirm");
     	acceptButton = new JButton();
@@ -67,24 +115,33 @@ public class GUI extends JFrame {
      	rejectButton = new JButton();
      	rejectButton.setText("Reject");
      	
-     	
+     	JMenuBar menuBar = createMenuBar();
+     	this.setJMenuBar(menuBar);
         
+     	ImageIcon gifIcon = new ImageIcon(getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-rock-bocchi.gif"));
+        JLabel gifLabel = new JLabel(gifIcon);
+     	
+     	
         //Set up the frame
         this.setTitle("Bocchi the GUI");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new FlowLayout(FlowLayout.LEFT));
         this.setSize(960, 600);
-
+        
+        
+        this.add(gifLabel);
+        this.setVisible(true);
+        
+       
+        
+        /*
         this.acceptAuditionBtn = new JButton("Accept Audition");
         this.acceptAuditionBtn.setActionCommand("accept_audition");
 
         this.acceptAuditionBtn.setPreferredSize(new Dimension(350, 30));
         this.acceptAuditionBtn.setFont(new Font("Dialog", Font.PLAIN, 15));
         //Set up the buttons
-        this.hireStaffBtn = new JButton("Hire staff");
-        this.hireStaffBtn.setActionCommand("hire");
-        this.hireStaffBtn.setPreferredSize(new Dimension(350, 30));
-        this.hireStaffBtn.setFont(new Font("Dialog", Font.PLAIN, 15));
+        
 
         this.updateStaffPosBtn = new JButton("Update staff positions");
         this.updateStaffPosBtn.setActionCommand("add_position");
@@ -124,14 +181,14 @@ public class GUI extends JFrame {
         mainBtnPanel.add(this.hireStaffBtn);
         mainBtnPanel.add(this.updateStaffPosBtn);
         mainBtnPanel.add(this.acceptAuditionBtn);
-        /*
+      
         mainBtnPanel.add(this.rentEquipmentBtn);
         mainBtnPanel.add(this.schedAuditionBtn);
         mainBtnPanel.add(this.resolveBookingBtn);
         mainBtnPanel.add(this.cancelBookingBtn);
         mainBtnPanel.add(this.recordRevenueBtn);
         mainBtnPanel.add(this.generateReportsBtn);
-         */
+        
         
      
         
@@ -139,8 +196,9 @@ public class GUI extends JFrame {
         //Add main button panel to frame
         this.add(mainBtnPanel);
         this.setVisible(true);
-        
+        */
         dialogInit();
+         
     }
     public void setWindowListener(WindowAdapter windowAdapter) {
     	this.addWindowListener(windowAdapter);
