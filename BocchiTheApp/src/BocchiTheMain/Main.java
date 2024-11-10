@@ -1,61 +1,52 @@
 package BocchiTheMain;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
 
 import BocchiTheController.Controller;
 import BocchiTheGUI.GUI;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class Main {
-	
 	public static void main(String[] args) {
-        
-        Connection connection = createConnection();
-        
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                GUI gui = new GUI();  
-                // Code to run on EDT (e.g., update UI)
-            	new Controller(connection, gui);
-            }
-        });
-        
-    }
-	
-	private static Connection createConnection() {
-		
-		/* The SQL credentials will need to be updated based on who is running the code */
-		
-		 String jdbcUrl = "jdbc:mysql://localhost:3306/livehouse";
-	     String jdbcUser = "root";
-	     String jdbcPassword = "12345678";
-	     
-	     /* The SQL credentials will need to be updated based on who is running the code */
-	     
-	     Connection connection = null;
-	   
-			try {
-			   
-				try {
-					Class.forName("com.mysql.cj.jdbc.Driver");
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} // Optional in *newer* versions of JDBC
-			    connection = DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
-			    System.out.println("Database connection established.");
-			} catch (SQLException e) {
-			   
-			    e.printStackTrace();
+		Connection connection = createConnection();
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				GUI gui = new GUI();
+				// Code to run on EDT (e.g., update UI)
+				new Controller(connection, gui);
 			}
-			
-			return connection;
+		});
 	}
 
+	private static Connection createConnection() {
+		/* Load MySQL credentials from .env */
+		Dotenv dotenv = Dotenv.load();
 
-   
- 
-    
+		String jdbcUrl = dotenv.get("JDBC_URL");
+		String jdbcUser = dotenv.get("JDBC_USER");
+		String jdbcPassword = dotenv.get("JDBC_PASSWORD");
+
+		Connection connection = null;
+
+		try {
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} // Optional in *newer* versions of JDBC
+			connection = DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
+			System.out.println("Database connection established.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return connection;
+	}
 }
-

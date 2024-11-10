@@ -1,24 +1,21 @@
-Instructions in running the database application. As of 11 PM November 7, 2024
+## How to run
 
+1. Initialize the database with `livehouse.sql` and `transaction-procedures.sql`, then populate it with `sample_data/base_records.sql` and `sample_data/transaction_records.sql`
 
--
+2. Create a file named `.env` in the root directory containing your login credentials for the MySQL server. Its contents
+   should be as follows:
 
-Before running the program make sure to do the following:
+```
+JDBC_URL=jdbc:mysql://localhost:3306/livehouse
+JDBC_USER=root
+JDBC_PASSWORD=tobisawamisaki
+```
 
-run livehouse.sql and procedure sql files in the same server.
+3. Download the following `.jar` files into `BocchiTheApp/lib`:
 
-change the SQL credentials in createConnection,  Main.java 
+-   [`dotenv-java-3.0.2.jar`](https://repo1.maven.org/maven2/io/github/cdimascio/dotenv-java/3.0.2/dotenv-java-3.0.2.jar)
+-   [`mysql-connector-j-9.1.0.jar`](https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.1.0/mysql-connector-j-9.1.0.jar)
 
+## References
 
-
-
-Connection spitting out errors?
-
-Download the mysql java connector here, and unzip it
-https://dev.mysql.com/downloads/connector/j/
-
-Add it to build/classpath of the java project. 
-Red is using Eclipse right-clicking JDK so selecting the folder where the unzipped jar files are would do that trick, ill try to send a code if i find it.
-
-[Watch this youtube tutorial on the basics of JDBC api](https://www.youtube.com/watch?v=BOUMR85B-V0&list=PLhs1urmduZ2-yp3zID5rMEmXDETN8xvMo&pp=iAQB)
-
+-   [JDBC API tutorial](https://www.youtube.com/watch?v=BOUMR85B-V0&list=PLhs1urmduZ2-yp3zID5rMEmXDETN8xvMo&pp=iAQB)
