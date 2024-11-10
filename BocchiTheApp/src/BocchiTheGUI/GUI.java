@@ -71,6 +71,7 @@ public class GUI extends JFrame {
         hireStaffBtn = new JMenuItem("Hire Staff");
         hireStaffBtn.setActionCommand("hire");
         staffMenu.add(hireStaffBtn);
+        
         staffMenu.add(new JMenuItem("Remove Staff"));
         staffMenu.add(new JMenuItem("Update Staff"));
         menuBar.add(staffMenu);
@@ -86,8 +87,6 @@ public class GUI extends JFrame {
         
         // Auditions
         JMenu auditionsMenu = new JMenu("Auditions");
-        auditionsMenu.add(new JMenuItem("Accept Audition"));
-        auditionsMenu.add(new JMenuItem("Reject Audition"));
         menuBar.add(auditionsMenu);
 
         // Financials
@@ -120,7 +119,8 @@ public class GUI extends JFrame {
         
      	ImageIcon gifIcon = new ImageIcon(getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-rock-bocchi.gif"));
         JLabel gifLabel = new JLabel(gifIcon);
-     	
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-icon.jpg")); // Path to the image file
+        this.setIconImage(icon.getImage());
      	
         //Set up the frame
         this.setTitle("Bocchi the GUI");
