@@ -1,6 +1,6 @@
 ## How to run
 
-1. Initialize the database with `livehouse.sql` and `transaction-procedures.sql`, then populate it with `sample_data/base_records.sql` and `sample_data/transaction_records.sql`
+1. Initialize the database with `database/livehouse.sql` and `database/transaction-procedures.sql`, then populate it with `database/sample_data/base_records.sql` and `database/sample_data/transaction_records.sql`
 
 2. Create a file named `.env` in the root directory containing your login credentials for the MySQL server. Its contents
    should be as follows:
