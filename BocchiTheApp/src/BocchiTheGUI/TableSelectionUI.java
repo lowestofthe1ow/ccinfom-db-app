@@ -11,14 +11,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-public class AuditionUI extends JPanel {
+public class TableSelectionUI extends JPanel {
     private JTextField searchField;
     private JTable table;
     private DefaultTableModel tableModel;
     private List<Object[]> TABLEPERM;
 
     @SuppressWarnings("serial")
-	public AuditionUI() {
+	public TableSelectionUI(String[] columnNames) {
         setLayout(new BorderLayout());
 
         searchField = new JTextField();
@@ -26,7 +26,7 @@ public class AuditionUI extends JPanel {
         add(searchField, BorderLayout.NORTH);
 
         TABLEPERM = new ArrayList<>();
-        String[] columnNames = {"ID", "Performer Name", "Submission Link"};
+        
         Object[][] names = null;
         
         tableModel = new DefaultTableModel(names, columnNames) {

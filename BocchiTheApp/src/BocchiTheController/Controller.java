@@ -37,7 +37,7 @@ public class Controller {
         });
         */
         
-        gui.setConfirmButtonActionListener(e ->{
+        gui.setButtonPanelActionListener(e ->{
         	commandHandler(e.getActionCommand());
         });
         
@@ -112,24 +112,23 @@ public class Controller {
     public void commandHandler(String eventString) {
     	try {
 	    	switch(eventString) {
-	    	case "hire":  executeProcedure(eventString, 
+	    	case "hire":            executeProcedure(eventString, 
 	    								  gui.getHireStaff().getFirstName(),
 	    		                          gui.getHireStaff().getLastName(),
 	    		    					  gui.getHireStaff().getContactNo(),
 	    		                          gui.getHireStaff().getPositionName(),
 	    		                          gui.getHireStaff().getSalary());
-	    				   break;
+	    				   			break;
 	    	case "accept_audition": executeProcedure(eventString, 
-				         gui.getAccAud().getSelectedID()); 
-	    					break;
+				                          gui.getAccAud().getSelectedID()); 
+	    				  			break;
+	    	case "reject_audition": executeProcedure(eventString, 
+         								  gui.getAccAud().getSelectedID()); 
+	    							break;  			
 	    	/* case "add_position": executeProcedure(eventString, 
 					  	   				          gui.getStaffPos().getStaffID(),
 					  	   				          gui.getStaffPos().getPositionName(),
 					  	   				          gui.getStaffPos().getSalary()); 
-	    				   break;
-	    	
-	    	case "reject_audition": executeProcedure(eventString, 
-				         							 gui.getRejAud().getAuditionID()); 
 	    				   break;
 	    	case "cancel_performance":  executeProcedure(eventString, 
 					 						 			 gui.getCancelPerf().getPerformanceID()); 
@@ -222,49 +221,5 @@ public class Controller {
         }
     }
 	
-    /*
-	private void addPosition(Integer staffId, String positionName, Double salary) {
-		try {
-			executeProcedure("add_position", staffId, positionName, salary);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
-    private void hireStaff(String firstName, String lastName, String contactNo, String positionName, Double salary) {
-        try {
-			executeProcedure("hire", firstName, lastName, contactNo, positionName, salary);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-    
-    private void acceptAudition(Integer auditionId) {
-	    try {
-	    	executeProcedure("accept_audition", auditionId);
-	    }catch(SQLException e) {
-	    	e.printStackTrace();
-	    }
-	}
-	
-    private void rejectAudition(Integer auditionId) {
-	    try {
-	    	executeProcedure("reject_audition", auditionId);
-	    }catch(SQLException e) {
-	    	e.printStackTrace();
-	    }
-	}
-    
-    private void cancelPerformance(Integer auditionId) {
-	    try {
-	    	executeProcedure("cancel_performance", auditionId);
-	    }catch(SQLException e) {
-	    	e.printStackTrace();
-	    }
-	}
-	
-*/
+ 
 }
