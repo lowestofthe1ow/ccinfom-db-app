@@ -111,15 +111,13 @@ public class GUI extends JFrame {
         ImageIcon gifIcon = new ImageIcon(
                 getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-rock-bocchi.gif"));
         JLabel gifLabel = new JLabel(gifIcon);
-<<<<<<< HEAD
+
         ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-icon.jpg")); // Path to the image file
         this.setIconImage(icon.getImage());
      	
-        //Set up the frame
-=======
 
         // Set up the frame
->>>>>>> branch 'GUI_branch_with_flat_laf' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
+
         this.setTitle("Bocchi the GUI");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new FlowLayout(FlowLayout.LEFT));
