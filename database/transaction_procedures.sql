@@ -262,3 +262,98 @@ BEGIN
 	END IF;
 END //
 DELIMITER ;
+
+-- Adding a performer
+
+DROP PROCEDURE IF EXISTS add_performer;
+DELIMITER //
+CREATE PROCEDURE add_performer (
+	IN performer_name VARCHAR(255),
+    IN contact_last_name VARCHAR(255),
+    IN contact_first_name VARCHAR(255),
+    IN contact_no DECIMAL(11, 0)
+)
+BEGIN
+	INSERT INTO performer (`performer_name`, `contact_last_name`, `contact_first_name`, `contact_no`) 
+		VALUES (performer_name, contact_last_name, contact_first_name, contact_no);
+END //
+DELIMITER ;
+
+-- Adding a performance timeslot
+
+DROP PROCEDURE IF EXISTS add_performance_timeslot;
+DELIMITER //
+CREATE PROCEDURE add_performance_timeslot (
+	IN timeslot_date DATE,
+    IN start_time TIME,
+    IN end_time TIME
+)
+BEGIN
+	INSERT INTO performer (`timeslot_date`, `start_time`, `end_time`) 
+		VALUES (timeslot_date, start_time, end_time);
+END //
+DELIMITER ;
+
+-- Scheduling an audition
+
+DROP PROCEDURE IF EXISTS sched_audition;
+DELIMITER //
+CREATE PROCEDURE sched_audition (
+	IN performer_id INT,
+	IN target_timeslot_id INT,
+    IN submission_link VARCHAR(255)
+)
+BEGIN
+	INSERT INTO audition (`performer_id`, `target_timeslot_id`, `submission_link`, `audition_status`)
+			VALUES (performer_id, target_timeslot_id, submission_link, 'PENDING');
+END //
+DELIMITER ;
+
+-- Assigning staff to performance
+
+DROP PROCEDURE IF EXISTS assign_staff;
+DELIMITER //
+CREATE PROCEDURE assign_staff (
+	IN staff_id INT,
+    IN performance_id INT
+)
+BEGIN
+	IF (
+		SELECT p.performance_status
+        FROM performance p
+        WHERE p.id = performance_id
+	) <> 'PENDING' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
+	ELSE
+		INSERT INTO staff_assignment (`staff_id`, `performance_id`)
+			VALUES (staff_id, performance_id);
+	END IF;
+END //
+DELIMITER ;
+
+-- Recording a performance’s generated revenue (after the performance)
+
+DROP PROCEDURE IF EXISTS record_performance_revenue;
+DELIMITER //
+CREATE PROCEDURE record_performance_revenue (
+	IN performance_id INT,
+    IN ticket_price DECIMAL,
+    IN tickets_sold INT,
+    IN cut_percent DECIMAL
+)
+BEGIN
+	IF (
+		SELECT p.performance_status
+        FROM performance p
+        WHERE p.id = performance_id
+	) <> 'PENDING' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
+	ELSE
+		UPDATE performance p
+			SET p.performance_status = 'COMPLETE'
+            WHERE p.id = performance_id;
+		INSERT INTO performance_revenue (`performance_id`, `ticket_price`, `tickets_sold`, `cut_percent`)
+			VALUES (performance_id, ticket_price, tickets_sold, cut_percent);
+	END IF;
+END //
+DELIMITER ;
