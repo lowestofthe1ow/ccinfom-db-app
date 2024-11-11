@@ -186,7 +186,6 @@ public class GUI extends JFrame {
          * this.add(mainBtnPanel);
          * this.setVisible(true);
          */
-        dialogInit();
 
     }
 
@@ -206,100 +205,29 @@ public class GUI extends JFrame {
         this.acceptAuditionBtn.addActionListener(actionListener);
     }
 
-    public void setButtonPanelActionListener(ActionListener listener) {
-        this.confirmButton.addActionListener(listener);
-        this.acceptButton.addActionListener(listener);
-        this.rejectButton.addActionListener(listener);
+    /* LOWEST'S WEIRD NEW DIALOG STUFF */
+
+    private CommandDialog dialog;
+
+    public void showDialog(DialogUI dialogUI, Runnable callback) {
+        dialog = new CommandDialog(dialogUI, callback);
+        dialog.setVisible(true);
     }
 
-    public HireStaffUI getHireStaff() {
-        return this.hireStaffUI;
-    }
-
-    public void dialogInit() {
-
-        dialog.getContentPane().setLayout(new BorderLayout());
-        dialog.setLocationRelativeTo(null);
-        dialog.setModal(true);
-        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-        confirmBtnPanel.add(confirmButton);
-        confirmBtnPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
-        acceptRejectBtnPanel.add(acceptButton);
-        acceptRejectBtnPanel.add(rejectButton);
-        acceptRejectBtnPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
-
-        dialog.setSize(400, 360);
-
-        acceptButton.setActionCommand("accept_audition");
-        rejectButton.setActionCommand("reject_audition");
-
-        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-        dialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-
-                dialog.setVisible(false);
-                removeText();
-            }
-        });
-
-        confirmButton.addActionListener(e -> {
-
+    public void closeDialog() {
+        if (dialog != null)
             dialog.setVisible(false);
-            removeText();
-        });
-
-        acceptButton.addActionListener(e -> {
-
-            dialog.setVisible(false);
-            removeText();
-        });
-        rejectButton.addActionListener(e -> {
-
-            dialog.setVisible(false);
-            removeText();
-        });
     }
 
-    public void removeText() {
-        hireStaffUI.removeText();
+    public Object[] getSQLParameterInputs() {
+        return dialog.getSQLParameterInputs();
     }
 
-    private JDialog dialog = new JDialog();
-    private JPanel confirmBtnPanel = new JPanel();
-    private JPanel acceptRejectBtnPanel = new JPanel();
-
-    public void showDialog(String command) {
-        System.out.println("Command that is passed in setActionCommand is " + command + ".");
-        dialog.getContentPane().removeAll();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                switch (command) {
-                    case "hire":
-                        dialog.getContentPane().add(hireStaffUI, BorderLayout.CENTER);
-                        break;
-                    case "add_position":
-                        dialog.getContentPane().add(updateStaffPosUI, BorderLayout.CENTER);
-                        break;
-                    case "accept_audition":
-                        dialog.getContentPane().add(acceptAuditionUI, BorderLayout.CENTER);
-
-                }
-                switch (command) {
-                    case "accept_audition":
-                        dialog.getContentPane().add(acceptRejectBtnPanel, BorderLayout.SOUTH);
-                        break;
-                    default:
-                        dialog.getContentPane().add(confirmBtnPanel, BorderLayout.SOUTH);
-                        confirmButton.setActionCommand(command);
-                }
-
-                dialog.setVisible(true);
-            }
-        });
+    public void addDialogButtonListener(ActionListener listener) {
+        this.dialog.addButtonListener(listener);
     }
+
+    /* END OF LOWEST'S WEIRD NEW DIALOG STUFF */
 
     public TableSelectionUI getAccAud() {
         return acceptAuditionUI;

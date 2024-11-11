@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public abstract class TextFieldsUI extends JPanel {
+public abstract class TextFieldsUI extends DialogUI {
     protected ArrayList<JTextField> formItems;
 
     protected TextFieldsUI(String... formItemLabels) {
