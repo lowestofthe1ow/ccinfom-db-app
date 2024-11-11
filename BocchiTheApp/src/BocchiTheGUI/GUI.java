@@ -209,8 +209,11 @@ public class GUI extends JFrame {
 
     private CommandDialog dialog;
 
-    public void showDialog(DialogUI dialogUI, Runnable callback) {
+    public void createDialog(DialogUI dialogUI, Runnable callback) {
         dialog = new CommandDialog(dialogUI, callback);
+    }
+
+    public void showDialog() {
         dialog.setVisible(true);
     }
 

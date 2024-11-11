@@ -22,12 +22,14 @@ public class Controller {
 
     private void showDialog(DialogUI dialogUI) {
         /* Show the dialog window and wait for the UI to be loaded */
-        gui.showDialog(dialogUI, () -> {
+        gui.createDialog(dialogUI, () -> {
             /* Update dialog window button listeners */
             gui.addDialogButtonListener((e) -> {
                 gui.closeDialog();
                 commandHandler(e.getActionCommand());
             });
+            /* Show dialog */
+            gui.showDialog();
         });
     }
 
