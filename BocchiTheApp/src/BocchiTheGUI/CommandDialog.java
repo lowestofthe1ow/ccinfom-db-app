@@ -28,6 +28,7 @@ public class CommandDialog extends JDialog {
             this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             this.setSize(400, 360);
             this.getContentPane().add(dialogUI);
+            this.setTitle(dialogUI.getDialogTitle());
 
             onReady.run();
         });

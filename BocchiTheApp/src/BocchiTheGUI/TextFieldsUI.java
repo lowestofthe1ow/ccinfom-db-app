@@ -12,7 +12,11 @@ import javax.swing.JTextField;
 public abstract class TextFieldsUI extends DialogUI {
     protected ArrayList<JTextField> formItems;
 
-    protected TextFieldsUI(String... formItemLabels) {
+    public TextFieldsUI(String dialogTitle) {
+        super(dialogTitle);
+    }
+
+    protected void addForms(String... formItemLabels) {
         this.formItems = new ArrayList<>();
 
         this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));

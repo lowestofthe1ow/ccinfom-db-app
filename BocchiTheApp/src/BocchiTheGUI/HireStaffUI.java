@@ -2,8 +2,8 @@ package BocchiTheGUI;
 
 public class HireStaffUI extends TextFieldsUI {
     public HireStaffUI() {
-        super("First name: ", "Last name: ", "Contact number: ", "Staff position: ", "Salary: ");
-
+        super("Hire staff");
+        addForms("First name: ", "Last name: ", "Contact number: ", "Staff position: ", "Salary: ");
         addButtons("Confirm");
         setButtonActionCommands("hire");
     }
@@ -32,6 +32,7 @@ public class HireStaffUI extends TextFieldsUI {
      * {@return an array of objects that represent the parameters to pass to the SQL
      * query} Uses values from the form inputs.
      */
+    @Override
     public Object[] getSQLParameterInputs() {
         Object[] SQLParameters = {
                 getFirstName(),

@@ -10,8 +10,13 @@ import javax.swing.JPanel;
 public abstract class DialogUI extends JPanel {
     private ArrayList<JButton> buttons;
     private JPanel buttonPanel;
+    private String dialogTitle;
 
     public abstract Object[] getSQLParameterInputs();
+
+    public String getDialogTitle() {
+        return this.dialogTitle;
+    }
 
     /**
      * Attaches a {@link ActionListener} to all {@link JButton}s tied to the dialog.
@@ -58,7 +63,8 @@ public abstract class DialogUI extends JPanel {
         this.add(buttonPanel);
     }
 
-    public DialogUI() {
+    public DialogUI(String dialogTitle) {
+        this.dialogTitle = dialogTitle;
         this.buttons = new ArrayList<>();
         this.buttonPanel = new JPanel();
 
