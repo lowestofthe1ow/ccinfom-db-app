@@ -77,13 +77,6 @@ public class GUI extends JFrame {
 
     public void createDialog(DialogUI dialogUI, Runnable callback) {
         dialog = new CommandDialog(dialogUI, callback);
-<<<<<<< HEAD
-=======
-    }
-
-    public void showDialog() {
-        dialog.setVisible(true);
->>>>>>> branch 'dialog-rewrite' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
     }
 
     public void closeDialog() {

@@ -22,20 +22,13 @@ public class Controller {
 
     private void showDialog(DialogUI dialogUI) {
         /* Show the dialog window and wait for the UI to be loaded */
-<<<<<<< HEAD
     	
-=======
->>>>>>> branch 'dialog-rewrite' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
         gui.createDialog(dialogUI, () -> {
             /* Update dialog window button listeners */
             gui.addDialogButtonListener((e) -> {
                 gui.closeDialog();
                 commandHandler(e.getActionCommand());
             });
-<<<<<<< HEAD
-=======
-            /* Show dialog */
->>>>>>> branch 'dialog-rewrite' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
             gui.showDialog();
         });
        
