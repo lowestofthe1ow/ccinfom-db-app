@@ -25,7 +25,7 @@ CREATE PROCEDURE remove_staff (
 	IN staff_id INT
 )
 BEGIN
-	IF staff_id NOT IN (SELECT id FROM staff) THEN
+	IF staff_id NOT IN (SELECT staff_id FROM staff) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No such staff';
 	ELSEIF (
 		SELECT MAX(start_date) 
@@ -51,7 +51,7 @@ CREATE PROCEDURE add_position (
     IN salary DECIMAL(10, 2)
 )
 BEGIN
-	IF staff_id NOT IN (SELECT id FROM staff) THEN
+	IF staff_id NOT IN (SELECT staff_id FROM staff) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No such staff';
 	ELSEIF (
 		SELECT MAX(start_date) 
@@ -82,12 +82,12 @@ CREATE PROCEDURE rent_equipment (
 BEGIN
 	IF start_date >= end_date THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid date range (equipment must be rented for at least a day)';
-	ELSEIF equipment_id NOT IN (SELECT id FROM equipment) THEN
+	ELSEIF equipment_id NOT IN (SELECT equipment_id FROM equipment) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No such equipment';
 	ELSEIF (
 		SELECT equipment_status
         FROM equipment e
-        WHERE e.id = equipment_id
+        WHERE e.equipment_id = equipment_id
     ) <> 'UNDAMAGED' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Damaged or missing equipment cannot be rented out';
 	ELSEIF (
@@ -166,7 +166,7 @@ BEGIN
             WHERE er.rental_id = rental_id;
 		UPDATE equipment e
 			SET e.equipment_status = equipment_status
-            WHERE e.id = (
+            WHERE e.equipment_id = (
 				SELECT er.equipment_id
                 FROM equipment_rental er
                 WHERE er.rental_id = rental_id
@@ -186,7 +186,7 @@ BEGIN
 	IF (
 		SELECT a.audition_status
         FROM audition a
-        WHERE a.id = audition_id
+        WHERE a.audition_id = audition_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Audition is not waiting to be resolved';
 	ELSEIF (
@@ -195,25 +195,25 @@ BEGIN
 		WHERE p.performance_timeslot_id = (
 			SELECT a.target_timeslot_id
 			FROM audition a
-			WHERE a.id = audition_id
+			WHERE a.audition_id = audition_id
 		) AND p.performance_status = 'PENDING'
     ) > 0 THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance slot is taken';
 	ELSE
 		UPDATE audition a
 			SET a.audition_status = 'PASSED'
-            WHERE a.id = audition_id;
+            WHERE a.audition_id = audition_id;
 		INSERT INTO performance (`performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`)
 			VALUES ((
-				SELECT p.id
+				SELECT p.performer_id
                 FROM audition a
                 JOIN performer p
-                ON a.performer_id = p.id
-                WHERE a.id = audition_id
+                ON a.performer_id = p.performer_id
+                WHERE a.audition_id = audition_id
             ), (
 				SELECT a.target_timeslot_id
 				FROM audition a
-				WHERE a.id = audition_id
+				WHERE a.audition_id = audition_id
 			), '5000.00', 'PENDING');
     END IF;
 END //
@@ -230,13 +230,13 @@ BEGIN
 	IF (
 		SELECT a.audition_status
         FROM audition a
-        WHERE a.id = audition_id
+        WHERE a.audition_id = audition_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Audition is not waiting to be resolved';
 	ELSE
 		UPDATE audition a
 			SET a.audition_status = 'REJECTED'
-            WHERE a.id = audition_id;
+            WHERE a.audition_id = audition_id;
 	END IF;
 END //
 DELIMITER ;
@@ -252,13 +252,13 @@ BEGIN
 	IF (
 		SELECT p.performance_status
         FROM performance p
-        WHERE p.id = performance_id
+        WHERE p.performance_id = performance_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
 	ELSE
 		UPDATE performance p
 			SET p.performance_status = 'CANCELLED'
-            WHERE p.id = performance_id;
+            WHERE p.performance_id = performance_id;
 	END IF;
 END //
 DELIMITER ;
@@ -321,7 +321,7 @@ BEGIN
 	IF (
 		SELECT p.performance_status
         FROM performance p
-        WHERE p.id = performance_id
+        WHERE p.performance_id = performance_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
 	ELSE
@@ -345,13 +345,13 @@ BEGIN
 	IF (
 		SELECT p.performance_status
         FROM performance p
-        WHERE p.id = performance_id
+        WHERE p.performance_id = performance_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
 	ELSE
 		UPDATE performance p
 			SET p.performance_status = 'COMPLETE'
-            WHERE p.id = performance_id;
+            WHERE p.performance_id = performance_id;
 		INSERT INTO performance_revenue (`performance_id`, `ticket_price`, `tickets_sold`, `cut_percent`)
 			VALUES (performance_id, ticket_price, tickets_sold, cut_percent);
 	END IF;

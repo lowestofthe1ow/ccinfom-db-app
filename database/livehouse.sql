@@ -13,16 +13,16 @@ USE livehouse;
 -- Standalone tables
 
 CREATE TABLE performer (
-	id INT NOT NULL AUTO_INCREMENT,
+	performer_id INT NOT NULL AUTO_INCREMENT,
     performer_name VARCHAR(255) NOT NULL,
     contact_first_name VARCHAR(255) NOT NULL,
     contact_last_name VARCHAR(255), -- TODO: Nullable?
     contact_no DECIMAL(11, 0) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (performer_id)
 );
 
 CREATE TABLE equipment (
-	id INT NOT NULL AUTO_INCREMENT,
+	equipment_id INT NOT NULL AUTO_INCREMENT,
     equipment_name VARCHAR(255) NOT NULL,
     equipment_type VARCHAR(255) NOT NULL,
     rental_fee DECIMAL(10, 2) NOT NULL,
@@ -32,29 +32,29 @@ CREATE TABLE equipment (
         'MAJ_DMG',
         'MISSING'
     ),
-    PRIMARY KEY (id)
+    PRIMARY KEY (equipment_id)
 );
 
 CREATE TABLE staff (
-	id INT NOT NULL AUTO_INCREMENT,
+	staff_id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255), -- TODO: Nullable?
     contact_no DECIMAL(11, 0) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (staff_id)
 );
 
 CREATE TABLE performance_timeslot (
-	id INT NOT NULL AUTO_INCREMENT,
+	performance_timeslot_id INT NOT NULL AUTO_INCREMENT,
     timeslot_date DATE NOT NULL,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (performance_timeslot_id)
 );
 
 -- Junction tables
 
 CREATE TABLE audition (
-	id INT NOT NULL AUTO_INCREMENT,
+	audition_id INT NOT NULL AUTO_INCREMENT,
     performer_id INT NOT NULL,
     target_timeslot_id INT NOT NULL,
     submission_link VARCHAR(255) NOT NULL,
@@ -63,13 +63,13 @@ CREATE TABLE audition (
         'PENDING',
         'REJECTED'
     ) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (performer_id) REFERENCES performer(id),
-    FOREIGN KEY (target_timeslot_id) REFERENCES performance_timeslot(id)
+    PRIMARY KEY (audition_id),
+    FOREIGN KEY (performer_id) REFERENCES performer(performer_id),
+    FOREIGN KEY (target_timeslot_id) REFERENCES performance_timeslot(performance_timeslot_id)
 );
 
 CREATE TABLE performance (
-	id INT NOT NULL AUTO_INCREMENT,
+	performance_id INT NOT NULL AUTO_INCREMENT,
     performer_id INT NOT NULL,
     performance_timeslot_id INT NOT NULL,
     base_quota DECIMAL(10, 2) NOT NULL, 	
@@ -78,9 +78,9 @@ CREATE TABLE performance (
 		'PENDING',
         'CANCELLED'
     ) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (performer_id) REFERENCES performer(id),
-    FOREIGN KEY (performance_timeslot_id) REFERENCES performance_timeslot(id)
+    PRIMARY KEY (performance_id),
+    FOREIGN KEY (performer_id) REFERENCES performer(performer_id),
+    FOREIGN KEY (performance_timeslot_id) REFERENCES performance_timeslot(performance_timeslot_id)
 );
 
 CREATE TABLE performance_revenue (
@@ -89,7 +89,7 @@ CREATE TABLE performance_revenue (
     tickets_sold INT NOT NULL,
     cut_percent DECIMAL(2, 2) NOT NULL,
     PRIMARY KEY (performance_id),
-    FOREIGN KEY (performance_id) REFERENCES performance(id)
+    FOREIGN KEY (performance_id) REFERENCES performance(performance_id)
 );
 
 CREATE TABLE equipment_rental (
@@ -111,16 +111,16 @@ CREATE TABLE equipment_rental (
         'CANCELLED'
     ) NOT NULL,
 	PRIMARY KEY (rental_id),
-    FOREIGN KEY (performer_id) REFERENCES performer(id),
-    FOREIGN KEY (equipment_id) REFERENCES equipment(id)
+    FOREIGN KEY (performer_id) REFERENCES performer(performer_id),
+    FOREIGN KEY (equipment_id) REFERENCES equipment(equipment_id)
 );
 
 CREATE TABLE staff_assignment (
 	staff_id INT NOT NULL,
     performance_id INT NOT NULL,
     PRIMARY KEY (staff_id, performance_id),
-    FOREIGN KEY (staff_id) REFERENCES staff(id),
-    FOREIGN KEY (performance_id) REFERENCES performance(id)
+    FOREIGN KEY (staff_id) REFERENCES staff(staff_id),
+    FOREIGN KEY (performance_id) REFERENCES performance(performance_id)
 );
 
 CREATE TABLE staff_position (
@@ -130,5 +130,5 @@ CREATE TABLE staff_position (
     start_date DATE NOT NULL,
     end_date DATE, -- NULL if currently employed?
     PRIMARY KEY (staff_id, start_date),
-    FOREIGN KEY (staff_id) REFERENCES staff(id)
+    FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
 );
