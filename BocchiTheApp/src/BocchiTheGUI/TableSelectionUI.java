@@ -1,8 +1,7 @@
 package BocchiTheGUI;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.sql.*;
+import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,20 +10,20 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-public class TableSelectionUI extends JPanel {
+public abstract class TableSelectionUI extends DialogUI {
     private JTextField searchField;
-    private JTable table;
+    protected JTable table;
     private DefaultTableModel tableModel;
     private List<Object[]> TABLEPERM;
 
-    @SuppressWarnings("serial")
-	public TableSelectionUI(String[] columnNames) {
-        setLayout(new BorderLayout());
+	public TableSelectionUI(String name, String... columnNames) {
+    	super(name);
+        setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
 
         searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(300, 30));
-        add(searchField, BorderLayout.NORTH);
-
+        add(searchField);
+        
         TABLEPERM = new ArrayList<>();
         
         Object[][] names = null;
@@ -39,7 +38,7 @@ public class TableSelectionUI extends JPanel {
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
+        add(scrollPane);
 
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -57,10 +56,12 @@ public class TableSelectionUI extends JPanel {
                 filterTable();
             }
         });
+        
+       
 
     }
 
-    public void updateTable(Object[][] data) {
+    public void updateTable(List<Object[]> data) {
         tableModel.setRowCount(0);
        
         for (Object[] row : data) {
@@ -81,19 +82,5 @@ public class TableSelectionUI extends JPanel {
         }
     }
     
-    public Integer getSelectedID() {
-        int selectedRowIndex = table.getSelectedRow();
-     
-        if (selectedRowIndex == -1) {
-            return null;  
-        }
-        
-        Object idObject = table.getValueAt(selectedRowIndex, 0); 
-        if (idObject instanceof Integer) {
-            return (Integer) idObject;  
-        } else {
-          
-            throw new IllegalArgumentException("Selected row does not have an Integer ID.");
-        }
-    } 
+	
 }

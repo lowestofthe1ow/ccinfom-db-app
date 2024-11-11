@@ -67,7 +67,7 @@ public abstract class DialogUI extends JPanel {
         this.dialogTitle = dialogTitle;
         this.buttons = new ArrayList<>();
         this.buttonPanel = new JPanel();
-
+        
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
     }
 }

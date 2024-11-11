@@ -1,5 +1,7 @@
 package BocchiTheGUI;
 
+@SuppressWarnings("serial")
+
 public class HireStaffUI extends TextFieldsUI {
     public HireStaffUI() {
         super("Hire staff");
@@ -32,6 +34,7 @@ public class HireStaffUI extends TextFieldsUI {
      * {@return an array of objects that represent the parameters to pass to the SQL
      * query} Uses values from the form inputs.
      */
+    
     @Override
     public Object[] getSQLParameterInputs() {
         Object[] SQLParameters = {

@@ -18,7 +18,7 @@ public class Main {
 		 try {
 		        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
 		    } catch (Exception ex) {
-		       
+		        
 		    }
 		 System.setProperty( "flatlaf.menuBarEmbedded", "true" );
 		SwingUtilities.invokeLater(new Runnable() {

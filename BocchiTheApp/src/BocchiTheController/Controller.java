@@ -22,13 +22,16 @@ public class Controller {
 
     private void showDialog(DialogUI dialogUI) {
         /* Show the dialog window and wait for the UI to be loaded */
-        gui.showDialog(dialogUI, () -> {
+    	
+        gui.createDialog(dialogUI, () -> {
             /* Update dialog window button listeners */
             gui.addDialogButtonListener((e) -> {
                 gui.closeDialog();
                 commandHandler(e.getActionCommand());
             });
+            gui.showDialog();
         });
+       
     }
 
     private void initializeListeners() {
@@ -37,8 +40,16 @@ public class Controller {
          * TODO: See if it's possible to store info of which UI to load from e
          * This will allow us to reuse the same listener for every menu button
          */
-        gui.setBtnAActionListener((e) -> {
-            showDialog(new HireStaffUI());
+        gui.setMenuListener((e) -> {
+        	
+        	
+            showDialog(gui.dialogHandler(e.getActionCommand())); 
+            
+            /*This would stay like this until i find a better way */
+            if(e.getActionCommand() == "audition" ) {
+        		gui.updateTable(updateAuditionPendingList());
+        	}
+            
         });
 
         gui.setWindowListener(new WindowAdapter() {
@@ -74,6 +85,7 @@ public class Controller {
             cs.execute();
 
             System.out.println(procedureName + " executed successfully.");
+            
         } catch (SQLException e) {
             if ("45000".equals(e.getSQLState())) {
                 System.err.println("Business Logic Error in " + procedureName + ": " + e.getMessage());
@@ -108,29 +120,9 @@ public class Controller {
 
     public void commandHandler(String eventString) {
         try {
-            switch (eventString) {
-                case "hire":
-                    executeProcedure(eventString, gui.getSQLParameterInputs());
-                    break;
-                case "accept_audition":
-                    executeProcedure(eventString,
-                            gui.getAccAud().getSelectedID());
-                    break;
-                case "reject_audition":
-                    executeProcedure(eventString,
-                            gui.getAccAud().getSelectedID());
-                    break;
-                /*
-                 * case "add_position": executeProcedure(eventString,
-                 * gui.getStaffPos().getStaffID(),
-                 * gui.getStaffPos().getPositionName(),
-                 * gui.getStaffPos().getSalary());
-                 * break;
-                 * case "cancel_performance": executeProcedure(eventString,
-                 * gui.getCancelPerf().getPerformanceID());
-                 * break;
-                 */
-            }
+        	executeProcedure(eventString, gui.getSQLParameterInputs());
+        	
+         
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("There are no errors in Bocchi the Database Application.");
@@ -149,32 +141,39 @@ public class Controller {
         // selectStaffPosition();
     }
 
-    public Object[][] updateAuditionPendingList() {
+    public List<Object[]> updateAuditionPendingList() {
         String selectSql = "SELECT a.id, p.performer_name, a.submission_link "
-                + "FROM audition a "
-                + "LEFT JOIN performer p ON p.id = a.performer_id "
-                + "WHERE a.audition_status = 'PENDING';";
+			                + "FROM audition a "
+			                + "LEFT JOIN performer p ON p.id = a.performer_id "
+			                + "WHERE a.audition_status = 'PENDING';";
 
-        List<Object[]> rows = new ArrayList<>();
-
-        try (Statement statement = this.connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(selectSql)) {
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String performerName = resultSet.getString("performer_name");
-                String submissionLink = resultSet.getString("submission_link");
-
-                Object[] row = { id, performerName, submissionLink };
-                rows.add(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return rows.toArray(new Object[0][]);
+       return updateList(selectSql);
     }
+    
+    
+    public List<Object[]> updateList(String selectSql) {
+    	List<Object[]> rows = new ArrayList<>();
 
+    	try (Statement statement = this.connection.createStatement();
+    	        ResultSet resultSet = statement.executeQuery(selectSql)) {
+    	    int columnCount = resultSet.getMetaData().getColumnCount();
+
+    	    while (resultSet.next()) {
+    	    
+    	        Object[] row = new Object[columnCount];
+
+    	        for (int i = 1; i <= columnCount; i++) {
+    	            row[i - 1] = resultSet.getObject(i); 
+    	        }
+    	        
+    	        rows.add(row);
+    	    }
+    	} catch (SQLException e) {
+    	    e.printStackTrace();
+    	}
+    
+    	return rows;
+    }
     private void selectStaff() {
         String selectSql = "SELECT * FROM staff";
         try (Statement statement = this.connection.createStatement();
