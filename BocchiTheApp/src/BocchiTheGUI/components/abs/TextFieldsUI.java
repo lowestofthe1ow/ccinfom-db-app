@@ -1,4 +1,4 @@
-package BocchiTheGUI;
+package BocchiTheGUI.components.abs;
 
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;

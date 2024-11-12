@@ -1,4 +1,4 @@
-package BocchiTheGUI;
+package BocchiTheGUI.components;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
+
+import BocchiTheGUI.components.abs.DialogUI;
 
 public class CommandDialog extends JDialog {
     private DialogUI dialogUI;
@@ -41,7 +43,7 @@ public class CommandDialog extends JDialog {
      * @param listener The listener to attach
      * @see DialogUI#addButtonListener(ActionListener)
      */
-    protected void addButtonListener(ActionListener listener) {
+    public void addButtonListener(ActionListener listener) {
         this.dialogUI.addButtonListener(listener);
     }
 

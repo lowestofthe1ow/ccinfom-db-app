@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="92f09f28-5612-419c-b83a-761afe0bd0bd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/AuditionSelectionUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/AuditionSelectionUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/BocchiTheBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/BocchiTheBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/BocchiTheMenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/BocchiTheMenuBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/CommandDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/CommandDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/DialogUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/abstract/DialogUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/GenerateReportsUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/GenerateReportsUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/HireStaffUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/HireStaffUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/RentEquipmentUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/RentEquipmentUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/SchedAuditionUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/SchedAuditionUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/TableSelectionUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/abstract/TableSelectionUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/TextFieldsUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/abstract/TextFieldsUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/TimeSlotMakerUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/TimeSlotMakerUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/UpdateStaffPosUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/UpdateStaffPosUI.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="2okROWNzgAZaw9Zbl9Wa0TlY4s7" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Lorenz/Documents/Git/ccinfom-db-app/BocchiTheApp",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Lorenz\Documents\Git\ccinfom-db-app\BocchiTheApp\src\BocchiTheGUI\components" />
+      <recent name="C:\Users\Lorenz\Documents\Git\ccinfom-db-app\BocchiTheApp\src\BocchiTheGUI\components\ui" />
+      <recent name="C:\Users\Lorenz\Documents\Git\ccinfom-db-app\BocchiTheApp\src\BocchiTheGUI\components\abstract" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="92f09f28-5612-419c-b83a-761afe0bd0bd" name="Changes" comment="" />
+      <created>1731411557039</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1731411557039</updated>
+      <workItem from="1731411557890" duration="260000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

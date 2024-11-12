@@ -1,4 +1,4 @@
-package BocchiTheGUI;
+package BocchiTheGUI.components.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import BocchiTheGUI.components.abs.DialogUI;
 import raven.datetime.component.date.DatePicker;
 import raven.datetime.component.time.TimePicker;
 
@@ -16,7 +17,7 @@ public class TimeSlotMakerUI extends DialogUI {
 	DatePicker datePicker;
 	TimePicker timePicker;
 
-	TimeSlotMakerUI() {
+	public TimeSlotMakerUI() {
 		super("Pick a date and time");
 		JPanel n = new JPanel();
 

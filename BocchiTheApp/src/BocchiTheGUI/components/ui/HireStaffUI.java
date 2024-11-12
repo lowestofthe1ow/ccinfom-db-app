@@ -1,4 +1,6 @@
-package BocchiTheGUI;
+package BocchiTheGUI.components.ui;
+
+import BocchiTheGUI.components.abs.TextFieldsUI;
 
 /* TODO: What is this for lol */
 @SuppressWarnings("serial")

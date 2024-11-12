@@ -9,6 +9,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import BocchiTheGUI.components.CommandDialog;
+import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.components.ui.AuditionSelectionUI;
+import BocchiTheGUI.components.ui.HireStaffUI;
+import BocchiTheGUI.components.ui.TimeSlotMakerUI;
+
 public class GUI extends JFrame {
     private BocchiTheMenuBar menuBar;
 

@@ -1,9 +1,11 @@
-package BocchiTheGUI;
+package BocchiTheGUI.components.ui;
 
 import java.util.ArrayList;
 
+import BocchiTheGUI.components.abs.TableSelectionUI;
+
 public class AuditionSelectionUI extends TableSelectionUI {
-	AuditionSelectionUI() {
+	public AuditionSelectionUI() {
 		super("Audition Selection", 1, "ID", "Performer Name", "Submission Link");
 		super.addButtons("Accept", "Reject");
 		setButtonActionCommands("accept_audition", "reject_audition");

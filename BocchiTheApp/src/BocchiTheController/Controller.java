@@ -11,9 +11,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import BocchiTheGUI.CommandDialog;
-import BocchiTheGUI.DialogUI;
 import BocchiTheGUI.GUI;
+import BocchiTheGUI.components.CommandDialog;
+import BocchiTheGUI.components.abs.DialogUI;
 
 public class Controller {
     private Connection connection = null;

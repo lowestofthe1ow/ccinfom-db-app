@@ -1,4 +1,4 @@
-package BocchiTheGUI;
+package BocchiTheGUI.components.abs;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
