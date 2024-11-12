@@ -76,6 +76,16 @@ public abstract class TableSelectionUI extends DialogUI {
         }
     }
 
+    
+    /*
+     * 
+     * 	TODO: Make a mouse listener that listens to what column was clicked and 
+     * switch the search priority for that column
+     * 
+     * or a Button besides JTextfield that can be repeatedly pressed to switch search priority
+     * 
+     */
+    
     private void filterTable() {
         String searchText = searchField.getText().toLowerCase();
 

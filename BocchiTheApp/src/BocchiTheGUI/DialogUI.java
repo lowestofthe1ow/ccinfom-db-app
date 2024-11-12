@@ -1,5 +1,6 @@
 package BocchiTheGUI;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
@@ -60,14 +61,14 @@ public abstract class DialogUI extends JPanel {
             buttonPanel.add(button);
         });
 
-        this.add(buttonPanel);
+        this.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public DialogUI(String dialogTitle) {
         this.dialogTitle = dialogTitle;
         this.buttons = new ArrayList<>();
         this.buttonPanel = new JPanel();
-
+        this.setLayout(new BorderLayout());
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
     }
 }

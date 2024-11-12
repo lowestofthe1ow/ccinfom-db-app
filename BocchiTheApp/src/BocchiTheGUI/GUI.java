@@ -69,6 +69,8 @@ public class GUI extends JFrame {
             case "audition":
                 a = new AuditionSelectionUI();
                 return a;
+            case "add_timeslot":
+            	return new TimeSlotMakerUI();
         }
         return null;
     }
