@@ -1,5 +1,7 @@
 package BocchiTheController;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.CallableStatement;
@@ -14,50 +16,84 @@ import java.util.List;
 import BocchiTheGUI.GUI;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.components.ui.AuditionSelectionUI;
+import BocchiTheGUI.components.ui.HireStaffUI;
+import BocchiTheGUI.components.ui.TimeSlotMakerUI;
 
 public class Controller {
     private Connection connection = null;
     private GUI gui;
 
     /**
+     * Creates a new {@link DialogUI} instance of a specific subclass based on an
+     * action command string.
+     * <ul>
+     * <li>{@code hire_staff}: {@link HireStaffUI}
+     * <li>{@code audition}: {@link AuditionSelectionUI}
+     * <li>{@code add_timeslot}: {@link TimeSlotMakerUI}
+     * </ul>
+     * No instance is created if the string does not match any of the options.
+     * 
+     * @param actionCommand The action command string
+     * @return The newly-created instance ({@code null} if no string matched)
+     */
+    private DialogUI createDialogUI(String actionCommand) {
+        switch (actionCommand) {
+            case "hire_staff":
+                return new HireStaffUI();
+            case "audition":
+                return new AuditionSelectionUI();
+            case "add_timeslot":
+                return new TimeSlotMakerUI();
+        }
+        return null;
+    }
+
+    /**
+     * Refreshes a {@link DialogUI} (i.e., updates it with data, if needed).
+     * 
+     * @param dialogUI      The UI to update
+     * @param actionCommand The action command string associated with the UI
+     */
+    private void refreshDialogUI(DialogUI dialogUI, String actionCommand) {
+        switch (actionCommand) {
+            case "audition":
+                AuditionSelectionUI castedDialogUI = (AuditionSelectionUI) dialogUI;
+                castedDialogUI.loadTableData(updateAuditionPendingList());
+        }
+    }
+
+    /**
      * Creates a {@link CommandDialog} and loads in a {@link DialogUI}.
      * 
-     * @param dialogUI The UI to load into the dialog window
+     * @param actionCommand The action command representing the UI to load into the
+     *                      window
      */
-    private void showDialog(DialogUI dialogUI) {
+    private void showDialog(String actionCommand) {
+        DialogUI dialogUI = createDialogUI(actionCommand);
+
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, () -> {
+            /* Refresh the UI */
+            refreshDialogUI(dialogUI, actionCommand);
             /* Update dialog window button listeners */
-            gui.addDialogButtonListener((e) -> {
-                if (gui.isTerminatingCommand(e.getActionCommand()))
+            dialogUI.addButtonListener((e) -> {
+                /* Process the command */
+                commandHandler(e.getActionCommand(), dialogUI.getSQLParameterInputs());
+                /* If the action command is terminating, close the window */
+                if (dialogUI.isTerminatingCommand(e.getActionCommand()))
                     gui.closeDialog();
-                commandHandler(e.getActionCommand());
-
-                /* TODO: Find a better way. Callback maybe? */
-                switch (e.getActionCommand()) {
-                    case "accept_audition":
-                    case "reject_audition":
-                        gui.updateTable(updateAuditionPendingList());
-                }
+                /* Otherwise, refresh the UI again */
+                else
+                    refreshDialogUI(dialogUI, actionCommand);
             });
             gui.showDialog();
         });
-
     }
 
     private void initializeListeners() {
-        /* TODO: Determine which UI to load from e */
         gui.setMenuListener((e) -> {
-            showDialog(gui.dialogHandler(e.getActionCommand()));
-
-            /*
-             * This would stay like this until i find a better way
-             * Copied to above
-             */
-            if (e.getActionCommand() == "audition") {
-                gui.updateTable(updateAuditionPendingList());
-            }
-
+            showDialog(e.getActionCommand());
         });
 
         gui.setWindowListener(new WindowAdapter() {
@@ -98,6 +134,7 @@ public class Controller {
         } catch (SQLException e) {
             if ("45000".equals(e.getSQLState())) {
                 System.err.println("Business Logic Error in " + procedureName + ": " + e.getMessage());
+                showMessageDialog(null, e.getMessage());
             } else {
                 throw e;
             }
@@ -127,9 +164,9 @@ public class Controller {
         }
     }
 
-    public void commandHandler(String eventString) {
+    public void commandHandler(String eventString, Object[][] sqlQueries) {
         try {
-            for (Object[] query : gui.getSQLParameterInputs()) {
+            for (Object[] query : sqlQueries) {
                 executeProcedure(eventString, query);
             }
         } catch (Exception e) {

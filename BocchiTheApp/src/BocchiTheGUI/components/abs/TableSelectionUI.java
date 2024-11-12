@@ -82,7 +82,7 @@ public abstract class TableSelectionUI extends DialogUI {
      * 
      * @param data The list of row data to insert into the table
      */
-    public void updateTable(List<Object[]> data) {
+    public void loadTableData(List<Object[]> data) {
         /* Reset the table model */
         activeTableModel.setRowCount(0);
         table.clearSelection();
@@ -99,7 +99,6 @@ public abstract class TableSelectionUI extends DialogUI {
 
         /* Reset the table model */
         activeTableModel.setRowCount(0);
-        table.clearSelection();
 
         for (Object[] row : tableRows) {
             /* TODO: Change search column based on mouse click */
@@ -108,5 +107,7 @@ public abstract class TableSelectionUI extends DialogUI {
                 activeTableModel.addRow(row);
             }
         }
+
+        table.clearSelection();
     }
 }

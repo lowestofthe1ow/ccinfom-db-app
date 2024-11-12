@@ -1,6 +1,6 @@
 package BocchiTheGUI.components.abs;
 
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public abstract class TextFieldsUI extends DialogUI {
     protected ArrayList<JTextField> formItems;
@@ -27,22 +28,18 @@ public abstract class TextFieldsUI extends DialogUI {
         this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
 
         for (String formItemLabel : formItemLabels) {
-            JPanel formItemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            formItemPanel.add(new JLabel(formItemLabel));
+            JPanel formItemPanel = new JPanel(new GridLayout());
 
             JTextField formItemTextField = new JTextField();
             formItemTextField.setColumns(15);
             this.formItems.add(formItemTextField);
 
+            formItemPanel.add(new JLabel(formItemLabel));
             formItemPanel.add(formItemTextField);
+
+            formItemPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
             this.add(formItemPanel);
         }
-    }
-
-    public void removeText() {
-        this.formItems.forEach((formItem) -> {
-            formItem.setText("");
-        });
     }
 }

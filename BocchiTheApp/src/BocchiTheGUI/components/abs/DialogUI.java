@@ -9,27 +9,53 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public abstract class DialogUI extends JPanel {
-    private ArrayList<JButton> buttons;
-    private JPanel buttonPanel;
     private String dialogTitle;
+    private JPanel buttonPanel;
 
+    private ArrayList<JButton> buttons;
     private ArrayList<String> terminatingCommands;
-
-    protected void addTerminatingActionCommands(String... commands) {
-        for (String command : commands) {
-            terminatingCommands.add(command);
-        }
-    }
-
-    public boolean isTerminatingCommand(String command) {
-        return terminatingCommands.contains(command);
-    }
 
     /**
      * {@return a 2D array of objects that represent the parameters to pass to SQL
      * query or queries} Each inner array represents a single query.
      */
     public abstract Object[][] getSQLParameterInputs();
+
+    /**
+     * Enables or disables all buttons in the UI.
+     * 
+     * @param enabled {@code true} to enable all buttons, {@code false} to disable
+     *                all buttons
+     */
+    public void setAllButtonsEnabled(boolean enabled) {
+        buttons.forEach((button) -> {
+            button.setEnabled(enabled);
+        });
+    }
+
+    /**
+     * Adds an action command string to the list of action commands that close the
+     * dialog window when triggered.
+     * 
+     * @param commands The action command strings to add
+     */
+    protected void addTerminatingCommands(String... commands) {
+        for (String command : commands) {
+            terminatingCommands.add(command);
+        }
+    }
+
+    /**
+     * Checks if an action command string is part of the list of terminating
+     * commands that close the dialog window when triggered.
+     * 
+     * @param command The action command to check
+     * @return {@code true} if the string is a terminating command, {@code false}
+     *         otherwise
+     */
+    public boolean isTerminatingCommand(String command) {
+        return terminatingCommands.contains(command);
+    }
 
     public String getDialogTitle() {
         return this.dialogTitle;
