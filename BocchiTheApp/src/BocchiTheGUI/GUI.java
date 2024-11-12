@@ -3,6 +3,7 @@ package BocchiTheGUI;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -49,18 +50,17 @@ public class GUI extends JFrame {
 
     /* Handling dialog windows */
 
-    private CommandDialog dialog;
+    private HashMap<String, CommandDialog> dialogs = new HashMap<>();
 
-    public void createDialog(DialogUI dialogUI, Runnable callback) {
-        dialog = new CommandDialog(dialogUI, callback);
+    public void createDialog(DialogUI dialogUI, String name, Runnable callback) {
+        dialogs.put(name, new CommandDialog(dialogUI, callback));
     }
 
-    public void showDialog() {
-        dialog.setVisible(true);
+    public void showDialog(String name) {
+        dialogs.get(name).setVisible(true);
     }
 
-    public void closeDialog() {
-        if (dialog != null)
-            dialog.setVisible(false);
+    public void closeDialog(String name) {
+        dialogs.get(name).setVisible(false);
     }
 }

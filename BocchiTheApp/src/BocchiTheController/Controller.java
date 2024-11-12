@@ -60,6 +60,11 @@ public class Controller {
             case "audition":
                 AuditionSelectionUI castedDialogUI = (AuditionSelectionUI) dialogUI;
                 castedDialogUI.loadTableData(executeProcedure("get_auditions"));
+                /*
+                 * TODO: Sample.
+                 * You can make a recursive call to showDialog() here to create more dialogs
+                 */
+                // showDialog("hire_staff");
         }
     }
 
@@ -73,7 +78,7 @@ public class Controller {
         DialogUI dialogUI = createDialogUI(actionCommand);
 
         /* Create the dialog window and wait for the UI to be loaded */
-        gui.createDialog(dialogUI, () -> {
+        gui.createDialog(dialogUI, actionCommand, () -> {
             /* Refresh the UI */
             refreshDialogUI(dialogUI, actionCommand);
 
@@ -84,12 +89,12 @@ public class Controller {
 
                 /* If the action command is terminating, close the window */
                 if (dialogUI.isTerminatingCommand(e.getActionCommand()))
-                    gui.closeDialog();
+                    gui.closeDialog(actionCommand);
                 /* Otherwise, refresh the UI again */
                 else
                     refreshDialogUI(dialogUI, actionCommand);
             });
-            gui.showDialog();
+            gui.showDialog(actionCommand);
         });
     }
 

@@ -9,6 +9,14 @@ public class HireStaffUI extends TextFieldsUI {
     public HireStaffUI() {
         super("Hire staff");
         addForms("First name: ", "Last name: ", "Contact number: ", "Staff position: ", "Salary: ");
+
+        /* TODO: Sample */
+        // this.add(new TableSelectionUI(null, 0, "Date", "Time") {
+        // public Object[][] getSQLParameterInputs() {
+        // return null;
+        // }
+        // });
+
         addButtons("Confirm");
         setButtonActionCommands("hire");
         addTerminatingCommands("hire");
