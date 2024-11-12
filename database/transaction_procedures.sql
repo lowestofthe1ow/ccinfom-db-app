@@ -4,7 +4,9 @@ DROP PROCEDURE IF EXISTS get_auditions;
 DELIMITER //
 CREATE PROCEDURE get_auditions ()
 BEGIN
-	SELECT a.audition_id, p.performer_name, a.submission_link, pt.timeslot_date, pt.start_time
+	SELECT a.audition_id, p.performer_name, a.submission_link, pt.timeslot_date, pt.start_time,
+		CONCAT(p.contact_first_name, ' ', p.contact_last_name) AS full_name,
+		p.contact_no AS contact_no
     FROM audition a
     LEFT JOIN performer p
 		ON p.performer_id = a.performer_id
