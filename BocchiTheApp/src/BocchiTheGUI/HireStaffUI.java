@@ -9,6 +9,7 @@ public class HireStaffUI extends TextFieldsUI {
         addForms("First name: ", "Last name: ", "Contact number: ", "Staff position: ", "Salary: ");
         addButtons("Confirm");
         setButtonActionCommands("hire");
+        addTerminatingActionCommands("hire");
     }
 
     private String getFirstName() {

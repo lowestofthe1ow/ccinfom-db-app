@@ -54,4 +54,8 @@ public class CommandDialog extends JDialog {
     public Object[][] getSQLParameterInputs() {
         return dialogUI.getSQLParameterInputs();
     }
+
+    public boolean isTerminatingCommand(String command) {
+        return dialogUI.isTerminatingCommand(command);
+    }
 }

@@ -13,6 +13,18 @@ public abstract class DialogUI extends JPanel {
     private JPanel buttonPanel;
     private String dialogTitle;
 
+    private ArrayList<String> terminatingCommands;
+
+    protected void addTerminatingActionCommands(String... commands) {
+        for (String command : commands) {
+            terminatingCommands.add(command);
+        }
+    }
+
+    public boolean isTerminatingCommand(String command) {
+        return terminatingCommands.contains(command);
+    }
+
     /**
      * {@return a 2D array of objects that represent the parameters to pass to SQL
      * query or queries} Each inner array represents a single query.
@@ -70,6 +82,7 @@ public abstract class DialogUI extends JPanel {
 
     public DialogUI(String dialogTitle) {
         this.dialogTitle = dialogTitle;
+        this.terminatingCommands = new ArrayList<>();
         this.buttons = new ArrayList<>();
         this.buttonPanel = new JPanel();
         this.setLayout(new BorderLayout());

@@ -85,6 +85,8 @@ public abstract class TableSelectionUI extends DialogUI {
     public void updateTable(List<Object[]> data) {
         /* Reset the table model */
         activeTableModel.setRowCount(0);
+        table.clearSelection();
+        tableRows.clear();
 
         for (Object[] row : data) {
             activeTableModel.addRow(row);
@@ -97,6 +99,7 @@ public abstract class TableSelectionUI extends DialogUI {
 
         /* Reset the table model */
         activeTableModel.setRowCount(0);
+        table.clearSelection();
 
         for (Object[] row : tableRows) {
             /* TODO: Change search column based on mouse click */

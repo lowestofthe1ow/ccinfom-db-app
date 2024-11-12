@@ -29,8 +29,16 @@ public class Controller {
         gui.createDialog(dialogUI, () -> {
             /* Update dialog window button listeners */
             gui.addDialogButtonListener((e) -> {
-                gui.closeDialog();
+                if (gui.isTerminatingCommand(e.getActionCommand()))
+                    gui.closeDialog();
                 commandHandler(e.getActionCommand());
+
+                /* TODO: Find a better way. Callback maybe? */
+                switch (e.getActionCommand()) {
+                    case "accept_audition":
+                    case "reject_audition":
+                        gui.updateTable(updateAuditionPendingList());
+                }
             });
             gui.showDialog();
         });
@@ -42,7 +50,10 @@ public class Controller {
         gui.setMenuListener((e) -> {
             showDialog(gui.dialogHandler(e.getActionCommand()));
 
-            /* This would stay like this until i find a better way */
+            /*
+             * This would stay like this until i find a better way
+             * Copied to above
+             */
             if (e.getActionCommand() == "audition") {
                 gui.updateTable(updateAuditionPendingList());
             }

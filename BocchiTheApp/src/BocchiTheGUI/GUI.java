@@ -90,4 +90,8 @@ public class GUI extends JFrame {
         if (dialog != null)
             dialog.setVisible(false);
     }
+
+    public boolean isTerminatingCommand(String command) {
+        return this.dialog.isTerminatingCommand(command);
+    }
 }
