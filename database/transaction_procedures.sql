@@ -289,7 +289,7 @@ CREATE PROCEDURE add_performance_timeslot (
     IN end_time TIME
 )
 BEGIN
-	INSERT INTO performer (`timeslot_date`, `start_time`, `end_time`) 
+	INSERT INTO performance_timeslot (`timeslot_date`, `start_time`, `end_time`) 
 		VALUES (timeslot_date, start_time, end_time);
 END //
 DELIMITER ;
