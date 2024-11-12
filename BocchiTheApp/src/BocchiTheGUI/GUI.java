@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import BocchiTheGUI.components.BocchiTheMenuBar;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
 import BocchiTheGUI.components.abs.TableSelectionUI;

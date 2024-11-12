@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
 public class BocchiTheMenuBar extends JMenuBar {
     private List<JMenu> menuTitles;
 
-    BocchiTheMenuBar() {
+    public BocchiTheMenuBar() {
         menuTitles = new ArrayList<>();
 
         menuTitles.add(createMenu("Staff",
