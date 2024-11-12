@@ -140,9 +140,9 @@ public class Controller {
     }
 
     public List<Object[]> updateAuditionPendingList() {
-        String selectSql = "SELECT a.audition_id, p.performer_name, a.submission_link "
+        String selectSql = "SELECT a.id, p.performer_name, a.submission_link "
                 + "FROM audition a "
-                + "LEFT JOIN performer p ON p.performer_id = a.performer_id "
+                + "LEFT JOIN performer p ON p.id = a.performer_id "
                 + "WHERE a.audition_status = 'PENDING';";
 
         return updateList(selectSql);
@@ -171,10 +171,6 @@ public class Controller {
 
         return rows;
     }
-<<<<<<< HEAD
-    
-    
-=======
 
     private void selectStaff() {
         String selectSql = "SELECT * FROM staff";
@@ -218,5 +214,5 @@ public class Controller {
         }
     }
 
->>>>>>> branch 'dialog-rewrite' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
+
 }

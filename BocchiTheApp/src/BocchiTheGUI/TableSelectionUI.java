@@ -36,7 +36,13 @@ public abstract class TableSelectionUI extends DialogUI {
         };
         
         table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        
+        
+        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        
+        
+        
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane);
 
