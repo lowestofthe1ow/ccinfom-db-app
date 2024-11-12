@@ -4,10 +4,12 @@ DROP PROCEDURE IF EXISTS get_auditions;
 DELIMITER //
 CREATE PROCEDURE get_auditions ()
 BEGIN
-	SELECT a.audition_id, p.performer_name, a.submission_link
+	SELECT a.audition_id, p.performer_name, a.submission_link, pt.timeslot_date, pt.start_time
     FROM audition a
     LEFT JOIN performer p
 		ON p.performer_id = a.performer_id
+	LEFT JOIN performance_timeslot pt
+		ON a.target_timeslot_id = pt.performance_timeslot_id
     WHERE a.audition_status = 'PENDING';
 END //
 DELIMITER ;
