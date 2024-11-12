@@ -3,28 +3,27 @@ package BocchiTheGUI;
 import java.util.ArrayList;
 
 public class AuditionSelectionUI extends TableSelectionUI {
-
 	AuditionSelectionUI() {
-
-		super("Audition Selection", "ID", "Performer Name", "Submission Link");
-		super.addButtons("Accept");
-		super.addButtons("Reject");
+		super("Audition Selection", 1, "ID", "Performer Name", "Submission Link");
+		super.addButtons("Accept", "Reject");
 		setButtonActionCommands("accept_audition", "reject_audition");
 	}
 
+	/**
+	 * {@inheritDoc} Each query represents a row included in the table selection
+	 * (which may include multiple rows).
+	 */
 	@Override
 	public Object[][] getSQLParameterInputs() {
+		/* Get selected rows and create an empty ArrayList */
 		int[] selectedRowIndices = table.getSelectedRows();
-
-		if (selectedRowIndices.length == 0) {
-			return null;
-		}
-
 		ArrayList<Object[]> retval = new ArrayList<>();
 
 		for (int selectedRowIndex : selectedRowIndices) {
+			/* Create an array containing only the audition ID */
 			Object[] val = { table.getValueAt(selectedRowIndex, 0) };
 
+			/* Verify that the ID is an integer */
 			if (val[0] instanceof Integer) {
 				retval.add(val);
 			} else {
@@ -32,6 +31,10 @@ public class AuditionSelectionUI extends TableSelectionUI {
 			}
 		}
 
+		/*
+		 * Return an array of singleton array (each singleton is processed as the
+		 * parameter passed to the SQL stored procedure)
+		 */
 		return retval.toArray(new Object[retval.size()][]);
 	}
 }

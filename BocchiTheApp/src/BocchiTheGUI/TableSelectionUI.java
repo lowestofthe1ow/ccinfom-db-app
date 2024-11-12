@@ -5,48 +5,61 @@ import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 public abstract class TableSelectionUI extends DialogUI {
-    private JTextField searchField;
     protected JTable table;
-    private DefaultTableModel tableModel;
-    private List<Object[]> TABLEPERM;
+    private DefaultTableModel activeTableModel;
+    private List<Object[]> tableRows;
 
-	public TableSelectionUI(String name, String... columnNames) {
-    	super(name);
-        setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
+    private JTextField searchField;
+    private int searchColumnIndex;
 
-        searchField = new JTextField();
-        searchField.setPreferredSize(new Dimension(300, 30));
-        add(searchField);
-        
-        TABLEPERM = new ArrayList<>();
-        
-        Object[][] names = null;
-        
-        tableModel = new DefaultTableModel(names, columnNames) {
+    /**
+     * Creates a dialog window for table selection.
+     * 
+     * @param name              Dialog window name
+     * @param searchColumnIndex The index of the column used by the search box
+     * @param columnNames       The names for each column
+     */
+    public TableSelectionUI(String name, int searchColumnIndex, String... columnNames) {
+        super(name);
+        this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        /* Create an empty list of row data */
+        this.tableRows = new ArrayList<>();
+
+        /* Create an empty table model */
+        this.activeTableModel = new DefaultTableModel(null, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; 
+                return false;
             }
         };
-        
-        table = new JTable(tableModel);
-        
-        
-        
-        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
-        
-        
-        JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane);
 
-        searchField.getDocument().addDocumentListener(new DocumentListener() {
+        /* Create JTable based on model */
+        this.table = new JTable(activeTableModel);
+        this.table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        /* Wrap JTable in JScrollPane and add it */
+        JScrollPane scrollPane = new JScrollPane(table);
+        this.add(scrollPane);
+
+        /* Initialize search box */
+        this.searchField = new JTextField();
+        this.searchField.setPreferredSize(new Dimension(300, 30));
+        this.searchColumnIndex = searchColumnIndex;
+        this.add(searchField);
+
+        /* Add listener to search box */
+        this.searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 filterTable();
@@ -62,41 +75,35 @@ public abstract class TableSelectionUI extends DialogUI {
                 filterTable();
             }
         });
-        
-       
-
     }
 
+    /**
+     * Updates the table with data.
+     * 
+     * @param data The list of row data to insert into the table
+     */
     public void updateTable(List<Object[]> data) {
-        tableModel.setRowCount(0);
-       
+        /* Reset the table model */
+        activeTableModel.setRowCount(0);
+
         for (Object[] row : data) {
-            tableModel.addRow(row);
-            TABLEPERM.add(row);
+            activeTableModel.addRow(row);
+            tableRows.add(row);
         }
     }
 
-    
-    /*
-     * 
-     * 	TODO: Make a mouse listener that listens to what column was clicked and 
-     * switch the search priority for that column
-     * 
-     * or a Button besides JTextfield that can be repeatedly pressed to switch search priority
-     * 
-     */
-    
     private void filterTable() {
         String searchText = searchField.getText().toLowerCase();
 
-        tableModel.setRowCount(0);
-        for (Object[] row : TABLEPERM) {
-            String rowString = (String) row[1]; 
+        /* Reset the table model */
+        activeTableModel.setRowCount(0);
+
+        for (Object[] row : tableRows) {
+            /* TODO: Change search column based on mouse click */
+            String rowString = (String) row[searchColumnIndex];
             if (rowString.toLowerCase().contains(searchText)) {
-                tableModel.addRow(row);
+                activeTableModel.addRow(row);
             }
         }
     }
-    
-	
 }

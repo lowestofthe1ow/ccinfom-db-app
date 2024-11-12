@@ -31,21 +31,19 @@ public class HireStaffUI extends TextFieldsUI {
     }
 
     /**
-     * {@return an array of objects that represent the parameters to pass to the SQL
-     * query} Uses values from the form inputs.
+     * {@inheritDoc} Contains only the parameters for a single query, as multiple
+     * simultaneous hires are not allowed.
      */
-
     @Override
     public Object[][] getSQLParameterInputs() {
-        Object[][] SQLParameters = {
-                {
-                        getFirstName(),
-                        getLastName(),
-                        getContactNo(),
-                        getPositionName(),
-                        getSalary()
-                } };
+        Object[][] retval = { {
+                getFirstName(),
+                getLastName(),
+                getContactNo(),
+                getPositionName(),
+                getSalary()
+        } };
 
-        return SQLParameters;
+        return retval;
     }
 }

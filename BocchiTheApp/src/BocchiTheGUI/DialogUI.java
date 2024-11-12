@@ -13,6 +13,10 @@ public abstract class DialogUI extends JPanel {
     private JPanel buttonPanel;
     private String dialogTitle;
 
+    /**
+     * {@return a 2D array of objects that represent the parameters to pass to SQL
+     * query or queries} Each inner array represents a single query.
+     */
     public abstract Object[][] getSQLParameterInputs();
 
     public String getDialogTitle() {
