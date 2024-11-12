@@ -1,6 +1,5 @@
 package BocchiTheController;
 
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.CallableStatement;
@@ -12,17 +11,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import BocchiTheGUI.CommandDialog;
 import BocchiTheGUI.DialogUI;
 import BocchiTheGUI.GUI;
-import BocchiTheGUI.HireStaffUI;
 
 public class Controller {
     private Connection connection = null;
     private GUI gui;
 
+    /**
+     * Creates a {@link CommandDialog} and loads in a {@link DialogUI}.
+     * 
+     * @param dialogUI The UI to load into the dialog window
+     */
     private void showDialog(DialogUI dialogUI) {
-        /* Show the dialog window and wait for the UI to be loaded */
-
+        /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, () -> {
             /* Update dialog window button listeners */
             gui.addDialogButtonListener((e) -> {
@@ -35,13 +38,8 @@ public class Controller {
     }
 
     private void initializeListeners() {
-        /*
-         * Add a listener to the menu button
-         * TODO: See if it's possible to store info of which UI to load from e
-         * This will allow us to reuse the same listener for every menu button
-         */
+        /* TODO: Determine which UI to load from e */
         gui.setMenuListener((e) -> {
-
             showDialog(gui.dialogHandler(e.getActionCommand()));
 
             /* This would stay like this until i find a better way */
@@ -59,6 +57,7 @@ public class Controller {
         });
     }
 
+    /* TODO: Clean up */
     public void executeProcedure(String procedureName, Object... params) throws SQLException {
         String callSql = generateCallSql(procedureName, params.length);
 
@@ -122,7 +121,6 @@ public class Controller {
             for (Object[] query : gui.getSQLParameterInputs()) {
                 executeProcedure(eventString, query);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("There are no errors in Bocchi the Database Application.");
@@ -130,15 +128,10 @@ public class Controller {
     }
 
     public Controller(Connection connection, GUI gui) {
-
         this.connection = connection;
         this.gui = gui;
 
         initializeListeners();
-        // hireStaff("Akai Haato", "", "09156621444", "Staff", 200);
-        // addPosition(1, "HEAD", 500);
-        // selectStaff();
-        // selectStaffPosition();
     }
 
     public List<Object[]> updateAuditionPendingList() {

@@ -1,5 +1,6 @@
 package BocchiTheGUI;
 
+/* TODO: What is this for lol */
 @SuppressWarnings("serial")
 
 public class HireStaffUI extends TextFieldsUI {

@@ -29,7 +29,7 @@ public class CommandDialog extends JDialog {
             this.setSize(400, 360);
             this.getContentPane().add(dialogUI);
             this.setTitle(dialogUI.getDialogTitle());
-            pack();
+            this.pack();
             onReady.run();
         });
     }

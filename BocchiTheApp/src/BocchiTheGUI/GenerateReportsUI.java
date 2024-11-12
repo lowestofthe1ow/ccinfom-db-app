@@ -1,25 +1,21 @@
 package BocchiTheGUI;
 
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
 public class GenerateReportsUI extends JPanel {
-    // Buttons
     private JButton performerSalesBtn, livehouseSalesBtn, rentalSalesBtn;
     private JButton livehouseSchedBtn, staffSalaryBtn;
 
     public GenerateReportsUI() {
         this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        //Set up buttons
         this.performerSalesBtn = new JButton("Performer sales");
         this.performerSalesBtn.setPreferredSize(new Dimension(300, 30));
         this.performerSalesBtn.setFont(new Font("Dialog", Font.PLAIN, 15));
@@ -47,6 +43,8 @@ public class GenerateReportsUI extends JPanel {
         this.add(this.staffSalaryBtn);
     }
 
+    /* TODO: They can all use the same listener? */
+
     public void setBtnAActionListener(ActionListener actionListener) {
         this.performerSalesBtn.addActionListener(actionListener);
     }
@@ -58,7 +56,7 @@ public class GenerateReportsUI extends JPanel {
     public void setBtnCActionListener(ActionListener actionListener) {
         this.rentalSalesBtn.addActionListener(actionListener);
     }
-    
+
     public void setBtnDActionListener(ActionListener actionListener) {
         this.livehouseSchedBtn.addActionListener(actionListener);
     }

@@ -16,6 +16,11 @@ public abstract class TextFieldsUI extends DialogUI {
         super(dialogTitle);
     }
 
+    /**
+     * Adds {@link JTextField} forms to the UI
+     * 
+     * @param formItemLabels The labels to add to each form
+     */
     protected void addForms(String... formItemLabels) {
         this.formItems = new ArrayList<>();
 
