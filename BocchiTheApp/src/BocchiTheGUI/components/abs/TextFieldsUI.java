@@ -37,7 +37,7 @@ public abstract class TextFieldsUI extends DialogUI {
             formItemPanel.add(new JLabel(formItemLabel));
             formItemPanel.add(formItemTextField);
 
-            formItemPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+            formItemPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
 
             this.add(formItemPanel);
         }

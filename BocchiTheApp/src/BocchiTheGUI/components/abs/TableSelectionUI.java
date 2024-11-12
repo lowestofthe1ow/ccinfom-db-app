@@ -1,15 +1,19 @@
 package BocchiTheGUI.components.abs;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -50,13 +54,21 @@ public abstract class TableSelectionUI extends DialogUI {
 
         /* Wrap JTable in JScrollPane and add it */
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(500, 250));
         this.add(scrollPane);
 
         /* Initialize search box */
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new GridLayout(2, 1));
+        searchPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
+
         this.searchField = new JTextField();
         this.searchField.setPreferredSize(new Dimension(300, 30));
         this.searchColumnIndex = searchColumnIndex;
-        this.add(searchField);
+
+        searchPanel.add(new JLabel("Search by " + columnNames[searchColumnIndex] + ": "));
+        searchPanel.add(searchField);
+        this.add(searchPanel);
 
         /* Add listener to search box */
         this.searchField.getDocument().addDocumentListener(new DocumentListener() {
