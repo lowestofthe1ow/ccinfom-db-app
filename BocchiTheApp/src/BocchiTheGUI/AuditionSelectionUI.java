@@ -13,25 +13,25 @@ public class AuditionSelectionUI extends TableSelectionUI {
 	}
 
 	@Override
-	public Object[] getSQLParameterInputs() {
+	public Object[][] getSQLParameterInputs() {
 		int[] selectedRowIndices = table.getSelectedRows();
 
 		if (selectedRowIndices.length == 0) {
 			return null;
 		}
 
-		ArrayList<Object> retval = new ArrayList<>();
+		ArrayList<Object[]> retval = new ArrayList<>();
 
 		for (int selectedRowIndex : selectedRowIndices) {
-			Object val = table.getValueAt(selectedRowIndex, 0);
+			Object[] val = { table.getValueAt(selectedRowIndex, 0) };
 
-			if (val instanceof Integer) {
+			if (val[0] instanceof Integer) {
 				retval.add(val);
 			} else {
 				throw new IllegalArgumentException("Selected row(s) does not have an Integer ID.");
 			}
 		}
 
-		return retval.toArray();
+		return retval.toArray(new Object[retval.size()][]);
 	}
 }

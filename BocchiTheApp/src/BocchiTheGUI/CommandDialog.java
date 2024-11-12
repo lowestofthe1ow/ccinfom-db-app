@@ -51,7 +51,7 @@ public class CommandDialog extends JDialog {
      * 
      * @see DialogUI#getSQLParameterInputs()
      */
-    public Object[] getSQLParameterInputs() {
+    public Object[][] getSQLParameterInputs() {
         return dialogUI.getSQLParameterInputs();
     }
 }

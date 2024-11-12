@@ -26,11 +26,11 @@ public class GUI extends JFrame {
     // The other pages
 
     public GUI() {
-        
+
         menuBar = new BocchiTheMenuBar();
-        
+
         this.setJMenuBar(menuBar);
-        
+
         ImageIcon gifIcon = new ImageIcon(
                 getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-rock-bocchi.gif"));
         JLabel gifLabel = new JLabel(gifIcon);
@@ -39,7 +39,7 @@ public class GUI extends JFrame {
         this.setTitle("Bocchi the GUI");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-       // this.add(new BocchiTheBody(), BorderLayout.CENTER);
+        // this.add(new BocchiTheBody(), BorderLayout.CENTER);
         this.setSize(960, 600);
 
         this.add(gifLabel, BorderLayout.CENTER);
@@ -54,21 +54,23 @@ public class GUI extends JFrame {
     public void setMenuListener(ActionListener actionListener) {
         this.menuBar.addMenuListener(actionListener);
     }
-    
+
     // TABLE SELECTION GALORE
     private TableSelectionUI a;
+
     public void updateTable(List<Object[]> b) {
-    	a.updateTable(b);
+        a.updateTable(b);
     }
+
     public DialogUI dialogHandler(String event) {
-    	switch(event) {
-    	case "hire_staff":
-    		return new HireStaffUI();
-    	case "audition":
-    		a = new AuditionSelectionUI();
-    		return a;
-    	}
-		return null;
+        switch (event) {
+            case "hire_staff":
+                return new HireStaffUI();
+            case "audition":
+                a = new AuditionSelectionUI();
+                return a;
+        }
+        return null;
     }
 
     /* LOWEST'S WEIRD NEW DIALOG STUFF */
@@ -84,21 +86,18 @@ public class GUI extends JFrame {
             dialog.setVisible(false);
     }
 
-    public Object[] getSQLParameterInputs() {
+    public Object[][] getSQLParameterInputs() {
         return dialog.getSQLParameterInputs();
     }
 
     public void addDialogButtonListener(ActionListener listener) {
         this.dialog.addButtonListener(listener);
     }
-    
+
     public void showDialog() {
         dialog.setVisible(true);
     }
 
     /* END OF LOWEST'S WEIRD NEW DIALOG STUFF */
-
-    
-
 
 }

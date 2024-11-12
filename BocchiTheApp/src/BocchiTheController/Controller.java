@@ -119,7 +119,9 @@ public class Controller {
 
     public void commandHandler(String eventString) {
         try {
-            executeProcedure(eventString, gui.getSQLParameterInputs());
+            for (Object[] query : gui.getSQLParameterInputs()) {
+                executeProcedure(eventString, query);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,9 +142,9 @@ public class Controller {
     }
 
     public List<Object[]> updateAuditionPendingList() {
-        String selectSql = "SELECT a.id, p.performer_name, a.submission_link "
+        String selectSql = "SELECT a.audition_id, p.performer_name, a.submission_link "
                 + "FROM audition a "
-                + "LEFT JOIN performer p ON p.id = a.performer_id "
+                + "LEFT JOIN performer p ON p.performer_id = a.performer_id "
                 + "WHERE a.audition_status = 'PENDING';";
 
         return updateList(selectSql);
@@ -213,6 +215,5 @@ public class Controller {
             e.printStackTrace();
         }
     }
-
 
 }
