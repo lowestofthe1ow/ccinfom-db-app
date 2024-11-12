@@ -1,3 +1,17 @@
+-- Fetch audition data
+
+DROP PROCEDURE IF EXISTS get_auditions;
+DELIMITER //
+CREATE PROCEDURE get_auditions ()
+BEGIN
+	SELECT a.audition_id, p.performer_name, a.submission_link
+    FROM audition a
+    LEFT JOIN performer p
+		ON p.performer_id = a.performer_id
+    WHERE a.audition_status = 'PENDING';
+END //
+DELIMITER ;
+
 -- Hiring staff
 
 DROP PROCEDURE IF EXISTS hire;

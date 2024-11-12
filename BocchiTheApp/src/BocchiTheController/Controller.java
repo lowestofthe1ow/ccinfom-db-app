@@ -6,12 +6,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import BocchiTheGUI.GUI;
 import BocchiTheGUI.components.CommandDialog;
@@ -59,7 +59,7 @@ public class Controller {
         switch (actionCommand) {
             case "audition":
                 AuditionSelectionUI castedDialogUI = (AuditionSelectionUI) dialogUI;
-                castedDialogUI.loadTableData(updateAuditionPendingList());
+                castedDialogUI.loadTableData(executeProcedure("get_auditions"));
         }
     }
 
@@ -76,10 +76,12 @@ public class Controller {
         gui.createDialog(dialogUI, () -> {
             /* Refresh the UI */
             refreshDialogUI(dialogUI, actionCommand);
+
             /* Update dialog window button listeners */
             dialogUI.addButtonListener((e) -> {
                 /* Process the command */
-                commandHandler(e.getActionCommand(), dialogUI.getSQLParameterInputs());
+                parseButtonCommand(e.getActionCommand(), dialogUI.getSQLParameterInputs());
+
                 /* If the action command is terminating, close the window */
                 if (dialogUI.isTerminatingCommand(e.getActionCommand()))
                     gui.closeDialog();
@@ -91,30 +93,57 @@ public class Controller {
         });
     }
 
-    private void initializeListeners() {
-        gui.setMenuListener((e) -> {
-            showDialog(e.getActionCommand());
-        });
+    /**
+     * Parses a {@link ResultSet} object returned by an SQL query.
+     * 
+     * @param resultSet The result set to parse
+     * @return A list of all the rows in the resulting set.
+     */
+    private List<Object[]> parseResultSet(ResultSet resultSet) {
+        List<Object[]> rows = new ArrayList<>();
 
-        gui.setWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                closeConnection();
+        try {
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            while (resultSet.next()) {
+                Object[] row = new Object[columnCount];
+
+                for (int i = 1; i <= columnCount; i++) {
+                    row[i - 1] = resultSet.getObject(i);
+                }
+
+                rows.add(row);
             }
-        });
+        } catch (SQLException e) {
+            System.err.println("Failed to parse result set: " + e.getMessage());
+            showMessageDialog(null, e.getMessage(), "Database error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return rows;
     }
 
-    /* TODO: Clean up */
-    public void executeProcedure(String procedureName, Object... params) throws SQLException {
+    /**
+     * Executes a stored procedure.
+     * 
+     * @param procedureName The name of the stored procedure
+     * @param params        The parameters to pass to the stored procedure
+     * @return A list of all the rows in the resulting set (as parsed by
+     *         {@link #parseButtonCommand(String, Object[][])}). If the stored
+     *         procedure does not return a result set, returns {@code null} instead.
+     */
+    private List<Object[]> executeProcedure(String procedureName, Object... params) {
         String callSql = generateCallSql(procedureName, params.length);
+        System.out.println(callSql);
 
         try (CallableStatement cs = connection.prepareCall(callSql)) {
             for (int i = 0; i < params.length; i++) {
                 Object param = params[i];
+
                 if (param == null) {
                     cs.setString(i + 1, "");
                     continue;
                 }
+
+                /* Resolve parameter data types */
                 if (param instanceof Integer) {
                     cs.setInt(i + 1, (Integer) param);
                 } else if (param instanceof Long) {
@@ -127,21 +156,39 @@ public class Controller {
                     throw new IllegalArgumentException("Unsupported parameter type: " + param.getClass().getName());
                 }
             }
-            cs.execute();
 
-            System.out.println(procedureName + " executed successfully.");
-
-        } catch (SQLException e) {
-            if ("45000".equals(e.getSQLState())) {
-                System.err.println("Business Logic Error in " + procedureName + ": " + e.getMessage());
-                showMessageDialog(null, e.getMessage());
+            /* execute() returns true if a result set was returned */
+            if (cs.execute() == true) {
+                ResultSet resultSet = cs.getResultSet();
+                System.out.println(procedureName + " executed successfully. Result set was returned");
+                return parseResultSet(resultSet);
             } else {
-                throw e;
+                System.out.println(procedureName + " executed successfully. Result set was not returned");
+                return null;
             }
+        } catch (SQLException e) {
+            /* SQL state 45000 indicates a user-defined error (business logic error) */
+            if ("45000".equals(e.getSQLState())) {
+                System.err.println("Business logic error in " + procedureName + ": " + e.getMessage());
+                showMessageDialog(null, e.getMessage(), "Logical error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                System.err.println("Unexpected SQL error in " + procedureName + ": " + e.getMessage());
+                showMessageDialog(null, e.getMessage(), "Unexpected SQL error", JOptionPane.ERROR_MESSAGE);
+            }
+            return null;
         }
     }
 
+    /**
+     * Generates an SQL string for calling a stored procedure. Parameters are
+     * replaced with question marks, as in {@code CALL accept_audition(?)}
+     * 
+     * @param procedureName The name of the procedure
+     * @param paramCount    The number of parameters
+     * @return The SQL string
+     */
     private String generateCallSql(String procedureName, int paramCount) {
+        /* Wrap around braces */
         StringBuilder callSql = new StringBuilder("{CALL " + procedureName + "(");
         for (int i = 0; i < paramCount; i++) {
             callSql.append("?");
@@ -153,7 +200,7 @@ public class Controller {
         return callSql.toString();
     }
 
-    public void closeConnection() {
+    private void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();
@@ -164,7 +211,7 @@ public class Controller {
         }
     }
 
-    public void commandHandler(String eventString, Object[][] sqlQueries) {
+    private void parseButtonCommand(String eventString, Object[][] sqlQueries) {
         try {
             for (Object[] query : sqlQueries) {
                 executeProcedure(eventString, query);
@@ -175,86 +222,25 @@ public class Controller {
         }
     }
 
+    private void initializeListeners() {
+        /* Set menu bar listener */
+        gui.setMenuListener((e) -> {
+            showDialog(e.getActionCommand());
+        });
+
+        /* Set window closing listener */
+        gui.setWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeConnection();
+            }
+        });
+    }
+
     public Controller(Connection connection, GUI gui) {
         this.connection = connection;
         this.gui = gui;
 
         initializeListeners();
     }
-
-    public List<Object[]> updateAuditionPendingList() {
-        String selectSql = "SELECT a.audition_id, p.performer_name, a.submission_link "
-                + "FROM audition a "
-                + "LEFT JOIN performer p ON p.performer_id = a.performer_id "
-                + "WHERE a.audition_status = 'PENDING';";
-
-        return updateList(selectSql);
-    }
-
-    public List<Object[]> updateList(String selectSql) {
-        List<Object[]> rows = new ArrayList<>();
-
-        try (Statement statement = this.connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(selectSql)) {
-            int columnCount = resultSet.getMetaData().getColumnCount();
-
-            while (resultSet.next()) {
-
-                Object[] row = new Object[columnCount];
-
-                for (int i = 1; i <= columnCount; i++) {
-                    row[i - 1] = resultSet.getObject(i);
-                }
-
-                rows.add(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return rows;
-    }
-
-    private void selectStaff() {
-        String selectSql = "SELECT * FROM staff";
-        try (Statement statement = this.connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(selectSql)) {
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                String contactNo = resultSet.getString("contact_no");
-
-                System.out.println("ID: " + id +
-                        ", First Name: " + firstName +
-                        ", Last Name: " + lastName +
-                        ", Contact No: " + contactNo);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void selectStaffPosition() {
-        String selectSql = "SELECT * FROM staff_position";
-        try (Statement statement = this.connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(selectSql)) {
-            while (resultSet.next()) {
-                int staffId = resultSet.getInt("staff_id");
-                String positionName = resultSet.getString("staff_position_name");
-                double salary = resultSet.getDouble("staff_salary");
-                Date startDate = resultSet.getDate("start_date");
-                Date endDate = resultSet.getDate("end_date");
-
-                System.out.println("Staff ID: " + staffId +
-                        ", Position: " + positionName +
-                        ", Salary: " + salary +
-                        ", Start Date: " + startDate +
-                        ", End Date: " + (endDate != null ? endDate : "Currently Employed"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
