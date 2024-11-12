@@ -22,7 +22,7 @@ public class Controller {
 
     private void showDialog(DialogUI dialogUI) {
         /* Show the dialog window and wait for the UI to be loaded */
-    	
+
         gui.createDialog(dialogUI, () -> {
             /* Update dialog window button listeners */
             gui.addDialogButtonListener((e) -> {
@@ -31,7 +31,7 @@ public class Controller {
             });
             gui.showDialog();
         });
-       
+
     }
 
     private void initializeListeners() {
@@ -41,15 +41,14 @@ public class Controller {
          * This will allow us to reuse the same listener for every menu button
          */
         gui.setMenuListener((e) -> {
-        	
-        	
-            showDialog(gui.dialogHandler(e.getActionCommand())); 
-            
-            /*This would stay like this until i find a better way */
-            if(e.getActionCommand() == "audition" ) {
-        		gui.updateTable(updateAuditionPendingList());
-        	}
-            
+
+            showDialog(gui.dialogHandler(e.getActionCommand()));
+
+            /* This would stay like this until i find a better way */
+            if (e.getActionCommand() == "audition") {
+                gui.updateTable(updateAuditionPendingList());
+            }
+
         });
 
         gui.setWindowListener(new WindowAdapter() {
@@ -85,7 +84,7 @@ public class Controller {
             cs.execute();
 
             System.out.println(procedureName + " executed successfully.");
-            
+
         } catch (SQLException e) {
             if ("45000".equals(e.getSQLState())) {
                 System.err.println("Business Logic Error in " + procedureName + ": " + e.getMessage());
@@ -120,9 +119,8 @@ public class Controller {
 
     public void commandHandler(String eventString) {
         try {
-        	executeProcedure(eventString, gui.getSQLParameterInputs());
-        	
-         
+            executeProcedure(eventString, gui.getSQLParameterInputs());
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("There are no errors in Bocchi the Database Application.");
@@ -142,38 +140,83 @@ public class Controller {
     }
 
     public List<Object[]> updateAuditionPendingList() {
-        String selectSql = "SELECT a.id, p.performer_name, a.submission_link "
-			                + "FROM audition a "
-			                + "LEFT JOIN performer p ON p.id = a.performer_id "
-			                + "WHERE a.audition_status = 'PENDING';";
+        String selectSql = "SELECT a.audition_id, p.performer_name, a.submission_link "
+                + "FROM audition a "
+                + "LEFT JOIN performer p ON p.performer_id = a.performer_id "
+                + "WHERE a.audition_status = 'PENDING';";
 
-       return updateList(selectSql);
+        return updateList(selectSql);
     }
-    
-    
+
     public List<Object[]> updateList(String selectSql) {
-    	List<Object[]> rows = new ArrayList<>();
+        List<Object[]> rows = new ArrayList<>();
 
-    	try (Statement statement = this.connection.createStatement();
-    	        ResultSet resultSet = statement.executeQuery(selectSql)) {
-    	    int columnCount = resultSet.getMetaData().getColumnCount();
+        try (Statement statement = this.connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(selectSql)) {
+            int columnCount = resultSet.getMetaData().getColumnCount();
 
-    	    while (resultSet.next()) {
-    	    
-    	        Object[] row = new Object[columnCount];
+            while (resultSet.next()) {
 
-    	        for (int i = 1; i <= columnCount; i++) {
-    	            row[i - 1] = resultSet.getObject(i); 
-    	        }
-    	        
-    	        rows.add(row);
-    	    }
-    	} catch (SQLException e) {
-    	    e.printStackTrace();
-    	}
-    
-    	return rows;
+                Object[] row = new Object[columnCount];
+
+                for (int i = 1; i <= columnCount; i++) {
+                    row[i - 1] = resultSet.getObject(i);
+                }
+
+                rows.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rows;
     }
+<<<<<<< HEAD
     
     
+=======
+
+    private void selectStaff() {
+        String selectSql = "SELECT * FROM staff";
+        try (Statement statement = this.connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(selectSql)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String contactNo = resultSet.getString("contact_no");
+
+                System.out.println("ID: " + id +
+                        ", First Name: " + firstName +
+                        ", Last Name: " + lastName +
+                        ", Contact No: " + contactNo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void selectStaffPosition() {
+        String selectSql = "SELECT * FROM staff_position";
+        try (Statement statement = this.connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(selectSql)) {
+            while (resultSet.next()) {
+                int staffId = resultSet.getInt("staff_id");
+                String positionName = resultSet.getString("staff_position_name");
+                double salary = resultSet.getDouble("staff_salary");
+                Date startDate = resultSet.getDate("start_date");
+                Date endDate = resultSet.getDate("end_date");
+
+                System.out.println("Staff ID: " + staffId +
+                        ", Position: " + positionName +
+                        ", Salary: " + salary +
+                        ", Start Date: " + startDate +
+                        ", End Date: " + (endDate != null ? endDate : "Currently Employed"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+>>>>>>> branch 'dialog-rewrite' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
 }
