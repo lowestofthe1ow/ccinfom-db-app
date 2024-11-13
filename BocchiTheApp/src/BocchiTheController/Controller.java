@@ -8,6 +8,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,7 +158,10 @@ public class Controller {
                     cs.setString(i + 1, (String) param);
                 } else if (param instanceof Double) {
                     cs.setDouble(i + 1, (Double) param);
+                } else if (param instanceof Timestamp) {
+                	cs.setTimestamp(i + 1, (Timestamp) param);
                 } else {
+                	
                     throw new IllegalArgumentException("Unsupported parameter type: " + param.getClass().getName());
                 }
             }

@@ -1,70 +1,124 @@
 package BocchiTheGUI.components.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.time.LocalTime;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import BocchiTheGUI.components.abs.DialogUI;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JFormattedTextField;
+import raven.datetime.component.date.DateEvent;
 import raven.datetime.component.date.DatePicker;
+import raven.datetime.component.date.DateSelectionListener;
+import raven.datetime.component.time.TimeEvent;
 import raven.datetime.component.time.TimePicker;
+import raven.datetime.component.time.TimeSelectionListener;
+
 
 public class TimeSlotMakerUI extends DialogUI {
-	DatePicker datePicker;
-	TimePicker timePicker;
+    
+    /* would love to make this fields less but.... idk how */
+    private LocalDate startDate;
+    private LocalTime startTime;
+    private LocalDate endDate;
+    private LocalTime endTime;
 
-	public TimeSlotMakerUI() {
-		super("Pick a date and time");
-		JPanel n = new JPanel();
+    public TimeSlotMakerUI() {
+        super("Pick a date and time");
+        
+        JPanel startPanel = createDateTimePickerPanel("Start");
+        JPanel endPanel = createDateTimePickerPanel("End");
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 1, 3, 10));
+        panel.add(startPanel);
+        panel.add(endPanel);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        add(panel, BorderLayout.CENTER);
 
-		n.setLayout(new BorderLayout());
-		datePicker = new DatePicker();
-		timePicker = new TimePicker();
+        addButtons("Confirm");
+        setButtonActionCommands("add_performance_stimeslot");
+    }
 
-		timePicker.setSelectedTime(LocalTime.now());
+    private JPanel createDateTimePickerPanel(String labelText) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 2, 3, 0));
 
-		n.add(datePicker, BorderLayout.WEST);
-		n.add(timePicker, BorderLayout.EAST);
+        DatePicker datePicker = new DatePicker();
+        JFormattedTextField dateEditor = new JFormattedTextField();
+        dateEditor.setPreferredSize(new Dimension(100, 25));
+        datePicker.setEditor(dateEditor);
 
-		/* TODO: Wire the buttons to update the text fields/labels below */
+        datePicker.addDateSelectionListener(new DateSelectionListener() {
+            @Override
+            public void dateSelected(DateEvent event) {
+                if (labelText.equals("Start")) {
+                    startDate = datePicker.getSelectedDate();
+                } else {
+                    endDate = datePicker.getSelectedDate();   
+                }
+            }
+        });
 
-		JPanel b = new JPanel();
-		b.setLayout(new BoxLayout(b, BoxLayout.Y_AXIS));
+        // Create the TimePicker
+        TimePicker timePicker = new TimePicker();
+        JFormattedTextField timeEditor = new JFormattedTextField();
+        timeEditor.setPreferredSize(new Dimension(100, 25));
+        timePicker.setEditor(timeEditor);
 
-		b.add(new JButton("Start Date Time Selected:"));
-		b.add(new JButton("End Date Time Selected:"));
+        // Set up the TimeSelectionListener
+        timePicker.addTimeSelectionListener(new TimeSelectionListener() {
+            @Override
+            public void timeSelected(TimeEvent event) {
+                if (labelText.equals("Start")) {
+                    startTime = timePicker.getSelectedTime();
+                } else {
+                    endTime = timePicker.getSelectedTime();
+                }
+            }
+        });
 
-		/* TODO: Set to uneditable */
+        panel.add(new JLabel(labelText + " Date/Time:"));
+        panel.add(dateEditor);
+        panel.add(timeEditor);
 
-		JPanel c = new JPanel();
-		c.setLayout(new BoxLayout(c, BoxLayout.Y_AXIS));
+        return panel;
+    }
 
-		c.add(new JTextField(""));
-		c.add(new JTextField(""));
+   
+    @Override
+    public Object[][] getSQLParameterInputs() {
+        try {
+            if (startDate == null || startTime == null || endDate == null || endTime == null) {
+                System.out.println("Error: One or more date/time values are null.");
+                return new Object[][] {};  // Return empty array if any value is missing
+            }
 
-		JPanel d = new JPanel();
+            Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(startDate, startTime));
+            Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(endDate, endTime));
 
-		d.add(b);
-		d.add(c);
+            if (endTimestamp.before(startTimestamp)) {
+                System.out.println("Error: End time must be after start time.");
+                return new Object[][] {};  
+            }
 
-		n.add(d, BorderLayout.NORTH);
+            System.out.println("Start Timestamp: " + startTimestamp);
+            System.out.println("End Timestamp: " + endTimestamp);
 
-		setLayout(new BorderLayout());
-
-		add(n, BorderLayout.CENTER);
-
-		setPreferredSize(new Dimension(600, 400));
-
-		addButtons("Confirm");
-		setButtonActionCommands("add_timeslot");
-	}
-
-	@Override
-	public Object[][] getSQLParameterInputs() {
-		return null;
-	}
+            return new Object[][]{
+                {startTimestamp, endTimestamp}
+            };
+        } catch (Exception e) {
+            System.out.println("Error while creating SQL parameters: " + e.getMessage());
+            e.printStackTrace();
+            return new Object[][] {};  
+        }
+    }
 }

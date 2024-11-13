@@ -21,7 +21,8 @@ public class BocchiTheMenuBar extends JMenuBar {
         menuTitles.add(createMenu("Configure",
                 "Add Performer", "add_performer",
                 "Add Timeslot", "add_timeslot",
-                "Rental", "rental",
+                "Rent Equipment", "rent_equipment",
+                "Mange Rental", "rental",
                 "Audition", "audition"));
         menuTitles.add(createMenu("Finance",
                 "Record Revenue", "record_revenue",
