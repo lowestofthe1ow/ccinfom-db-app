@@ -44,7 +44,7 @@ public class TimeSlotMakerUI extends DialogUI {
         add(panel, BorderLayout.CENTER);
 
         addButtons("Confirm");
-        setButtonActionCommands("add_performance_stimeslot");
+        setButtonActionCommands("add_performance_timeslot");
     }
 
     private JPanel createDateTimePickerPanel(String labelText) {
