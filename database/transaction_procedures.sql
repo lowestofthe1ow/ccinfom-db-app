@@ -26,11 +26,11 @@ BEGIN
 END //
 DELIMITER ;
 
--- Fetch staff data
+-- Fetch active staff data
 
-DROP PROCEDURE IF EXISTS get_staff;
+DROP PROCEDURE IF EXISTS get_active_staff;
 DELIMITER //
-CREATE PROCEDURE get_staff ()
+CREATE PROCEDURE get_active_staff ()
 BEGIN
 	SELECT sp.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, pt.position_name, pt.salary
 	FROM staff s
@@ -43,6 +43,26 @@ BEGIN
         FROM staff_position sp2
 		WHERE sp.staff_id = sp2.staff_id
 	) AND sp.end_date IS NULL;
+END //
+DELIMITER ;
+
+-- Fetch staff data
+
+DROP PROCEDURE IF EXISTS get_staff;
+DELIMITER //
+CREATE PROCEDURE get_staff ()
+BEGIN
+	SELECT s.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, IFNULL(pt.position_name, 'N/A'), IFNULL(pt.salary, 'N/A')
+	FROM staff s
+	LEFT JOIN staff_position sp
+	ON s.staff_id = sp.staff_id
+    AND sp.start_date = (
+		SELECT MAX(start_date)
+        FROM staff_position sp2
+		WHERE sp.staff_id = sp2.staff_id
+	) AND sp.end_date IS NULL
+    LEFT JOIN position_type pt
+    ON sp.position_id = pt.position_id;
 END //
 DELIMITER ;
 

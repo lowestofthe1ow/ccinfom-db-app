@@ -83,9 +83,12 @@ public class Controller {
                 auditions.loadTableData(executeProcedure("get_auditions"));
                 break;
             case "update_staff_position":
-            case "remove_staff":
                 TableSelectionUI staff = (TableSelectionUI) dialogUI;
                 staff.loadTableData(executeProcedure("get_staff"));
+                break;
+            case "remove_staff":
+                TableSelectionUI activeStaff = (TableSelectionUI) dialogUI;
+                activeStaff.loadTableData(executeProcedure("get_active_staff"));
                 break;
             case "update_staff_position_select_position":
             case "hire_staff_select_position":
