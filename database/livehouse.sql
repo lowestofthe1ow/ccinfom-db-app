@@ -44,10 +44,9 @@ CREATE TABLE staff (
 );
 
 CREATE TABLE performance_timeslot (
-	performance_timeslot_id INT NOT NULL AUTO_INCREMENT,
-    timeslot_date DATE NOT NULL,
-    start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
+    performance_timeslot_id INT NOT NULL AUTO_INCREMENT,
+    start_timestamp TIMESTAMP NOT NULL,
+    end_timestamp TIMESTAMP NOT NULL,
     PRIMARY KEY (performance_timeslot_id)
 );
 

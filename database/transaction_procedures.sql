@@ -371,13 +371,12 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS add_performance_timeslot;
 DELIMITER //
 CREATE PROCEDURE add_performance_timeslot (
-	IN timeslot_date DATE,
-    IN start_time TIME,
-    IN end_time TIME
+	IN start_timestamp TIMESTAMP,
+    IN end_timestamp TIMESTAMP
 )
 BEGIN
-	INSERT INTO performance_timeslot (`timeslot_date`, `start_time`, `end_time`) 
-		VALUES (timeslot_date, start_time, end_time);
+	INSERT INTO performance_timeslot (`start_timestamp`, `end_timestamp`) 
+		VALUES (start_timestamp, end_timestamp);
 END //
 DELIMITER ;
 
@@ -443,4 +442,58 @@ BEGIN
 			VALUES (performance_id, ticket_price, tickets_sold, cut_percent);
 	END IF;
 END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS performer_report_day;
+
+DELIMITER //
+CREATE PROCEDURE performer_report_day(
+    IN performer_id INT,
+    IN aday DATE
+)
+BEGIN
+    SELECT 
+        pf.performer_name,
+        pts.timeslot_date,
+        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota)* (1 - pr.cut_percent)) AS earning_day
+    FROM 
+        performance_revenue pr
+    JOIN 
+        performance p ON pr.performance_id = p.performance_id
+    JOIN 
+        performer pf ON p.performer_id = pf.performer_id
+    JOIN 
+        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    WHERE 
+        pf.performer_id = performer_id
+        AND DATE(pts.timeslot_date) = aday
+        AND p.performance_status = 'COMPLETE'
+    GROUP BY 
+        pf.performer_name, 
+        pts.timeslot_date;
+END //
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS cut_report_month;
+
+DELIMITER //
+CREATE PROCEDURE cut_report_month(
+    IN month INT,
+    IN year INT
+)
+BEGIN
+    SELECT 
+        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota) * (1-pr.cut_percent) ) AS monthCut
+    FROM 
+        performance_revenue pr
+    JOIN 
+        performance p ON pr.performance_id = p.performance_id
+    JOIN 
+        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    WHERE 
+        MONTH(pts.timeslot_date) = month
+        AND YEAR(pts.timeslot_date) = year;
+END //
+
 DELIMITER ;
