@@ -5,14 +5,14 @@ import java.util.Collections;
 
 import BocchiTheGUI.components.abs.TableSelectionUI;
 
-public class SelectPositionTypeUI extends TableSelectionUI {
+public class SelectStaffPositionUI extends TableSelectionUI {
     private Object[][] sqlData;
 
-    public SelectPositionTypeUI(String buttonName, String buttonCommand, String rootName, Object[][] sqlData) {
+    public SelectStaffPositionUI(String buttonLabel, String actionCommand, String rootName, Object[][] sqlData) {
         super("Select staff position", 1, "ID", "Position", "Salary");
-        this.addButtons(buttonName);
-        this.setButtonActionCommands(buttonCommand);
-        this.addTerminatingCommands(buttonCommand);
+        this.addButtons(buttonLabel);
+        this.setButtonActionCommands(actionCommand);
+        this.addTerminatingCommands(actionCommand);
         this.setRoot(rootName);
         this.sqlData = sqlData;
     }

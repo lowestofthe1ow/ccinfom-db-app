@@ -1,6 +1,5 @@
 package BocchiTheGUI.components.ui;
 
-
 import BocchiTheGUI.components.abs.DialogUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,31 +19,30 @@ import raven.datetime.component.time.TimeEvent;
 import raven.datetime.component.time.TimePicker;
 import raven.datetime.component.time.TimeSelectionListener;
 
+public class AddTimeslotUI extends DialogUI {
 
-public class TimeSlotMakerUI extends DialogUI {
-    
     /* would love to make this fields less but.... idk how */
     private LocalDate startDate;
     private LocalTime startTime;
     private LocalDate endDate;
     private LocalTime endTime;
 
-    public TimeSlotMakerUI() {
-        super("Pick a date and time");
-        
+    public AddTimeslotUI() {
+        super("Add Timeslot");
+
         JPanel startPanel = createDateTimePickerPanel("Start");
         JPanel endPanel = createDateTimePickerPanel("End");
-        
+
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2, 1, 3, 10));
         panel.add(startPanel);
         panel.add(endPanel);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         add(panel, BorderLayout.CENTER);
 
         addButtons("Confirm");
-        setButtonActionCommands("add_performance_timeslot");
+        setButtonActionCommands("button/sql/add_performance_timeslot");
     }
 
     private JPanel createDateTimePickerPanel(String labelText) {
@@ -62,7 +60,7 @@ public class TimeSlotMakerUI extends DialogUI {
                 if (labelText.equals("Start")) {
                     startDate = datePicker.getSelectedDate();
                 } else {
-                    endDate = datePicker.getSelectedDate();   
+                    endDate = datePicker.getSelectedDate();
                 }
             }
         });
@@ -92,13 +90,12 @@ public class TimeSlotMakerUI extends DialogUI {
         return panel;
     }
 
-   
     @Override
     public Object[][] getSQLParameterInputs() {
         try {
             if (startDate == null || startTime == null || endDate == null || endTime == null) {
                 System.out.println("Error: One or more date/time values are null.");
-                return new Object[][] {};  // Return empty array if any value is missing
+                return new Object[][] {}; // Return empty array if any value is missing
             }
 
             Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(startDate, startTime));
@@ -106,19 +103,19 @@ public class TimeSlotMakerUI extends DialogUI {
 
             if (endTimestamp.before(startTimestamp)) {
                 System.out.println("Error: End time must be after start time.");
-                return new Object[][] {};  
+                return new Object[][] {};
             }
 
             System.out.println("Start Timestamp: " + startTimestamp);
             System.out.println("End Timestamp: " + endTimestamp);
 
-            return new Object[][]{
-                {startTimestamp, endTimestamp}
+            return new Object[][] {
+                    { startTimestamp, endTimestamp }
             };
         } catch (Exception e) {
             System.out.println("Error while creating SQL parameters: " + e.getMessage());
             e.printStackTrace();
-            return new Object[][] {};  
+            return new Object[][] {};
         }
     }
 }

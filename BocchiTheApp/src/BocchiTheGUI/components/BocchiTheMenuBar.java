@@ -15,18 +15,18 @@ public class BocchiTheMenuBar extends JMenuBar {
         menuTitles = new ArrayList<>();
 
         menuTitles.add(createMenu("Staff",
-                "Hire Staff", "hire_staff",
-                "Remove Staff", "remove_staff",
-                "Update Position", "update_staff_position"));
+                "Hire Staff", "dialog/hire_staff",
+                "Remove Staff", "dialog/remove_staff",
+                "Update Staff Position", "dialog/update_staff_position"));
         menuTitles.add(createMenu("Configure",
-                "Add Performer", "add_performer",
-                "Add Timeslot", "add_timeslot",
-                "Rent Equipment", "rent_equipment",
-                "Mange Rental", "rental",
-                "Audition", "audition"));
+                "Add Performer", "dialog/add_performer",
+                "Add Timeslot", "dialog/add_timeslot",
+                "Rent Equipment", "dialog/rent_equipment",
+                "Manage Rentals", "dialog/manage_rentals",
+                "Manage Auditions", "dialog/manage_auditions"));
         menuTitles.add(createMenu("Finance",
-                "Record Revenue", "record_revenue",
-                "Generate Reports", "generate_reports"));
+                "Record Revenue", "dialog/record_revenue",
+                "Generate Reports", "dialog/generate_reports"));
 
         for (JMenu menuTitle : menuTitles) {
             this.add(menuTitle);

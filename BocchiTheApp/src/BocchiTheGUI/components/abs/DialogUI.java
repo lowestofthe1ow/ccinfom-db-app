@@ -75,11 +75,12 @@ public abstract class DialogUI extends JPanel {
      * commands that close the dialog window when triggered.
      * 
      * @param command The action command to check
-     * @return {@code true} if the string is a terminating command, {@code false}
+     * @return {@code true} if the string is a terminating command or is equivalent
+     *         to {@code "button/next"} (a special identifier), {@code false}
      *         otherwise
      */
     public boolean isTerminatingCommand(String command) {
-        return terminatingCommands.contains(command);
+        return command.equals("button/next") || terminatingCommands.contains(command);
     }
 
     public String getDialogTitle() {

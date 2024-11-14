@@ -137,7 +137,7 @@ BEGIN
 			SELECT MAX(sp2.start_date) 
 			FROM staff_position sp2
 			WHERE sp2.staff_id = staff_id
-        ) AND sp.staff_id = staff_id
+        ) AND sp.staff_id = staff_id AND sp.end_date IS NULL
     ) = position_id THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Staff is already assigned that position';
 	ELSEIF (
