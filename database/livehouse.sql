@@ -21,10 +21,16 @@ CREATE TABLE performer (
     PRIMARY KEY (performer_id)
 );
 
+CREATE TABLE equipment_type (
+	equipment_type_id INT NOT NULL AUTO_INCREMENT,
+    equipment_type_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (equipment_type_id)
+);
+
 CREATE TABLE equipment (
 	equipment_id INT NOT NULL AUTO_INCREMENT,
+    equipment_type_id INT NOT NULL,
     equipment_name VARCHAR(255) NOT NULL,
-    equipment_type VARCHAR(255) NOT NULL,
     rental_fee DECIMAL(10, 2) NOT NULL,
     equipment_status ENUM (
 		'UNDAMAGED',
@@ -32,7 +38,8 @@ CREATE TABLE equipment (
         'MAJ_DMG',
         'MISSING'
     ),
-    PRIMARY KEY (equipment_id)
+    PRIMARY KEY (equipment_id),
+    FOREIGN KEY (equipment_type_id) REFERENCES equipment_type(equipment_type_id)
 );
 
 CREATE TABLE staff (

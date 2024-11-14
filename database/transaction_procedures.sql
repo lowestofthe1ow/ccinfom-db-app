@@ -26,6 +26,7 @@ BEGIN
 END //
 DELIMITER ;
 
+<<<<<<< HEAD
 -- Fetch active staff data
 
 DROP PROCEDURE IF EXISTS get_active_staff;
@@ -63,6 +64,23 @@ BEGIN
 	) AND sp.end_date IS NULL
     LEFT JOIN position_type pt
     ON sp.position_id = pt.position_id;
+=======
+-- Fetch staff data
+
+DROP PROCEDURE IF EXISTS get_staff;
+DELIMITER //
+CREATE PROCEDURE get_staff ()
+BEGIN
+	SELECT sp.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, staff_position_name
+	FROM staff s
+	JOIN staff_position sp
+	ON s.staff_id = sp.staff_id
+	WHERE sp.start_date = (
+		SELECT MAX(start_date)
+        FROM staff_position sp2
+		WHERE sp.staff_id = sp2.staff_id
+	) AND sp.end_date IS NULL;
+>>>>>>> branch 'main' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
 END //
 DELIMITER ;
 
@@ -444,6 +462,7 @@ BEGIN
 END //
 DELIMITER ;
 
+<<<<<<< HEAD
 DROP PROCEDURE IF EXISTS performer_report_day;
 
 DELIMITER //
@@ -496,4 +515,31 @@ BEGIN
         AND YEAR(pts.timeslot_date) = year;
 END //
 
+=======
+-- Adding equipment
+DROP PROCEDURE IF EXISTS add_equipment;
+DELIMITER //
+CREATE PROCEDURE add_equipment (
+	IN equipment_type_id INT,
+    IN equipment_name VARCHAR(255),
+    IN rental_fee DECIMAL(10, 2),
+    IN equipment_status VARCHAR(255)
+)
+BEGIN
+	INSERT INTO performance_timeslot (`equipment_type_id`, `equipment_name`, `rental_fee`, `equipment_status`) 
+		VALUES (equipment_type_id, equipment_name, rental_fee, equipment_status);
+END //
+DELIMITER ;
+
+-- Adding equipment type
+DROP PROCEDURE IF EXISTS add_equipment_type;
+DELIMITER //
+CREATE PROCEDURE add_equipment_type (
+    IN equipment_type_name VARCHAR(255)
+)
+BEGIN
+	INSERT INTO performance_timeslot (`equipment_type_name`) 
+		VALUES (equipment_type_name);
+END //
+>>>>>>> branch 'main' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
 DELIMITER ;
