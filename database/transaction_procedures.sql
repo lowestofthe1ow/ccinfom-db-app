@@ -111,6 +111,16 @@ BEGIN
 	IF staff_id NOT IN (SELECT staff_id FROM staff) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No such staff';
 	ELSEIF (
+		SELECT sp.position_id
+        FROM staff_position sp
+        WHERE sp.start_date = (
+			SELECT MAX(sp2.start_date) 
+			FROM staff_position sp2
+			WHERE sp2.staff_id = staff_id
+        ) AND sp.staff_id = staff_id
+    ) = position_id THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Staff is already assigned that position';
+	ELSEIF (
 		SELECT MAX(start_date) 
 		FROM staff_position sp
 		WHERE sp.staff_id = staff_id
