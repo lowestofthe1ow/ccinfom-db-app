@@ -12,6 +12,7 @@ public abstract class DialogUI extends JPanel {
     private String dialogTitle;
     private JPanel buttonPanel;
     private String nextDialogUI;
+    private String rootDialogUI;
 
     private ArrayList<JButton> buttons;
     private ArrayList<String> terminatingCommands;
@@ -27,8 +28,16 @@ public abstract class DialogUI extends JPanel {
         this.nextDialogUI = nextDialogUI;
     }
 
+    protected void setRoot(String rootDialogUI) {
+        this.rootDialogUI = rootDialogUI;
+    }
+
     public String getNext() {
         return this.nextDialogUI;
+    }
+
+    public String getRoot() {
+        return this.rootDialogUI;
     }
 
     /**

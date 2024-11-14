@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -68,6 +69,23 @@ public class GUI extends JFrame {
         dialogs.forEach((key, dialog) -> {
             dialogs.get(key).setVisible(false);
         });
+
+        dialogs.clear();
+    }
+
+    /* TODO: Rewrite, this sucks lmao */
+    public void closeAllDialogsExcept(String dialogName, Consumer<DialogUI> callback) {
+        CommandDialog root = dialogs.get(dialogName);
+
+        dialogs.forEach((key, dialog) -> {
+            if (!key.equals(dialogName)) {
+                dialogs.get(key).setVisible(false);
+            }
+        });
+        dialogs.clear();
+        dialogs.put(dialogName, root);
+
+        callback.accept(root.getPanelUI());
     }
 
     /* TODO: Decide if we want to overwrite the UI or create a new window */

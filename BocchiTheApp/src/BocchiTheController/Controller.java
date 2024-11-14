@@ -21,6 +21,8 @@ import BocchiTheGUI.components.ui.AuditionSelectionUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.TimeSlotMakerUI;
+import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
+import BocchiTheGUI.components.ui.sub.EnterStaffPositionUI;
 
 public class Controller {
     private Connection connection = null;
@@ -51,6 +53,10 @@ public class Controller {
                 return new AuditionSelectionUI();
             case "add_timeslot":
                 return new TimeSlotMakerUI();
+            case "update_staff_position":
+                return new UpdateStaffPositionUI();
+            case "add_position":
+                return new EnterStaffPositionUI(sqlData);
         }
         return null;
     }
@@ -70,11 +76,16 @@ public class Controller {
             case "remove_staff":
                 RemoveStaffUI removeStaffUI = (RemoveStaffUI) dialogUI;
                 removeStaffUI.loadTableData(executeProcedure("get_staff"));
-                /*
-                 * TODO: Sample.
-                 * You can make a recursive call to showDialog() here to create more dialogs
-                 */
-                // showDialog("hire_staff");
+                break;
+            case "update_staff_position":
+                UpdateStaffPositionUI updateStaffPositionUI = (UpdateStaffPositionUI) dialogUI;
+                updateStaffPositionUI.loadTableData(executeProcedure("get_staff"));
+                break;
+            /*
+             * TODO: Sample.
+             * You can make a recursive call to showDialog() here to create more dialogs
+             */
+            // showDialog("hire_staff");
         }
     }
 
@@ -96,14 +107,28 @@ public class Controller {
 
             /* Update dialog window button listeners */
             dialogUI.addButtonListener((e) -> {
-                /* Process the command */
-                parseButtonCommand(e.getActionCommand(), dialogUI.getSQLParameterInputs());
+                /* Process the command only if this is the last window in the chain */
+                if (dialogUI.getNext() == null)
+                    parseButtonCommand(e.getActionCommand(), dialogUI.getSQLParameterInputs());
 
-                /* If the action command is terminating, close the window */
+                /*
+                 * If the action command is terminating, open the next window (or close it, if
+                 * this is the last one in the chain)
+                 */
                 if (dialogUI.isTerminatingCommand(e.getActionCommand()))
-                    if (dialogUI.getNext() == null)
-                        gui.closeAllDialogs();
-                    else
+                    if (dialogUI.getNext() == null) {
+                        /* Attempt to get the "root dialog" */
+                        String rootName = dialogUI.getRoot();
+
+                        if (rootName == null)
+                            gui.closeAllDialogs();
+                        else
+                            /* Close all dialogs except the "root", then refresh that */
+                            /* TODO: Rewrite, this sucks */
+                            gui.closeAllDialogsExcept(rootName, (rootUI) -> {
+                                refreshDialogUI(rootUI, rootName);
+                            });
+                    } else
                         /* TODO: Overwrites the existing UI on the dialog window with the next one. */
                         // gui.setDialog(actionCommand, createDialogUI(dialogUI.getNext()));
                         showDialog(dialogUI.getNext(), dialogUI.getSQLParameterInputs());
