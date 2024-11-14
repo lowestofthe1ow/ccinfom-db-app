@@ -131,11 +131,8 @@ public class Controller {
                 if (commandIdentifier.contains("button/sql/"))
                     parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
 
-                /* Check if the button pressed opens a new window and do that if it does */
-                if (commandIdentifier.equals("button/next") && dialogUI.getNext() != null)
-                    showDialog(dialogUI.getNext(), dialogUI.getSQLParameterInputs());
                 /* Check if the button command terminates the window */
-                else if (dialogUI.isTerminatingCommand(commandIdentifier)) {
+                if (dialogUI.isTerminatingCommand(commandIdentifier)) {
                     /* Only do something if the window is the last in the chain */
                     if (dialogUI.getNext() == null) {
                         /* Attempt to get the "root dialog" */
@@ -148,6 +145,8 @@ public class Controller {
                             gui.closeAllDialogsExcept(rootName, (rootUI) -> {
                                 refreshDialogUI(rootUI, rootName);
                             });
+                    } else {
+                        showDialog(dialogUI.getNext(), dialogUI.getSQLParameterInputs());
                     }
                 } else {
                     refreshDialogUI(dialogUI, dialogIdentifier);
