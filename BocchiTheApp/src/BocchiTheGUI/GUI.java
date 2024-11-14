@@ -63,4 +63,15 @@ public class GUI extends JFrame {
     public void closeDialog(String name) {
         dialogs.get(name).setVisible(false);
     }
+
+    public void closeAllDialogs() {
+        dialogs.forEach((key, dialog) -> {
+            dialogs.get(key).setVisible(false);
+        });
+    }
+
+    /* TODO: Decide if we want to overwrite the UI or create a new window */
+    public void setDialog(String name, DialogUI thing) {
+        dialogs.get(name).setPanelUI(thing);
+    }
 }

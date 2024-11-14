@@ -11,9 +11,25 @@ import javax.swing.JPanel;
 public abstract class DialogUI extends JPanel {
     private String dialogTitle;
     private JPanel buttonPanel;
+    private String nextDialogUI;
 
     private ArrayList<JButton> buttons;
     private ArrayList<String> terminatingCommands;
+
+    /**
+     * Sets the string representing the name of the UI in the dialog window that is
+     * opened whenever a button with a
+     * terminating command is clicked.
+     * 
+     * @param nextDialogUI The string representing the next UI
+     */
+    protected void setNext(String nextDialogUI) {
+        this.nextDialogUI = nextDialogUI;
+    }
+
+    public String getNext() {
+        return this.nextDialogUI;
+    }
 
     /**
      * {@return a 2D array of objects that represent the parameters to pass to SQL
@@ -109,6 +125,7 @@ public abstract class DialogUI extends JPanel {
     public DialogUI(String dialogTitle) {
         this.dialogTitle = dialogTitle;
         this.terminatingCommands = new ArrayList<>();
+        this.nextDialogUI = null;
         this.buttons = new ArrayList<>();
         this.buttonPanel = new JPanel();
         this.setLayout(new BorderLayout());

@@ -36,9 +36,11 @@ public class Controller {
      * No instance is created if the string does not match any of the options.
      * 
      * @param actionCommand The action command string
+     * @param sqlData       The SQL data to pass to the new dialog, as in
+     *                      {@link DialogUI#getSQLParameterInputs()}
      * @return The newly-created instance ({@code null} if no string matched)
      */
-    private DialogUI createDialogUI(String actionCommand) {
+    private DialogUI createDialogUI(String actionCommand, Object[][] sqlData) {
         switch (actionCommand) {
             case "hire_staff":
                 return new HireStaffUI();
@@ -74,9 +76,11 @@ public class Controller {
      * 
      * @param actionCommand The action command representing the UI to load into the
      *                      window
+     * @param sqlData       The SQL data to pass to the new dialog, as in
+     *                      {@link DialogUI#getSQLParameterInputs()}
      */
-    private void showDialog(String actionCommand) {
-        DialogUI dialogUI = createDialogUI(actionCommand);
+    private void showDialog(String actionCommand, Object[][] sqlData) {
+        DialogUI dialogUI = createDialogUI(actionCommand, sqlData);
 
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, actionCommand, () -> {
@@ -90,7 +94,12 @@ public class Controller {
 
                 /* If the action command is terminating, close the window */
                 if (dialogUI.isTerminatingCommand(e.getActionCommand()))
-                    gui.closeDialog(actionCommand);
+                    if (dialogUI.getNext() == null)
+                        gui.closeAllDialogs();
+                    else
+                        /* TODO: Overwrites the existing UI on the dialog window with the next one. */
+                        // gui.setDialog(actionCommand, createDialogUI(dialogUI.getNext()));
+                        showDialog(dialogUI.getNext(), dialogUI.getSQLParameterInputs());
                 /* Otherwise, refresh the UI again */
                 else
                     refreshDialogUI(dialogUI, actionCommand);
@@ -159,9 +168,9 @@ public class Controller {
                 } else if (param instanceof Double) {
                     cs.setDouble(i + 1, (Double) param);
                 } else if (param instanceof Timestamp) {
-                	cs.setTimestamp(i + 1, (Timestamp) param);
+                    cs.setTimestamp(i + 1, (Timestamp) param);
                 } else {
-                	
+
                     throw new IllegalArgumentException("Unsupported parameter type: " + param.getClass().getName());
                 }
             }
@@ -234,7 +243,7 @@ public class Controller {
     private void initializeListeners() {
         /* Set menu bar listener */
         gui.setMenuListener((e) -> {
-            showDialog(e.getActionCommand());
+            showDialog(e.getActionCommand(), null);
         });
 
         /* Set window closing listener */
