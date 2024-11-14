@@ -1,4 +1,4 @@
-id,genre_name,genre_description
+genre_id,genre_name,genre_description
 1,Pop,Includes Pop music.
 2,Electronic,Includes Electronic music.
 3,Hip-hop,Includes Hip-hop music.

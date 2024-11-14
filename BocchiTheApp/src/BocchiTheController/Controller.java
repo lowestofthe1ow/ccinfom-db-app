@@ -19,6 +19,7 @@ import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
 import BocchiTheGUI.components.ui.AuditionSelectionUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
+import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.TimeSlotMakerUI;
 
 public class Controller {
@@ -44,6 +45,8 @@ public class Controller {
         switch (actionCommand) {
             case "hire_staff":
                 return new HireStaffUI();
+            case "remove_staff":
+                return new RemoveStaffUI();
             case "audition":
                 return new AuditionSelectionUI();
             case "add_timeslot":
@@ -61,8 +64,12 @@ public class Controller {
     private void refreshDialogUI(DialogUI dialogUI, String actionCommand) {
         switch (actionCommand) {
             case "audition":
-                AuditionSelectionUI castedDialogUI = (AuditionSelectionUI) dialogUI;
-                castedDialogUI.loadTableData(executeProcedure("get_auditions"));
+                AuditionSelectionUI auditionUI = (AuditionSelectionUI) dialogUI;
+                auditionUI.loadTableData(executeProcedure("get_auditions"));
+                break;
+            case "remove_staff":
+                RemoveStaffUI removeStaffUI = (RemoveStaffUI) dialogUI;
+                removeStaffUI.loadTableData(executeProcedure("get_staff"));
                 /*
                  * TODO: Sample.
                  * You can make a recursive call to showDialog() here to create more dialogs

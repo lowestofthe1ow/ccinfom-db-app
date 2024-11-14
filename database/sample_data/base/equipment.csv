@@ -1,4 +1,4 @@
-id,equipment_name,equipment_type,rental_fee,equipment_status
+equipment_id,equipment_name,equipment_type,rental_fee,equipment_status
 1,Fender Vintera II Tele,Electric Guitar,1000.00,UNDAMAGED
 2,Squier Bullet Mustang,Electric Guitar,1000.00,UNDAMAGED
 3,PRS SE Custom 24,Electric Guitar,1000.00,UNDAMAGED

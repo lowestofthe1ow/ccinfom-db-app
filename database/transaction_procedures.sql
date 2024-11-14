@@ -16,6 +16,24 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Fetch staff data
+
+DROP PROCEDURE IF EXISTS get_staff;
+DELIMITER //
+CREATE PROCEDURE get_staff ()
+BEGIN
+	SELECT sp.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, staff_position_name
+	FROM staff s
+	JOIN staff_position sp
+	ON s.staff_id = sp.staff_id
+	WHERE sp.start_date = (
+		SELECT MAX(start_date)
+        FROM staff_position sp2
+		WHERE sp.staff_id = sp2.staff_id
+	) AND sp.end_date IS NULL;
+END //
+DELIMITER ;
+
 -- Hiring staff
 
 DROP PROCEDURE IF EXISTS hire;
@@ -51,6 +69,17 @@ BEGIN
 		WHERE sp.staff_id = staff_id
 	) >= DATE(NOW()) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Staff must hold a position for at least a day';
+	ELSEIF (
+    -- TODO: This is ugly
+		SELECT sp.end_date
+        FROM staff_position sp
+        WHERE sp.staff_id = staff_id AND sp.start_date = (
+			SELECT MAX(start_date) 
+			FROM staff_position sp
+			WHERE sp.staff_id = staff_id
+		)
+    ) IS NOT NULL THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Staff is not active';
 	ELSE
 		UPDATE staff_position sp
 			SET sp.end_date = DATE(NOW())

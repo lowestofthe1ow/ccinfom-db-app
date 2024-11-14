@@ -1,4 +1,4 @@
-id,performer_id,performance_timeslot_id,base_quota,performance_status
+performance_id,performer_id,performance_timeslot_id,base_quota,performance_status
 1,9,20,5000.00,PENDING
 2,16,7,5000.00,PENDING
 3,8,6,5000.00,PENDING

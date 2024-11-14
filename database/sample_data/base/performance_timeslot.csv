@@ -1,4 +1,4 @@
-id,timeslot_date,start_time,end_time
+performance_timeslot_id,timeslot_date,start_time,end_time
 1,2024-11-11,17:00,18:00
 2,2024-11-11,18:15,19:15
 3,2024-11-11,19:30,20:30
