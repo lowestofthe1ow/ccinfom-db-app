@@ -8,18 +8,13 @@ import BocchiTheGUI.components.abs.TextFieldsUI;
 public class HireStaffUI extends TextFieldsUI {
     public HireStaffUI() {
         super("Hire staff");
-        addForms("First name: ", "Last name: ", "Contact number: ", "Staff position: ", "Salary: ");
+        addForms("First name: ", "Last name: ", "Contact number: ");
 
-        /* TODO: Sample */
-        // this.add(new TableSelectionUI(null, 0, "Date", "Time") {
-        // public Object[][] getSQLParameterInputs() {
-        // return null;
-        // }
-        // });
+        this.setNext("hire_staff_select_position");
 
         addButtons("Confirm");
-        setButtonActionCommands("hire");
-        addTerminatingCommands("hire");
+        setButtonActionCommands("hire_staff_select_position");
+        addTerminatingCommands("hire_staff_select_position");
     }
 
     private String getFirstName() {
@@ -34,14 +29,6 @@ public class HireStaffUI extends TextFieldsUI {
         return Long.parseLong(this.formItems.get(2).getText());
     }
 
-    private String getPositionName() {
-        return this.formItems.get(3).getText();
-    }
-
-    private Double getSalary() {
-        return Double.parseDouble(this.formItems.get(4).getText());
-    }
-
     /**
      * {@inheritDoc} Contains only the parameters for a single query, as multiple
      * simultaneous hires are not allowed.
@@ -51,11 +38,8 @@ public class HireStaffUI extends TextFieldsUI {
         Object[][] retval = { {
                 getFirstName(),
                 getLastName(),
-                getContactNo(),
-                getPositionName(),
-                getSalary()
+                getContactNo()
         } };
-
         return retval;
     }
 }

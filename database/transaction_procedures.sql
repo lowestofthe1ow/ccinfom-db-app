@@ -1,3 +1,13 @@
+-- Fetch position data
+
+DROP PROCEDURE IF EXISTS get_positions;
+DELIMITER //
+CREATE PROCEDURE get_positions ()
+BEGIN
+	SELECT * FROM position_type;
+END //
+DELIMITER ;
+
 -- Fetch audition data
 
 DROP PROCEDURE IF EXISTS get_auditions;
@@ -44,14 +54,13 @@ CREATE PROCEDURE hire (
 	IN first_name VARCHAR(255),
     IN last_name VARCHAR(255),
     IN contact_no DECIMAL(11, 0),
-    IN position_name VARCHAR(255),
-    IN salary DECIMAL(10, 2)
+    IN position_id INT
 )
 BEGIN
 	INSERT INTO staff (`first_name`, `last_name`, `contact_no`) 
 		VALUES (first_name, last_name, contact_no);
-	INSERT INTO staff_position (`staff_id`, `staff_position_name`, `staff_salary`, `start_date`, `end_date`)
-		VALUES (LAST_INSERT_ID(), position_name, salary, DATE(NOW()), NULL);
+	INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`)
+		VALUES (LAST_INSERT_ID(), position_id, DATE(NOW()), NULL);
 END //
 DELIMITER ;
 
@@ -96,8 +105,7 @@ DROP PROCEDURE IF EXISTS add_position;
 DELIMITER //
 CREATE PROCEDURE add_position (
 	IN staff_id INT,
-    IN position_name VARCHAR(255),
-    IN salary DECIMAL(10, 2)
+    IN position_id INT
 )
 BEGIN
 	IF staff_id NOT IN (SELECT staff_id FROM staff) THEN
@@ -112,8 +120,8 @@ BEGIN
 		UPDATE staff_position sp
 			SET sp.end_date = DATE(NOW())
 			WHERE sp.end_date IS NULL AND sp.staff_id = staff_id;
-		INSERT INTO staff_position (`staff_id`, `staff_position_name`, `staff_salary`, `start_date`, `end_date`)
-			VALUES (staff_id, position_name, salary, DATE(NOW()), NULL);
+		INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`)
+			VALUES (staff_id, position_id, DATE(NOW()), NULL);
 	END IF;
 END //
 DELIMITER ;

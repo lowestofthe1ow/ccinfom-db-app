@@ -17,12 +17,13 @@ import javax.swing.JOptionPane;
 import BocchiTheGUI.GUI;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.components.abs.TableSelectionUI;
 import BocchiTheGUI.components.ui.AuditionSelectionUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.TimeSlotMakerUI;
 import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
-import BocchiTheGUI.components.ui.sub.EnterStaffPositionUI;
+import BocchiTheGUI.components.ui.sub.SelectPositionTypeUI;
 
 public class Controller {
     private Connection connection = null;
@@ -47,16 +48,24 @@ public class Controller {
         switch (actionCommand) {
             case "hire_staff":
                 return new HireStaffUI();
+
+            case "update_staff_position_select_position":
+                return new SelectPositionTypeUI("Confirm", "add_position", "update_staff_position", sqlData);
+
+            case "hire_staff_select_position":
+                return new SelectPositionTypeUI("Confirm", "hire", null, sqlData);
+
             case "remove_staff":
                 return new RemoveStaffUI();
+
             case "audition":
                 return new AuditionSelectionUI();
+
             case "add_timeslot":
                 return new TimeSlotMakerUI();
+
             case "update_staff_position":
                 return new UpdateStaffPositionUI();
-            case "add_position":
-                return new EnterStaffPositionUI(sqlData);
         }
         return null;
     }
@@ -70,16 +79,18 @@ public class Controller {
     private void refreshDialogUI(DialogUI dialogUI, String actionCommand) {
         switch (actionCommand) {
             case "audition":
-                AuditionSelectionUI auditionUI = (AuditionSelectionUI) dialogUI;
-                auditionUI.loadTableData(executeProcedure("get_auditions"));
-                break;
-            case "remove_staff":
-                RemoveStaffUI removeStaffUI = (RemoveStaffUI) dialogUI;
-                removeStaffUI.loadTableData(executeProcedure("get_staff"));
+                AuditionSelectionUI auditions = (AuditionSelectionUI) dialogUI;
+                auditions.loadTableData(executeProcedure("get_auditions"));
                 break;
             case "update_staff_position":
-                UpdateStaffPositionUI updateStaffPositionUI = (UpdateStaffPositionUI) dialogUI;
-                updateStaffPositionUI.loadTableData(executeProcedure("get_staff"));
+            case "remove_staff":
+                TableSelectionUI staff = (TableSelectionUI) dialogUI;
+                staff.loadTableData(executeProcedure("get_staff"));
+                break;
+            case "update_staff_position_select_position":
+            case "hire_staff_select_position":
+                SelectPositionTypeUI positions = (SelectPositionTypeUI) dialogUI;
+                positions.loadTableData(executeProcedure("get_positions"));
                 break;
             /*
              * TODO: Sample.
