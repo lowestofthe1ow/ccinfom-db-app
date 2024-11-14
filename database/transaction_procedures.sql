@@ -1,3 +1,28 @@
+-- Fetch timeslot data
+
+DROP PROCEDURE IF EXISTS get_timeslots;
+DELIMITER //
+CREATE PROCEDURE get_timeslots ()
+BEGIN
+	SELECT * FROM performance_timeslot;
+END //
+DELIMITER ;
+
+-- Fetch performer data
+
+DROP PROCEDURE IF EXISTS get_performers;
+DELIMITER //
+CREATE PROCEDURE get_performers ()
+BEGIN
+	SELECT
+		p.performer_id,
+        p.performer_name,
+        CONCAT(p.contact_first_name, ' ', p.contact_last_name) AS contact_person,
+        p.contact_no
+    FROM performer p;
+END //
+DELIMITER ;
+
 -- Fetch position data
 
 DROP PROCEDURE IF EXISTS get_positions;

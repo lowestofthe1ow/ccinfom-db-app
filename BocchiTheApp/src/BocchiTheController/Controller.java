@@ -18,13 +18,16 @@ import BocchiTheGUI.GUI;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
 import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.components.ui.AddAuditionUI;
 import BocchiTheGUI.components.ui.AddPerformerUI;
 import BocchiTheGUI.components.ui.AddTimeslotUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
+import BocchiTheGUI.components.ui.sub.InputSubmissionUI;
 import BocchiTheGUI.components.ui.sub.SelectStaffPositionUI;
+import BocchiTheGUI.components.ui.sub.SelectTimeslotUI;
 
 public class Controller {
     private Connection connection = null;
@@ -71,10 +74,14 @@ public class Controller {
                         "button/sql/add_position",
                         "dialog/update_staff_position",
                         sqlData);
-
             case "dialog/add_performer":
                 return new AddPerformerUI();
-
+            case "dialog/add_audition":
+                return new AddAuditionUI();
+            case "dialog/add_audition/select_timeslot":
+                return new SelectTimeslotUI(sqlData);
+            case "dialog/add_audition/select_timeslot/input_submission":
+                return new InputSubmissionUI(sqlData);
             case "dialog/manage_auditions":
                 return new ManageAuditionsUI();
             case "dialog/add_timeslot":
@@ -108,6 +115,14 @@ public class Controller {
             case "dialog/hire_staff/select_position":
                 SelectStaffPositionUI positions = (SelectStaffPositionUI) dialogUI;
                 positions.loadTableData(executeProcedure("get_positions"));
+                break;
+            case "dialog/add_audition":
+                TableSelectionUI performers = (TableSelectionUI) dialogUI;
+                performers.loadTableData(executeProcedure("get_performers"));
+                break;
+            case "dialog/add_audition/select_timeslot":
+                TableSelectionUI timeslots = (TableSelectionUI) dialogUI;
+                timeslots.loadTableData(executeProcedure("get_timeslots"));
                 break;
         }
     }
