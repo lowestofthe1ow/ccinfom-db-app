@@ -98,3 +98,6 @@ INSERT INTO performance_timeslot (`performance_timeslot_id`, `timeslot_date`, `s
 INSERT INTO performance_timeslot (`performance_timeslot_id`, `timeslot_date`, `start_time`, `end_time`) VALUES ('39', '2024-11-20', '19:30', '20:30');
 INSERT INTO performance_timeslot (`performance_timeslot_id`, `timeslot_date`, `start_time`, `end_time`) VALUES ('40', '2024-11-20', '20:45', '21:45');
 
+INSERT INTO position_type (`position_id`, `position_name`, `salary`) VALUES ('1', 'Staff', '1000.00');
+INSERT INTO position_type (`position_id`, `position_name`, `salary`) VALUES ('2', 'Manager', '2000.00');
+

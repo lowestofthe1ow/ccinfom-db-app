@@ -22,10 +22,12 @@ DROP PROCEDURE IF EXISTS get_staff;
 DELIMITER //
 CREATE PROCEDURE get_staff ()
 BEGIN
-	SELECT sp.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, staff_position_name
+	SELECT sp.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, pt.position_name, pt.salary
 	FROM staff s
 	JOIN staff_position sp
 	ON s.staff_id = sp.staff_id
+    JOIN position_type pt
+    ON sp.position_id = pt.position_id
 	WHERE sp.start_date = (
 		SELECT MAX(start_date)
         FROM staff_position sp2

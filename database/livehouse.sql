@@ -51,6 +51,13 @@ CREATE TABLE performance_timeslot (
     PRIMARY KEY (performance_timeslot_id)
 );
 
+CREATE TABLE position_type (
+	position_id INT NOT NULL AUTO_INCREMENT,
+    position_name VARCHAR(255) NOT NULL,
+    salary DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (position_id)
+);
+
 -- Junction tables
 
 CREATE TABLE audition (
@@ -125,10 +132,10 @@ CREATE TABLE staff_assignment (
 
 CREATE TABLE staff_position (
 	staff_id INT NOT NULL,
-    staff_position_name VARCHAR(255) NOT NULL,
-    staff_salary DECIMAL(10, 2) NOT NULL,
+    position_id INT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE, -- NULL if currently employed?
     PRIMARY KEY (staff_id, start_date),
-    FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
+    FOREIGN KEY (staff_id) REFERENCES staff(staff_id),
+    FOREIGN KEY (position_id) REFERENCES position_type(position_id)
 );

@@ -4,7 +4,7 @@ import BocchiTheGUI.components.abs.TableSelectionUI;
 
 public class UpdateStaffPositionUI extends TableSelectionUI {
     public UpdateStaffPositionUI() {
-        super("Update staff position", 1, "ID", "Name", "Contact no.", "Current position");
+        super("Update staff position", 1, "ID", "Name", "Contact no.", "Current position", "Salary");
         this.setNext("add_position");
 
         this.addButtons("Update");
