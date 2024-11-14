@@ -51,6 +51,7 @@ BEGIN
 END //
 DELIMITER ;
 
+<<<<<<< HEAD
 -- Fetch active staff data
 
 DROP PROCEDURE IF EXISTS get_active_staff;
@@ -88,6 +89,23 @@ BEGIN
 	) AND sp.end_date IS NULL
     LEFT JOIN position_type pt
     ON sp.position_id = pt.position_id;
+=======
+-- Fetch staff data
+
+DROP PROCEDURE IF EXISTS get_staff;
+DELIMITER //
+CREATE PROCEDURE get_staff ()
+BEGIN
+	SELECT sp.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, staff_position_name
+	FROM staff s
+	JOIN staff_position sp
+	ON s.staff_id = sp.staff_id
+	WHERE sp.start_date = (
+		SELECT MAX(start_date)
+        FROM staff_position sp2
+		WHERE sp.staff_id = sp2.staff_id
+	) AND sp.end_date IS NULL;
+>>>>>>> branch 'main' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
 END //
 DELIMITER ;
 
@@ -396,13 +414,12 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS add_performance_timeslot;
 DELIMITER //
 CREATE PROCEDURE add_performance_timeslot (
-	IN timeslot_date DATE,
-    IN start_time TIME,
-    IN end_time TIME
+	IN start_timestamp TIMESTAMP,
+    IN end_timestamp TIMESTAMP
 )
 BEGIN
-	INSERT INTO performance_timeslot (`timeslot_date`, `start_time`, `end_time`) 
-		VALUES (timeslot_date, start_time, end_time);
+	INSERT INTO performance_timeslot (`start_timestamp`, `end_timestamp`) 
+		VALUES (start_timestamp, end_timestamp);
 END //
 DELIMITER ;
 
@@ -468,4 +485,86 @@ BEGIN
 			VALUES (performance_id, ticket_price, tickets_sold, cut_percent);
 	END IF;
 END //
+DELIMITER ;
+
+<<<<<<< HEAD
+DROP PROCEDURE IF EXISTS performer_report_day;
+
+DELIMITER //
+CREATE PROCEDURE performer_report_day(
+    IN performer_id INT,
+    IN aday DATE
+)
+BEGIN
+    SELECT 
+        pf.performer_name,
+        pts.timeslot_date,
+        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota)* (1 - pr.cut_percent)) AS earning_day
+    FROM 
+        performance_revenue pr
+    JOIN 
+        performance p ON pr.performance_id = p.performance_id
+    JOIN 
+        performer pf ON p.performer_id = pf.performer_id
+    JOIN 
+        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    WHERE 
+        pf.performer_id = performer_id
+        AND DATE(pts.timeslot_date) = aday
+        AND p.performance_status = 'COMPLETE'
+    GROUP BY 
+        pf.performer_name, 
+        pts.timeslot_date;
+END //
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS cut_report_month;
+
+DELIMITER //
+CREATE PROCEDURE cut_report_month(
+    IN month INT,
+    IN year INT
+)
+BEGIN
+    SELECT 
+        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota) * (1-pr.cut_percent) ) AS monthCut
+    FROM 
+        performance_revenue pr
+    JOIN 
+        performance p ON pr.performance_id = p.performance_id
+    JOIN 
+        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    WHERE 
+        MONTH(pts.timeslot_date) = month
+        AND YEAR(pts.timeslot_date) = year;
+END //
+
+=======
+-- Adding equipment
+DROP PROCEDURE IF EXISTS add_equipment;
+DELIMITER //
+CREATE PROCEDURE add_equipment (
+	IN equipment_type_id INT,
+    IN equipment_name VARCHAR(255),
+    IN rental_fee DECIMAL(10, 2),
+    IN equipment_status VARCHAR(255)
+)
+BEGIN
+	INSERT INTO performance_timeslot (`equipment_type_id`, `equipment_name`, `rental_fee`, `equipment_status`) 
+		VALUES (equipment_type_id, equipment_name, rental_fee, equipment_status);
+END //
+DELIMITER ;
+
+-- Adding equipment type
+DROP PROCEDURE IF EXISTS add_equipment_type;
+DELIMITER //
+CREATE PROCEDURE add_equipment_type (
+    IN equipment_type_name VARCHAR(255)
+)
+BEGIN
+	INSERT INTO performance_timeslot (`equipment_type_name`) 
+		VALUES (equipment_type_name);
+END //
+>>>>>>> branch 'main' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
 DELIMITER ;
