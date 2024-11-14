@@ -18,6 +18,7 @@ import BocchiTheGUI.GUI;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
 import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.components.ui.AddPerformerUI;
 import BocchiTheGUI.components.ui.AddTimeslotUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
@@ -70,6 +71,10 @@ public class Controller {
                         "button/sql/add_position",
                         "dialog/update_staff_position",
                         sqlData);
+
+            case "dialog/add_performer":
+                return new AddPerformerUI();
+
             case "dialog/manage_auditions":
                 return new ManageAuditionsUI();
             case "dialog/add_timeslot":
