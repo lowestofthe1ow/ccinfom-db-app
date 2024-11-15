@@ -1,8 +1,8 @@
 package BocchiTheGUI.components.ui;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.components.abs.TableSelectionSearchFilterUI;
 
-public class ManageAuditionsUI extends TableSelectionUI {
+public class ManageAuditionsUI extends TableSelectionSearchFilterUI {
 	public ManageAuditionsUI() {
 		super("Manage Auditions", 1, "ID", "Performer Name", "Submission Link", "Target timeslot",
 				"Contact person", "Contact no.");

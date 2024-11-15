@@ -3,9 +3,9 @@ package BocchiTheGUI.components.ui.sub;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.components.abs.TableSelectionDateFilterUI;
 
-public class SelectTimeslotUI extends TableSelectionUI {
+public class SelectTimeslotUI extends TableSelectionDateFilterUI {
     private Object[][] sqlData;
 
     public SelectTimeslotUI(Object[][] sqlData) {

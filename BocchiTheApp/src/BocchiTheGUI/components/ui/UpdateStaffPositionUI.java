@@ -1,8 +1,8 @@
 package BocchiTheGUI.components.ui;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.components.abs.TableSelectionSearchFilterUI;
 
-public class UpdateStaffPositionUI extends TableSelectionUI {
+public class UpdateStaffPositionUI extends TableSelectionSearchFilterUI {
     public UpdateStaffPositionUI() {
         super("Update staff position", 1, "ID", "Name", "Contact no.", "Current position", "Salary");
         this.setNext("dialog/update_staff_position/select_position");

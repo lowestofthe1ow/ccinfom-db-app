@@ -3,9 +3,9 @@ package BocchiTheGUI.components.ui.sub;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.components.abs.TableSelectionSearchFilterUI;
 
-public class SelectStaffPositionUI extends TableSelectionUI {
+public class SelectStaffPositionUI extends TableSelectionSearchFilterUI {
     private Object[][] sqlData;
 
     public SelectStaffPositionUI(String buttonLabel, String actionCommand, String rootName, Object[][] sqlData) {
