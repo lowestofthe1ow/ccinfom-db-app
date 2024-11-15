@@ -8,7 +8,7 @@ public class AddEquipmentUI extends TableSelectionSearchFilterUI {
 
         this.addButtons("Confirm", "Add type");
         this.setButtonActionCommands(
-                "button/next/add_equipment",
-                "button/next/add_type");
+                "button/next/add_equipment_details",
+                "button/next/add_equipment_type");
     }
 }

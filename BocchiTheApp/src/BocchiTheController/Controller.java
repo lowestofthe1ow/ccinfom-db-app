@@ -26,6 +26,8 @@ import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
+import BocchiTheGUI.components.ui.sub.AddEquipmentDetailsUI;
+import BocchiTheGUI.components.ui.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.components.ui.sub.InputSubmissionUI;
 import BocchiTheGUI.components.ui.sub.SelectStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.SelectTimeslotUI;
@@ -85,8 +87,10 @@ public class Controller {
                 return new InputSubmissionUI(sqlData);
             case "dialog/add_equipment":
                 return new AddEquipmentUI();
-            case "dialog/add_equipment/add_type":
-                return new AddEquipmentUI();
+            case "dialog/add_equipment/add_equipment_type":
+                return new AddEquipmentTypeUI();
+            case "dialog/add_equipment/add_equipment_details":
+                return new AddEquipmentDetailsUI(sqlData);
             case "dialog/manage_auditions":
                 return new ManageAuditionsUI();
             case "dialog/add_timeslot":

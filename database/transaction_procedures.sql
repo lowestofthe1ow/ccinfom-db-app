@@ -544,12 +544,11 @@ DELIMITER //
 CREATE PROCEDURE add_equipment (
 	IN equipment_type_id INT,
     IN equipment_name VARCHAR(255),
-    IN rental_fee DECIMAL(10, 2),
-    IN equipment_status VARCHAR(255)
+    IN rental_fee DECIMAL(10, 2)
 )
 BEGIN
-	INSERT INTO performance_timeslot (`equipment_type_id`, `equipment_name`, `rental_fee`, `equipment_status`) 
-		VALUES (equipment_type_id, equipment_name, rental_fee, equipment_status);
+	INSERT INTO equipment (`equipment_type_id`, `equipment_name`, `rental_fee`, `equipment_status`) 
+		VALUES (equipment_type_id, equipment_name, rental_fee, 'UNDAMAGED');
 END //
 DELIMITER ;
 
@@ -560,7 +559,7 @@ CREATE PROCEDURE add_equipment_type (
     IN equipment_type_name VARCHAR(255)
 )
 BEGIN
-	INSERT INTO performance_timeslot (`equipment_type_name`) 
+	INSERT INTO equipment_type (`equipment_type_name`) 
 		VALUES (equipment_type_name);
 END //
 DELIMITER ;
