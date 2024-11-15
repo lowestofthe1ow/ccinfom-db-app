@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -16,6 +17,7 @@ import raven.datetime.component.date.DateSelectionListener;
 
 public class TableSelectionDateFilterUI extends TableSelectionUI {
     private int searchColumnIndex;
+    private DatePicker datePicker;
 
     /**
      * Creates a dialog window for table selection.
@@ -32,7 +34,7 @@ public class TableSelectionDateFilterUI extends TableSelectionUI {
         searchPanel.setLayout(new GridLayout(2, 1));
         searchPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
 
-        DatePicker datePicker = new DatePicker();
+        datePicker = new DatePicker();
         JFormattedTextField dateEditor = new JFormattedTextField();
         // dateEditor.setPreferredSize(new Dimension(25, 25));
         datePicker.setEditor(dateEditor);
@@ -41,7 +43,7 @@ public class TableSelectionDateFilterUI extends TableSelectionUI {
         datePicker.addDateSelectionListener(new DateSelectionListener() {
             @Override
             public void dateSelected(DateEvent event) {
-                filterTable(datePicker.getSelectedDate());
+                filterTable();
             }
         });
 
@@ -52,7 +54,12 @@ public class TableSelectionDateFilterUI extends TableSelectionUI {
         this.add(searchPanel);
     }
 
-    private void filterTable(LocalDate date) {
+    private void filterTable() {
+        LocalDate date = datePicker.getSelectedDate();
+
+        if (date == null)
+            return;
+
         /* Reset the table model */
         activeTableModel.setRowCount(0);
 
@@ -66,5 +73,15 @@ public class TableSelectionDateFilterUI extends TableSelectionUI {
         }
 
         table.clearSelection();
+    }
+
+    /*
+     * Override the loadTableData() function so that the table is immediately
+     * filtered
+     */
+    @Override
+    public void loadTableData(List<Object[]> data) {
+        super.loadTableData(data);
+        filterTable();
     }
 }

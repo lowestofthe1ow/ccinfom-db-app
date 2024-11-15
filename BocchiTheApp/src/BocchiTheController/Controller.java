@@ -24,6 +24,7 @@ import BocchiTheGUI.components.ui.AddPerformerUI;
 import BocchiTheGUI.components.ui.AddTimeslotUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
+import BocchiTheGUI.components.ui.ManagePerformancesUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.AddEquipmentDetailsUI;
@@ -95,6 +96,8 @@ public class Controller {
                 return new ManageAuditionsUI();
             case "dialog/add_timeslot":
                 return new AddTimeslotUI();
+            case "dialog/manage_performances":
+                return new ManagePerformancesUI();
         }
         return null;
     }
@@ -136,6 +139,10 @@ public class Controller {
             case "dialog/add_equipment":
                 TableSelectionUI equipment_types = (TableSelectionUI) dialogUI;
                 equipment_types.loadTableData(executeProcedure("get_equipment_types"));
+                break;
+            case "dialog/manage_performances":
+                TableSelectionUI performances = (TableSelectionUI) dialogUI;
+                performances.loadTableData(executeProcedure("get_performances"));
                 break;
         }
     }

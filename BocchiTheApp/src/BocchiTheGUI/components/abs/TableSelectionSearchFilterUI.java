@@ -2,6 +2,7 @@ package BocchiTheGUI.components.abs;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,8 +12,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class TableSelectionSearchFilterUI extends TableSelectionUI {
-    private JTextField searchField;
-    private int searchColumnIndex;
+    protected JTextField searchField;
+    protected int searchColumnIndex;
 
     /**
      * Creates a dialog window for table selection.
@@ -56,7 +57,7 @@ public class TableSelectionSearchFilterUI extends TableSelectionUI {
         });
     }
 
-    private void filterTable() {
+    protected void filterTable() {
         String searchText = searchField.getText().toLowerCase();
 
         /* Reset the table model */
@@ -71,5 +72,15 @@ public class TableSelectionSearchFilterUI extends TableSelectionUI {
         }
 
         table.clearSelection();
+    }
+
+    /*
+     * Override the loadTableData() function so that the table is immediately
+     * filtered
+     */
+    @Override
+    public void loadTableData(List<Object[]> data) {
+        super.loadTableData(data);
+        filterTable();
     }
 }

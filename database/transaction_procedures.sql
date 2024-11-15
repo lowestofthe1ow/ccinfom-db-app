@@ -1,3 +1,23 @@
+-- Fetch performance data
+
+DROP PROCEDURE IF EXISTS get_performances;
+DELIMITER //
+CREATE PROCEDURE get_performances ()
+BEGIN
+	SELECT 
+		p.performance_id,
+		pr.performer_name,
+		pt.start_timestamp,
+        p.performance_status
+	FROM performance p
+	JOIN performance_timeslot pt
+	ON p.performance_timeslot_id = pt.performance_timeslot_id
+	JOIN performer pr
+	ON p.performer_id = pr.performer_id
+    ORDER BY pt.start_timestamp DESC;
+END //
+DELIMITER ;
+
 -- Fetch equipment type data
 
 DROP PROCEDURE IF EXISTS get_equipment_types;
@@ -57,13 +77,14 @@ CREATE PROCEDURE get_auditions ()
 BEGIN
 	SELECT a.audition_id, p.performer_name, a.submission_link, pt.start_timestamp,
 		CONCAT(p.contact_first_name, ' ', p.contact_last_name) AS full_name,
-		p.contact_no AS contact_no
+		p.contact_no AS contact_no,
+        a.audition_status
     FROM audition a
     LEFT JOIN performer p
 		ON p.performer_id = a.performer_id
 	LEFT JOIN performance_timeslot pt
-		ON a.target_timeslot_id = pt.performance_timeslot_id
-    WHERE a.audition_status = 'PENDING';
+		ON a.target_timeslot_id = pt.performance_timeslot_id;
+    -- WHERE a.audition_status = 'PENDING';
 END //
 DELIMITER ;
 
