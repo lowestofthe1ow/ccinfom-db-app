@@ -4,7 +4,13 @@ DROP PROCEDURE IF EXISTS get_timeslots;
 DELIMITER //
 CREATE PROCEDURE get_timeslots ()
 BEGIN
-	SELECT * FROM performance_timeslot;
+	SELECT * FROM performance_timeslot pt
+    WHERE (
+		SELECT COUNT(*)
+		FROM performance p
+        WHERE p.performance_timeslot_id = pt.performance_timeslot_id
+        AND p.performance_status <> 'CANCELLED'
+    ) = 0;
 END //
 DELIMITER ;
 

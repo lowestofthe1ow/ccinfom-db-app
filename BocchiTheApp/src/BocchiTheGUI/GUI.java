@@ -58,6 +58,8 @@ public class GUI extends JFrame {
     }
 
     public void showDialog(String name) {
+        dialogs.get(name).pack();
+        dialogs.get(name).setLocationRelativeTo(null);
         dialogs.get(name).setVisible(true);
     }
 
