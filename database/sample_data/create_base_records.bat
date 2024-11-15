@@ -1,4 +1,5 @@
 del "base_records.sql"
+python3 csv_to_sql_insert.py "base_records.sql" "base/equipment_type.csv" "equipment_type"
 python3 csv_to_sql_insert.py "base_records.sql" "base/equipment.csv" "equipment"
 python3 csv_to_sql_insert.py "base_records.sql" "base/performers.csv" "performer"
 python3 csv_to_sql_insert.py "base_records.sql" "base/staff.csv" "staff"

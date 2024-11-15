@@ -9,7 +9,7 @@ public class SelectTimeslotUI extends TableSelectionUI {
     private Object[][] sqlData;
 
     public SelectTimeslotUI(Object[][] sqlData) {
-        super("Add audition", 1, "ID", "Date", "Start time", "End time");
+        super("Add audition", 1, "ID", "Start", "End");
         this.setNext("dialog/add_audition/select_timeslot/input_submission");
 
         this.addButtons("Confirm");

@@ -4,7 +4,7 @@ import BocchiTheGUI.components.abs.TableSelectionUI;
 
 public class ManageAuditionsUI extends TableSelectionUI {
 	public ManageAuditionsUI() {
-		super("Manage Auditions", 1, "ID", "Performer Name", "Submission Link", "Target date", "Target time",
+		super("Manage Auditions", 1, "ID", "Performer Name", "Submission Link", "Target timeslot",
 				"Contact person", "Contact no.");
 
 		this.addButtons("Accept", "Reject");
