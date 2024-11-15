@@ -1,31 +1,67 @@
 package BocchiTheGUI.components;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class BocchiTheBody extends JPanel {
-	BocchiTheBody() {
-		this.setLayout(new BorderLayout());
-		JTabbedPane houses = new JTabbedPane();
 
-		/* TODO: This stuff...? */
-		// houses.addTab("Tab 1", null, makeTextPanel("Panel #1"), null);
-		// houses.addTab("Tab 2", null, makeTextPanel("Panel #2"), null);
-		// houses.addTab("Tab 3", null, makeTextPanel("Panel #3"), null);
-		// houses.addTab("Tab 4", null, makeTextPanel("Panel #4"), null);
-		// houses.addTab("Tab 5", null, null, null);
-		// houses.addTab("Tab 6", null, null, null);
+    private JMenuBar menuBar;
+    private JPanel centerPanel;
+    private BocchiTheSidePanel sidePanel;
+    public BocchiTheBody(String... strings) {
+        this.setLayout(new BorderLayout());
+        
+        centerPanel = new JPanel(new BorderLayout());
+        sidePanel = new BocchiTheSidePanel();
+        menuBar = new JMenuBar();
+        
+        // Add a home menu with instructions
+        JMenu homeMenu = createHomeMenu();
+        menuBar.add(homeMenu);
 
-		this.add(houses);
-	}
+        for(String string :  strings) {
+        	menuBar.add(new JMenu(string));
+        }
+        this.add(menuBar, BorderLayout.NORTH);
+        this.add(centerPanel, BorderLayout.CENTER);
+        this.add(sidePanel, BorderLayout.EAST);
+        showInstructionsPanel();
+    }
+    
+    
 
-	public JPanel makeTextPanel(String text) {
-		JPanel panel = new JPanel();
-		JLabel label = new JLabel(text);
-		panel.add(label);
-		return panel;
-	}
+    
+    private JMenu createHomeMenu() {
+        JMenu menu = new JMenu("Home");
+
+        menu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showInstructionsPanel(); 
+            }
+        });
+        return menu;
+    }
+
+    private void showInstructionsPanel() {
+        JPanel instructionsPanel = new JPanel();
+        JLabel instructionsLabel = new JLabel("<html><body><h3>Welcome to Bocchi the DB Application!</h3>" +
+                "<ul>" +
+                "<li>Click the \"+\" to view tables.</li>" +
+                "<li>Note: the option to view tables are not implemented yet.</li>" +
+                "<li>Kita? IKUYO!.</li>" +
+                "</ul>" +
+                "</body></html>");
+        instructionsPanel.add(instructionsLabel);
+        
+        centerPanel.removeAll();
+        centerPanel.add(instructionsPanel, BorderLayout.CENTER);
+        centerPanel.revalidate();
+        centerPanel.repaint();
+    }
+
+
+    
 }

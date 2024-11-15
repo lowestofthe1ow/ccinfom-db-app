@@ -1,5 +1,6 @@
 package BocchiTheGUI.components;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +35,12 @@ public class BocchiTheMenuBar extends JMenuBar {
         menuTitles.add(createMenu("Finance",
                 "Record Revenue", "dialog/record_revenue",
                 "Generate Reports", "dialog/generate_reports"));
-
+        
         for (JMenu menuTitle : menuTitles) {
             this.add(menuTitle);
         }
+        
+       
     }
 
     public void addMenuListener(ActionListener menuListener) {

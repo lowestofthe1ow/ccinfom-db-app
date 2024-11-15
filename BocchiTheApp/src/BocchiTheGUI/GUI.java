@@ -7,12 +7,17 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import javax.swing.ImageIcon;
+import javax.swing.JEditorPane;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
+import BocchiTheGUI.components.BocchiTheBody;
 import BocchiTheGUI.components.BocchiTheMenuBar;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
+import raven.datetime.component.date.DatePicker;
 
 public class GUI extends JFrame {
     private BocchiTheMenuBar menuBar;
@@ -20,24 +25,43 @@ public class GUI extends JFrame {
     public GUI() {
         /* Set up menu bar */
         this.menuBar = new BocchiTheMenuBar();
-        this.setJMenuBar(menuBar);
-
-        ImageIcon gifIcon = new ImageIcon(
-                getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-rock-bocchi.gif"));
-        JLabel gifLabel = new JLabel(gifIcon);
+        
+        
 
         /* Set up frame */
         this.setTitle("Bocchi the GUI");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
-        /* TODO: BocchiTheBody */
-        // this.add(new BocchiTheBody(), BorderLayout.CENTER);
+        /* TODO: Make this better, would love to add a '+' which would add a tab */
+        JPanel f = new BocchiTheBody("Performance",
+        							"Equipment Type",
+        							"Equipment",
+        							"Staff",
+        							"Performance Timeslot",
+        							"Position Type",
+        							"Audition",
+        							"Performance",
+        							"Performance Revenue",
+        							"Equipment Rental",
+        							"Staff Assignment",
+        							"Staff Position");
 
+        
+    
+        this.setJMenuBar(menuBar);
+        this.add(f, BorderLayout.CENTER);
+        /*
+        ImageIcon gifIcon = new ImageIcon(
+                getClass().getClassLoader().getResource("BocchiTheAssets/bocchi-the-rock-bocchi.gif"));
+          JLabel gifLabel = new JLabel(gifIcon);
+          this.add(gifLabel, BorderLayout.SOUTH);
+         */ 
+        
         this.setSize(960, 600);
-        this.add(gifLabel, BorderLayout.CENTER);
-
         this.setVisible(true);
+        
+        
 
     }
 
