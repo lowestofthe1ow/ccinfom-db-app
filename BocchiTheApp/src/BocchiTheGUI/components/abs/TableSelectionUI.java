@@ -17,53 +17,9 @@ import BocchiTheGUI.components.TableDatePicker;
 import BocchiTheGUI.components.TableSearchBox;
 
 public abstract class TableSelectionUI extends DialogUI {
-    protected JTable table;
-    protected DefaultTableModel activeTableModel;
-    protected List<Object[]> tableRows;
-
-    private ArrayList<Function<Object[], Boolean>> filters;
-
-    private void addFilter(Function<Object[], Boolean> filter) {
-        this.filters.add(filter);
-    }
-
-    protected void addSearchBoxFilter(String label, int filterColumnIndex) {
-        TableSearchBox searchBox = new TableSearchBox(label, filterColumnIndex, () -> {
-            this.filterTable();
-        });
-        this.addFilter(searchBox.getFilter());
-        this.add(searchBox);
-    }
-
-    protected void addDatePickerFilter(String label, int filterColumnIndex) {
-        TableDatePicker datePicker = new TableDatePicker(label, filterColumnIndex, () -> {
-            this.filterTable();
-        });
-        this.addFilter(datePicker.getFilter());
-        this.add(datePicker);
-    }
-
-    protected void addComboBoxFilter(String label, int filterColumnIndex, String... options) {
-        TableComboBox comboBox = new TableComboBox(label, filterColumnIndex, () -> {
-            this.filterTable();
-        });
-        comboBox.addOptions(options);
-        this.addFilter(comboBox.getFilter());
-        this.add(comboBox);
-    }
-
-    protected void filterTable() {
-        /* Reset the table model */
-        activeTableModel.setRowCount(0);
-
-        for (Object[] row : tableRows) {
-            if (filters.stream().allMatch(filter -> filter.apply(row))) {
-                this.activeTableModel.addRow(row);
-            }
-        }
-
-        table.clearSelection();
-    }
+    private JTable table;
+    private DefaultTableModel activeTableModel;
+    private List<Object[]> tableRows;
 
     /**
      * Creates a dialog window for table selection.
@@ -98,6 +54,82 @@ public abstract class TableSelectionUI extends DialogUI {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(500, 250));
         this.add(scrollPane);
+    }
+
+    /**
+     * A list of {@link Function}s that are called by the table during
+     * {@link #filterTable()}.
+     */
+    private ArrayList<Function<Object[], Boolean>> filters;
+
+    /**
+     * Adds a {@link Function} to the list of filters used by the table
+     * 
+     * @param filter The filter to add, usually provided by the component
+     */
+    private void addFilter(Function<Object[], Boolean> filter) {
+        this.filters.add(filter);
+    }
+
+    /**
+     * Adds a search box filter to the UI.
+     * 
+     * @param label             The label to add to the search box
+     * @param filterColumnIndex The index of the table column to filter by
+     */
+    protected void addSearchBoxFilter(String label, int filterColumnIndex) {
+        TableSearchBox searchBox = new TableSearchBox(label, filterColumnIndex, () -> {
+            this.filterTable();
+        });
+        this.addFilter(searchBox.getFilter());
+        this.add(searchBox);
+    }
+
+    /**
+     * Adds a date picker filter to the UI.
+     * 
+     * @param label             The label to add to the date picker
+     * @param filterColumnIndex The index of the table column to filter by
+     */
+    protected void addDatePickerFilter(String label, int filterColumnIndex) {
+        TableDatePicker datePicker = new TableDatePicker(label, filterColumnIndex, () -> {
+            this.filterTable();
+        });
+        this.addFilter(datePicker.getFilter());
+        this.add(datePicker);
+    }
+
+    /**
+     * Adds a combo box filter to the UI.
+     * 
+     * @param label             The label to add to the combo box
+     * @param filterColumnIndex The index of the column to filter by
+     * @param options           The options to add to the combo box
+     */
+    protected void addComboBoxFilter(String label, int filterColumnIndex, String... options) {
+        TableComboBox comboBox = new TableComboBox(label, filterColumnIndex, () -> {
+            this.filterTable();
+        });
+        comboBox.addOptions(options);
+        this.addFilter(comboBox.getFilter());
+        this.add(comboBox);
+    }
+
+    /**
+     * Filters the table according to the list of filters in the table
+     */
+    private void filterTable() {
+        /* Reset the table model */
+        activeTableModel.setRowCount(0);
+
+        for (Object[] row : tableRows) {
+            /* The row must meet ALL filter conditions to be added */
+            if (filters.stream().allMatch(filter -> filter.apply(row))) {
+                this.activeTableModel.addRow(row);
+            }
+        }
+
+        table.clearSelection();
     }
 
     /**
