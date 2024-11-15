@@ -18,14 +18,19 @@ public class BocchiTheMenuBar extends JMenuBar {
                 "Hire Staff", "dialog/hire_staff",
                 "Remove Staff", "dialog/remove_staff",
                 "Update Staff Position", "dialog/update_staff_position"));
-        menuTitles.add(createMenu("Configure",
+
+        menuTitles.add(createMenu("Audition/Performance",
                 "Add Performer", "dialog/add_performer",
                 "Add Timeslot", "dialog/add_timeslot",
+                "Add Audition", "dialog/add_audition",
+                "Manage Auditions", "dialog/manage_auditions",
+                "Manage Performances", "dialog/manage_performances"));
+
+        menuTitles.add(createMenu("Equipment",
                 "Add Equipment", "dialog/add_equipment",
                 "Rent Equipment", "dialog/rent_equipment",
-                "Manage Rentals", "dialog/manage_rentals",
-                "Add Audition", "dialog/add_audition",
-                "Manage Auditions", "dialog/manage_auditions"));
+                "Manage Rentals", "dialog/manage_rentals"));
+
         menuTitles.add(createMenu("Finance",
                 "Record Revenue", "dialog/record_revenue",
                 "Generate Reports", "dialog/generate_reports"));
