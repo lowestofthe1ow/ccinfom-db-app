@@ -10,7 +10,7 @@ public class ManagePerformancesUI extends TableSelectionUI {
         this.addDatePickerFilter("Filter by timeslot", 2);
         this.addComboBoxFilter("Filter by status", 3, "PENDING", "COMPLETE", "CANCELLED");
 
-        this.addButtons("Update");
-        this.setButtonActionCommands("button/next/input_submission");
+        this.addButtons("Record revenue", "Cancel performance");
+        this.setButtonActionCommands("button/next/record_revenue", "button/sql/cancel_performance");
     }
 }

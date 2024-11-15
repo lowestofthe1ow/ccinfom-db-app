@@ -30,6 +30,7 @@ import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.components.ui.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.components.ui.sub.InputSubmissionUI;
+import BocchiTheGUI.components.ui.sub.RecordRevenueUI;
 import BocchiTheGUI.components.ui.sub.SelectStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.SelectTimeslotUI;
 
@@ -98,6 +99,8 @@ public class Controller {
                 return new AddTimeslotUI();
             case "dialog/manage_performances":
                 return new ManagePerformancesUI();
+            case "dialog/manage_performances/record_revenue":
+                return new RecordRevenueUI(sqlData);
         }
         return null;
     }
