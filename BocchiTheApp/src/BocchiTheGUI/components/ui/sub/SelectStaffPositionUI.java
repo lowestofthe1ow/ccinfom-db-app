@@ -3,13 +3,16 @@ package BocchiTheGUI.components.ui.sub;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import BocchiTheGUI.components.abs.TableSelectionSearchFilterUI;
+import BocchiTheGUI.components.abs.TableSelectionUI;
 
-public class SelectStaffPositionUI extends TableSelectionSearchFilterUI {
+public class SelectStaffPositionUI extends TableSelectionUI {
     private Object[][] sqlData;
 
     public SelectStaffPositionUI(String buttonLabel, String actionCommand, String rootName, Object[][] sqlData) {
-        super("Select staff position", 1, "ID", "Position", "Salary");
+        super("Select staff position", "ID", "Position", "Salary");
+
+        this.addSearchBoxFilter("Filter by position name", 1);
+
         this.addButtons(buttonLabel);
         this.setButtonActionCommands(actionCommand);
         this.addTerminatingCommands(actionCommand);

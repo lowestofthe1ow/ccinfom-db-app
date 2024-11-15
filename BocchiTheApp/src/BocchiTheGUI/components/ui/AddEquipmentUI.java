@@ -1,10 +1,12 @@
 package BocchiTheGUI.components.ui;
 
-import BocchiTheGUI.components.abs.TableSelectionSearchFilterUI;
+import BocchiTheGUI.components.abs.TableSelectionUI;
 
-public class AddEquipmentUI extends TableSelectionSearchFilterUI {
+public class AddEquipmentUI extends TableSelectionUI {
     public AddEquipmentUI() {
-        super("Add equipment", 1, "ID", "Equipment type");
+        super("Add equipment", "ID", "Equipment type");
+
+        this.addSearchBoxFilter("Filter by equipment type", 1);
 
         this.addButtons("Confirm", "Add type");
         this.setButtonActionCommands(

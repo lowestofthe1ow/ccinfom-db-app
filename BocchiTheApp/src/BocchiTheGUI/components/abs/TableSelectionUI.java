@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
@@ -11,10 +12,58 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import BocchiTheGUI.components.TableComboBox;
+import BocchiTheGUI.components.TableDatePicker;
+import BocchiTheGUI.components.TableSearchBox;
+
 public abstract class TableSelectionUI extends DialogUI {
     protected JTable table;
     protected DefaultTableModel activeTableModel;
     protected List<Object[]> tableRows;
+
+    private ArrayList<Function<Object[], Boolean>> filters;
+
+    private void addFilter(Function<Object[], Boolean> filter) {
+        this.filters.add(filter);
+    }
+
+    protected void addSearchBoxFilter(String label, int filterColumnIndex) {
+        TableSearchBox searchBox = new TableSearchBox(label, filterColumnIndex, () -> {
+            this.filterTable();
+        });
+        this.addFilter(searchBox.getFilter());
+        this.add(searchBox);
+    }
+
+    protected void addDatePickerFilter(String label, int filterColumnIndex) {
+        TableDatePicker datePicker = new TableDatePicker(label, filterColumnIndex, () -> {
+            this.filterTable();
+        });
+        this.addFilter(datePicker.getFilter());
+        this.add(datePicker);
+    }
+
+    protected void addComboBoxFilter(String label, int filterColumnIndex, String... options) {
+        TableComboBox comboBox = new TableComboBox(label, filterColumnIndex, () -> {
+            this.filterTable();
+        });
+        comboBox.addOptions(options);
+        this.addFilter(comboBox.getFilter());
+        this.add(comboBox);
+    }
+
+    protected void filterTable() {
+        /* Reset the table model */
+        activeTableModel.setRowCount(0);
+
+        for (Object[] row : tableRows) {
+            if (filters.stream().allMatch(filter -> filter.apply(row))) {
+                this.activeTableModel.addRow(row);
+            }
+        }
+
+        table.clearSelection();
+    }
 
     /**
      * Creates a dialog window for table selection.
@@ -26,6 +75,8 @@ public abstract class TableSelectionUI extends DialogUI {
     public TableSelectionUI(String name, String... columnNames) {
         super(name);
         this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.filters = new ArrayList<>();
 
         /* Create an empty list of row data */
         this.tableRows = new ArrayList<>();
@@ -64,6 +115,8 @@ public abstract class TableSelectionUI extends DialogUI {
             activeTableModel.addRow(row);
             tableRows.add(row);
         }
+
+        filterTable();
     }
 
     /**

@@ -3,13 +3,15 @@ package BocchiTheGUI.components.ui.sub;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import BocchiTheGUI.components.abs.TableSelectionDateFilterUI;
+import BocchiTheGUI.components.abs.TableSelectionUI;
 
-public class SelectTimeslotUI extends TableSelectionDateFilterUI {
+public class SelectTimeslotUI extends TableSelectionUI {
     private Object[][] sqlData;
 
     public SelectTimeslotUI(Object[][] sqlData) {
-        super("Select target timeslot", 1, "ID", "Start", "End");
+        super("Select target timeslot", "ID", "Start", "End");
+
+        this.addDatePickerFilter("Filter by start date", 1);
 
         this.addButtons("Confirm");
         this.setButtonActionCommands("button/next/input_submission");
