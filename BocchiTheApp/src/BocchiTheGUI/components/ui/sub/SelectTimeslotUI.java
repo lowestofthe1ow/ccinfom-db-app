@@ -12,6 +12,7 @@ public class SelectTimeslotUI extends TableSelectionUI {
         super("Select target timeslot", "ID", "Start", "End");
 
         this.addDatePickerFilter("Filter by start date", 1);
+        this.addDatePickerFilter("Filter by end date", 2);
 
         this.addButtons("Confirm");
         this.setButtonActionCommands("button/next/input_submission");

@@ -49,6 +49,7 @@ public abstract class TableSelectionUI extends DialogUI {
         this.table = new JTable(activeTableModel);
         this.table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         this.table.getTableHeader().setReorderingAllowed(false);
+        this.table.setAutoCreateRowSorter(true);
 
         /* Wrap JTable in JScrollPane and add it */
         JScrollPane scrollPane = new JScrollPane(table);

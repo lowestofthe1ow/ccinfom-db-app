@@ -7,6 +7,7 @@ public class AddAuditionUI extends TableSelectionUI {
         super("Add audition", "ID", "Performer", "Contact person", "Contact number");
 
         this.addSearchBoxFilter("Filter by performer name", 1);
+        this.addSearchBoxFilter("Filter by contact person name", 2);
 
         this.addButtons("Confirm");
         this.setButtonActionCommands("button/next/select_timeslot");
