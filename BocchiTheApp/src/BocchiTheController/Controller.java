@@ -19,6 +19,7 @@ import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
 import BocchiTheGUI.components.abs.TableSelectionUI;
 import BocchiTheGUI.components.ui.AddAuditionUI;
+import BocchiTheGUI.components.ui.AddEquipmentUI;
 import BocchiTheGUI.components.ui.AddPerformerUI;
 import BocchiTheGUI.components.ui.AddTimeslotUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
@@ -82,6 +83,10 @@ public class Controller {
                 return new SelectTimeslotUI(sqlData);
             case "dialog/add_audition/select_timeslot/input_submission":
                 return new InputSubmissionUI(sqlData);
+            case "dialog/add_equipment":
+                return new AddEquipmentUI();
+            case "dialog/add_equipment/add_type":
+                return new AddEquipmentUI();
             case "dialog/manage_auditions":
                 return new ManageAuditionsUI();
             case "dialog/add_timeslot":
@@ -124,6 +129,10 @@ public class Controller {
                 TableSelectionUI timeslots = (TableSelectionUI) dialogUI;
                 timeslots.loadTableData(executeProcedure("get_timeslots"));
                 break;
+            case "dialog/add_equipment":
+                TableSelectionUI equipment_types = (TableSelectionUI) dialogUI;
+                equipment_types.loadTableData(executeProcedure("get_equipment_types"));
+                break;
         }
     }
 
@@ -154,7 +163,7 @@ public class Controller {
                 /* Check if the button command terminates the window */
                 if (dialogUI.isTerminatingCommand(commandIdentifier)) {
                     /* Only do something if the window is the last in the chain */
-                    if (dialogUI.getNext() == null) {
+                    if (!commandIdentifier.contains("button/next/")) {
                         /* Attempt to get the "root dialog" */
                         String rootName = dialogUI.getRoot();
 
@@ -166,7 +175,8 @@ public class Controller {
                                 refreshDialogUI(rootUI, rootName);
                             });
                     } else {
-                        showDialog(dialogUI.getNext(), dialogUI.getSQLParameterInputs());
+                        showDialog(dialogIdentifier + commandIdentifier.substring(11),
+                                dialogUI.getSQLParameterInputs());
                     }
                 } else {
                     refreshDialogUI(dialogUI, dialogIdentifier);

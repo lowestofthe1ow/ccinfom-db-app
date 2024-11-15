@@ -11,29 +11,13 @@ import javax.swing.JPanel;
 public abstract class DialogUI extends JPanel {
     private String dialogTitle;
     private JPanel buttonPanel;
-    private String nextDialogUI;
     private String rootDialogUI;
 
     private ArrayList<JButton> buttons;
     private ArrayList<String> terminatingCommands;
 
-    /**
-     * Sets the string representing the name of the UI in the dialog window that is
-     * opened whenever a button with a
-     * terminating command is clicked.
-     * 
-     * @param nextDialogUI The string representing the next UI
-     */
-    protected void setNext(String nextDialogUI) {
-        this.nextDialogUI = nextDialogUI;
-    }
-
     protected void setRoot(String rootDialogUI) {
         this.rootDialogUI = rootDialogUI;
-    }
-
-    public String getNext() {
-        return this.nextDialogUI;
     }
 
     public String getRoot() {
@@ -75,12 +59,12 @@ public abstract class DialogUI extends JPanel {
      * commands that close the dialog window when triggered.
      * 
      * @param command The action command to check
-     * @return {@code true} if the string is a terminating command or is equivalent
-     *         to {@code "button/next"} (a special identifier), {@code false}
+     * @return {@code true} if the string is a terminating command or contains
+     *         {@code "button/next"} (a special identifier), {@code false}
      *         otherwise
      */
     public boolean isTerminatingCommand(String command) {
-        return command.equals("button/next") || terminatingCommands.contains(command);
+        return command.contains("button/next") || terminatingCommands.contains(command);
     }
 
     public String getDialogTitle() {
@@ -135,7 +119,6 @@ public abstract class DialogUI extends JPanel {
     public DialogUI(String dialogTitle) {
         this.dialogTitle = dialogTitle;
         this.terminatingCommands = new ArrayList<>();
-        this.nextDialogUI = null;
         this.buttons = new ArrayList<>();
         this.buttonPanel = new JPanel();
         this.setLayout(new BorderLayout());

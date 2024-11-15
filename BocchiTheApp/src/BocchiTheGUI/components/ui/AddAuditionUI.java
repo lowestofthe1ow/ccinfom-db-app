@@ -5,9 +5,8 @@ import BocchiTheGUI.components.abs.TableSelectionSearchFilterUI;
 public class AddAuditionUI extends TableSelectionSearchFilterUI {
     public AddAuditionUI() {
         super("Add audition", 1, "ID", "Performer", "Contact person", "Contact number");
-        this.setNext("dialog/add_audition/select_timeslot");
 
         this.addButtons("Confirm");
-        this.setButtonActionCommands("button/next");
+        this.setButtonActionCommands("button/next/select_timeslot");
     }
 }

@@ -42,8 +42,4 @@ public class CommandDialog extends JDialog {
     public DialogUI getPanelUI() {
         return this.dialogUI;
     }
-
-    public String getNext() {
-        return this.dialogUI.getNext();
-    }
 }

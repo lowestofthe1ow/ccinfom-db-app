@@ -8,11 +8,10 @@ import BocchiTheGUI.components.abs.TextFieldsUI;
 public class HireStaffUI extends TextFieldsUI {
     public HireStaffUI() {
         super("Hire staff");
-        this.setNext("dialog/hire_staff/select_position");
 
         addForms("First name: ", "Last name: ", "Contact number: ");
         addButtons("Confirm");
-        setButtonActionCommands("button/next");
+        setButtonActionCommands("button/next/select_position");
     }
 
     private String getFirstName() {

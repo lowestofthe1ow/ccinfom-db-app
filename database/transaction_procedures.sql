@@ -1,3 +1,13 @@
+-- Fetch equipment type data
+
+DROP PROCEDURE IF EXISTS get_equipment_types;
+DELIMITER //
+CREATE PROCEDURE get_equipment_types ()
+BEGIN
+	SELECT * FROM equipment_type;
+END //
+DELIMITER ;
+
 -- Fetch timeslot data
 
 DROP PROCEDURE IF EXISTS get_timeslots;

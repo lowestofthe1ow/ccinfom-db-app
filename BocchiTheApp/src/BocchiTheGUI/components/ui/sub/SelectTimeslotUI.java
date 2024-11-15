@@ -9,11 +9,10 @@ public class SelectTimeslotUI extends TableSelectionDateFilterUI {
     private Object[][] sqlData;
 
     public SelectTimeslotUI(Object[][] sqlData) {
-        super("Add audition", 1, "ID", "Start", "End");
-        this.setNext("dialog/add_audition/select_timeslot/input_submission");
+        super("Select target timeslot", 1, "ID", "Start", "End");
 
         this.addButtons("Confirm");
-        this.setButtonActionCommands("button/next");
+        this.setButtonActionCommands("button/next/input_submission");
 
         this.sqlData = sqlData;
     }
