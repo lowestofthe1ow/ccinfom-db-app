@@ -1,5 +1,6 @@
 package BocchiTheGUI.components.abs;
 
+import java.awt.GridLayout;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class TableSelectionDateFilterUI extends TableSelectionUI {
 
         /* Initialize search box */
         JPanel searchPanel = new JPanel();
-        // searchPanel.setLayout(new GridLayout(1, 2));
+        searchPanel.setLayout(new GridLayout(2, 1));
         searchPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
 
         DatePicker datePicker = new DatePicker();
@@ -46,11 +47,8 @@ public class TableSelectionDateFilterUI extends TableSelectionUI {
 
         // searchPanel.add(new JLabel("Search by " + columnNames[searchColumnIndex] + ":
         // "));
-        JPanel headerPanel = new JPanel();
-        headerPanel.add(new JLabel("Filter by date:"));
-        headerPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
-        this.add(headerPanel);
-        searchPanel.add(datePicker);
+        searchPanel.add(new JLabel("Filter by start date: "));
+        searchPanel.add(dateEditor);
         this.add(searchPanel);
     }
 
