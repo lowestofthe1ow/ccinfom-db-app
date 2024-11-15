@@ -19,16 +19,16 @@ INSERT INTO audition (`audition_id`, `performer_id`, `target_timeslot_id`, `subm
 INSERT INTO audition (`audition_id`, `performer_id`, `target_timeslot_id`, `submission_link`, `audition_status`) VALUES ('19', '12', '35', 'https://www.youtube.com/watch?v=vJ3jNTH2QL0', 'PASSED');
 INSERT INTO audition (`audition_id`, `performer_id`, `target_timeslot_id`, `submission_link`, `audition_status`) VALUES ('20', '19', '18', 'https://www.youtube.com/watch?v=PV44FZwyS5M', 'PASSED');
 
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('1', '9', '20', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('2', '16', '7', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('3', '8', '6', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('4', '13', '5', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('5', '2', '25', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('6', '5', '17', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('7', '11', '21', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('8', '1', '33', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('9', '17', '2', '5000.00', 'PENDING');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('10', '4', '32', '5000.00', 'PENDING');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('1', '9', '20', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('2', '16', '7', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('3', '8', '6', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('4', '13', '5', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('5', '2', '25', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('6', '5', '17', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('7', '11', '21', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('8', '1', '33', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('9', '17', '2', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('10', '4', '32', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('11', '12', '35', '5000.00', 'PENDING');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('12', '19', '18', '5000.00', 'PENDING');
 
