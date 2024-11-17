@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -12,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public abstract class TextFieldsUI extends DialogUI {
-    protected ArrayList<JTextField> formItems;
+    protected List<JTextField> formItems;
 
     public TextFieldsUI(String dialogTitle) {
         super(dialogTitle);

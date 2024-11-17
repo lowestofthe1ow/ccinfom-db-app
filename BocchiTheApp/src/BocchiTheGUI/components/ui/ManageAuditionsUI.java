@@ -7,6 +7,8 @@ public class ManageAuditionsUI extends TableSelectionUI {
 		super("Manage Auditions", "ID", "Performer Name", "Submission Link", "Target timeslot",
 				"Contact person", "Contact no.", "Status");
 
+		this.setLoadDataCommand("sql/get_auditions");
+
 		this.addSearchBoxFilter("Filter by performer name", 1);
 		this.addSearchBoxFilter("Filter by contact person name", 4);
 		this.addDatePickerFilter("Filter by target timeslot", 3);
@@ -14,6 +16,6 @@ public class ManageAuditionsUI extends TableSelectionUI {
 				"PENDING", "PASSED", "REJECTED");
 
 		this.addButtons("Accept", "Reject");
-		setButtonActionCommands("button/sql/accept_audition", "button/sql/reject_audition");
+		this.setButtonActionCommands("button/sql/accept_audition", "button/sql/reject_audition");
 	}
 }

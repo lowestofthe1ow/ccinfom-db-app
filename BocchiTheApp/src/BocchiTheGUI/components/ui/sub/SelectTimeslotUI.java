@@ -2,6 +2,7 @@ package BocchiTheGUI.components.ui.sub;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import BocchiTheGUI.components.abs.TableSelectionUI;
 
@@ -10,6 +11,8 @@ public class SelectTimeslotUI extends TableSelectionUI {
 
     public SelectTimeslotUI(Object[][] sqlData) {
         super("Select target timeslot", "ID", "Start", "End");
+
+        this.setLoadDataCommand("sql/get_timeslots");
 
         this.addDatePickerFilter("Filter by start date", 1);
         this.addDatePickerFilter("Filter by end date", 2);
@@ -22,7 +25,7 @@ public class SelectTimeslotUI extends TableSelectionUI {
 
     @Override
     public Object[][] getSQLParameterInputs() {
-        ArrayList<Object> params = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
 
         Collections.addAll(params, sqlData[0]);
         params.add(super.getSQLParameterInputs()[0][0]);
