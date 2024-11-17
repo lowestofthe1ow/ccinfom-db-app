@@ -335,12 +335,12 @@ public class Controller {
 
     private void initializeListeners() {
         /* Set menu bar listener */
-        gui.setMenuListener((e) -> {
+        gui.setMenuBarListener((e) -> {
             showDialog(e.getActionCommand(), null);
         });
 
         /* Set window closing listener */
-        gui.setWindowListener(new WindowAdapter() {
+        gui.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 closeConnection();
