@@ -346,6 +346,7 @@ public class Controller {
                 closeConnection();
             }
         });
+
     }
 
     public Controller(Connection connection, GUI gui) {

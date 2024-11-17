@@ -7,39 +7,29 @@ import java.awt.event.ActionListener;
 
 public class BocchiTheBody extends JPanel {
 
-    private JMenuBar menuBar;
+    private JTabbedPane tabbedPane;
     private JPanel centerPanel;
     private BocchiTheSidePanel sidePanel;
+
     public BocchiTheBody(String... strings) {
         this.setLayout(new BorderLayout());
-        
+
+        tabbedPane = new JTabbedPane();
         centerPanel = new JPanel(new BorderLayout());
         sidePanel = new BocchiTheSidePanel();
-        menuBar = new JMenuBar();
-        
-        // Add a home menu with instructions
-        JMenu homeMenu = createHomeMenu();
-        menuBar.add(homeMenu);
 
-        for(String string :  strings) {
-        	menuBar.add(new JMenu(string));
-        }
-        this.add(menuBar, BorderLayout.NORTH);
-        this.add(centerPanel, BorderLayout.CENTER);
-        this.add(sidePanel, BorderLayout.EAST);
+        this.add(new BocchiTheTabbedPane());
+
         showInstructionsPanel();
     }
-    
-    
 
-    
     private JMenu createHomeMenu() {
         JMenu menu = new JMenu("Home");
 
         menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showInstructionsPanel(); 
+                showInstructionsPanel();
             }
         });
         return menu;
@@ -55,13 +45,11 @@ public class BocchiTheBody extends JPanel {
                 "</ul>" +
                 "</body></html>");
         instructionsPanel.add(instructionsLabel);
-        
+
         centerPanel.removeAll();
         centerPanel.add(instructionsPanel, BorderLayout.CENTER);
         centerPanel.revalidate();
         centerPanel.repaint();
     }
 
-
-    
 }
