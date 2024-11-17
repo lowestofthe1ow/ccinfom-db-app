@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 public class BocchiTheTabbedPane extends JTabbedPane {
     private ArrayList<JPanel> openTabs;
+    private JButton newTabButton;
 
     /**
      * Creates a control button in the tabbed pane (close tab or new tab)
@@ -68,11 +69,20 @@ public class BocchiTheTabbedPane extends JTabbedPane {
         this.setTabComponentAt(this.openTabs.size(), tabHeader);
     }
 
+    /**
+     * Sets a listener that listens to the new tab button.
+     * 
+     * @param actionListener The listener to attach
+     */
+    public void addTabbedPaneListener(ActionListener actionListener) {
+        this.newTabButton.addActionListener(actionListener);
+    }
+
     public BocchiTheTabbedPane() {
         this.addTab("Home", null);
         this.addTab(null, null);
 
-        JButton newTabButton = createControlButton("+", (e) -> {
+        this.newTabButton = createControlButton("+", (e) -> {
             this.newTab("New tab", new JPanel());
             // this.add(createMenu("Thing", "tab/thing"));
         });

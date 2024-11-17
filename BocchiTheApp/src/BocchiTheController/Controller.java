@@ -243,6 +243,12 @@ public class Controller {
             }
         });
 
+        gui.setTabbedPaneListener((e) -> {
+            /*
+             * TODO: Call a method that creates a new tab here.
+             * Create a TabUIFactory that takes identifiers starting with "tab/"
+             */
+        });
     }
 
     public Controller(Connection connection, GUI gui) {

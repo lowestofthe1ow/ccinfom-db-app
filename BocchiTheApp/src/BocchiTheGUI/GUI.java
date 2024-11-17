@@ -9,11 +9,13 @@ import javax.swing.JFrame;
 
 import BocchiTheGUI.components.BocchiTheBody;
 import BocchiTheGUI.components.BocchiTheMenuBar;
+import BocchiTheGUI.components.BocchiTheTabbedPane;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
 
 public class GUI extends JFrame {
     private BocchiTheMenuBar menuBar;
+    private BocchiTheTabbedPane tabbedPane;
     private HashMap<String, CommandDialog> dialogs = new HashMap<>();
 
     public GUI() {
@@ -26,7 +28,8 @@ public class GUI extends JFrame {
         this.menuBar = new BocchiTheMenuBar();
         this.setJMenuBar(menuBar);
 
-        this.add(new BocchiTheBody());
+        this.tabbedPane = new BocchiTheTabbedPane();
+        this.add(tabbedPane);
 
         /* Use the system exit call */
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,6 +44,10 @@ public class GUI extends JFrame {
      */
     public void setMenuBarListener(ActionListener actionListener) {
         this.menuBar.addMenuListener(actionListener);
+    }
+
+    public void setTabbedPaneListener(ActionListener actionListener) {
+        this.tabbedPane.addTabbedPaneListener(actionListener);
     }
 
     /**
