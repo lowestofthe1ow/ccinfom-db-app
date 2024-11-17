@@ -1,6 +1,6 @@
 package BocchiTheController;
 
-import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.components.abs.PaneUI;
 import BocchiTheGUI.components.ui.AddAuditionUI;
 import BocchiTheGUI.components.ui.AddEquipmentUI;
 import BocchiTheGUI.components.ui.AddPerformerUI;
@@ -9,6 +9,7 @@ import BocchiTheGUI.components.ui.GenerateReportUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
 import BocchiTheGUI.components.ui.ManagePerformancesUI;
+import BocchiTheGUI.components.ui.PerformerRevenueUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.AddEquipmentDetailsUI;
@@ -18,9 +19,9 @@ import BocchiTheGUI.components.ui.sub.RecordRevenueUI;
 import BocchiTheGUI.components.ui.sub.SelectStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.SelectTimeslotUI;
 
-public final class DialogUIFactory {
+public final class PaneUIFactory {
     /**
-     * Creates a new {@link DialogUI} instance of a specific subclass based on an
+     * Creates a new {@link PaneUI} instance of a specific subclass based on an
      * identifier string. The following is a list of all valid strings:
      * <ul>
      * <li>{@code "dialog/hire_staff"}
@@ -36,11 +37,11 @@ public final class DialogUIFactory {
      * 
      * @param dialogIdentifier The identifier string
      * @param sqlData          The SQL data to pass to the new dialog, as in
-     *                         {@link DialogUI#getSQLParameterInputs()}. Ignored in
+     *                         {@link PaneUI#getSQLParameterInputs()}. Ignored in
      *                         cases where the UI does not require it.
      * @return The newly-created instance ({@code null} if no string matched)
      */
-    public static DialogUI createDialogUI(String dialogIdentifier, Object[][] sqlData) {
+    public static PaneUI createPaneUI(String dialogIdentifier, Object[][] sqlData) {
         switch (dialogIdentifier) {
             /* Staff menu */
             case "dialog/hire_staff":
@@ -91,13 +92,13 @@ public final class DialogUIFactory {
                 return new AddEquipmentTypeUI();
             case "dialog/add_equipment/add_equipment_details":
                 return new AddEquipmentDetailsUI(sqlData);
-                
-                
-                
-           /* Finance menu */
+
+            /* Finance menu */
             case "dialog/generate_reports":
-            	return new GenerateReportUI();
-           
+                return new GenerateReportUI();
+
+            case "dialog/performer_revenue":
+                return new PerformerRevenueUI();
         }
         return null;
     }

@@ -16,16 +16,15 @@ public class PerformerRevenueTab extends TableSelectionUI {
         this.addSearchBoxFilter("Filter by Name", 1);
         this.addButtons("Generate");
         this.setButtonActionCommands("performer_revenue");
-        
+
     }
 
     private void addBottomPanel() {
-       
-        JPanel bottomPanel = new JPanel(new GridLayout(1, 2, 10, 10)); 
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
+
+        JPanel bottomPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         revenueLabel = new JLabel("Revenue: 0.00", SwingConstants.CENTER);
-        
 
         quotaLabel = new JLabel("Quota: 0.00%", SwingConstants.CENTER);
 
@@ -44,5 +43,4 @@ public class PerformerRevenueTab extends TableSelectionUI {
         quotaLabel.setText(String.format("Quota: %.2f%%", quota));
     }
 
-  
 }

@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 
 import BocchiTheGUI.GUI;
 import BocchiTheGUI.components.CommandDialog;
-import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.components.abs.PaneUI;
 import BocchiTheGUI.interfaces.DataLoadable;
 
 public class Controller {
@@ -31,7 +31,7 @@ public class Controller {
      * 
      * @param dialogUI The UI to load data into
      */
-    private void loadDataFromSQL(DialogUI dialogUI) {
+    private void loadDataFromSQL(PaneUI dialogUI) {
         if (dialogUI instanceof DataLoadable) {
             DataLoadable loadableUI = (DataLoadable) dialogUI;
             loadableUI.loadData((sqlIdentifier) -> {
@@ -47,15 +47,15 @@ public class Controller {
     }
 
     /**
-     * Creates a {@link CommandDialog} and loads in a {@link DialogUI}.
+     * Creates a {@link CommandDialog} and loads in a {@link PaneUI}.
      * 
      * @param dialogIdentifier The action command representing the UI to load into
      *                         the window
      * @param sqlData          The SQL data to pass to the new dialog, as in
-     *                         {@link DialogUI#getSQLParameterInputs()}
+     *                         {@link PaneUI#getSQLParameterInputs()}
      */
     private void showDialog(String dialogIdentifier, Object[][] sqlData) {
-        DialogUI dialogUI = DialogUIFactory.createDialogUI(dialogIdentifier, sqlData);
+        PaneUI dialogUI = PaneUIFactory.createPaneUI(dialogIdentifier, sqlData);
 
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, dialogIdentifier, () -> {
@@ -69,6 +69,11 @@ public class Controller {
                 /* Check if the button pressed was an SQL button */
                 if (commandIdentifier.contains("button/sql/"))
                     parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
+
+                else if (commandIdentifier.contains("button/report/"))
+                    /* Execute SQL here */
+                    System.out.println(dialogUI.getSQLParameterInputs());
+                /* Something */
 
                 /* Check if the button command terminates the window */
                 if (dialogUI.isTerminatingCommand(commandIdentifier)) {
@@ -243,23 +248,21 @@ public class Controller {
             }
         });
 
-        gui.setTabbedPaneListener((e) -> {
+        gui.setGenerateReportsListener((e) -> {
             /*
              * TODO: Call a method that creates a new tab here.
              * Create a TabUIFactory that takes identifiers starting with "tab/"
              */
-        	
-        	addTab(e.getActionCommand(), null);
+
+            // addTab(e.getActionCommand(), null);
+            showDialog(e.getActionCommand(), null);
         });
     }
-    
-    
-    
+
     private void addTab(String dialogIdentifier, Object[][] sqlData) {
-        DialogUI dialogUI = TabUIFactory.createTabUI(dialogIdentifier, sqlData);
-        
-        
-        gui.addTab(dialogUI, dialogIdentifier);
+        PaneUI dialogUI = TabUIFactory.createTabUI(dialogIdentifier, sqlData);
+
+        // gui.addTab(dialogUI, dialogIdentifier);
     }
 
     public Controller(Connection connection, GUI gui) {

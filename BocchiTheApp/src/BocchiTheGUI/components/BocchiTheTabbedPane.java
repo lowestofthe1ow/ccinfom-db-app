@@ -78,8 +78,8 @@ public class BocchiTheTabbedPane extends JTabbedPane {
         this.newTabButton.addActionListener(actionListener);
     }
 
-    public BocchiTheTabbedPane() {
-        this.addTab("Home", null);
+    public BocchiTheTabbedPane(JPanel homePanel) {
+        this.addTab("Home", homePanel);
         this.addTab(null, null);
 
         this.newTabButton = createControlButton("+", (e) -> {

@@ -31,10 +31,6 @@ public class BocchiTheMenuBar extends JMenuBar {
                 "Rent Equipment", "dialog/rent_equipment",
                 "Manage Rentals", "dialog/manage_rentals"));
 
-        menuTitles.add(createMenu("Finance",
-                "Record Revenue", "dialog/record_revenue",
-                "Generate Reports", "dialog/generate_reports"));
-
         for (JMenu menuTitle : menuTitles) {
             this.add(menuTitle);
         }

@@ -6,7 +6,7 @@
       <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/BocchiTheBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/BocchiTheBody.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/BocchiTheMenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/BocchiTheMenuBar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/CommandDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/CommandDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/DialogUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/abstract/DialogUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/PaneUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/abstract/PaneUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/GenerateReportsUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/GenerateReportsUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/HireStaffUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/HireStaffUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BocchiTheGUI/RentEquipmentUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BocchiTheGUI/components/ui/RentEquipmentUI.java" afterDir="false" />

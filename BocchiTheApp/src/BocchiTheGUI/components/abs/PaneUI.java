@@ -9,9 +9,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public abstract class DialogUI extends JPanel {
+public abstract class PaneUI extends JPanel {
     private String dialogTitle;
-    private JPanel buttonPanel;
     private String rootDialogUI;
 
     private List<JButton> buttons;
@@ -115,24 +114,26 @@ public abstract class DialogUI extends JPanel {
             this.buttons.add(button);
         }
 
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+
         this.buttons.forEach((button) -> {
             buttonPanel.add(button);
         });
 
-        this.add(buttonPanel, BorderLayout.SOUTH);
+        this.add(buttonPanel);
     }
-    
-    protected void setButtonPanelLocation(String location) {
-    	this.remove(buttonPanel);
-    	this.add(buttonPanel,location );
-    }
-    
-    public DialogUI(String dialogTitle) {
+
+    /*
+     * protected void setButtonPanelLocation(String location) {
+     * this.remove(buttonPanel);
+     * this.add(buttonPanel, location);
+     * }
+     */
+    public PaneUI(String dialogTitle) {
         this.dialogTitle = dialogTitle;
         this.terminatingCommands = new ArrayList<>();
         this.buttons = new ArrayList<>();
-        this.buttonPanel = new JPanel();
         this.setLayout(new BorderLayout());
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
     }
 }

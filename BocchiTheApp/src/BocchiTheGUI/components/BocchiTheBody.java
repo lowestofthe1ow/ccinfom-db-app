@@ -9,19 +9,16 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import BocchiTheGUI.components.ui.GenerateReportUI;
+
 public class BocchiTheBody extends JPanel {
 
     private JTabbedPane tabbedPane;
     private JPanel centerPanel;
     private BocchiTheSidePanel sidePanel;
 
-    public BocchiTheBody(String... strings) {
+    public BocchiTheBody() {
         this.setLayout(new BorderLayout());
-
-        centerPanel = new JPanel(new BorderLayout());
-        sidePanel = new BocchiTheSidePanel();
-
-        this.add(new BocchiTheTabbedPane());
     }
 
     private JMenu createHomeMenu() {

@@ -17,7 +17,7 @@ import BocchiTheGUI.components.TableDatePicker;
 import BocchiTheGUI.components.TableSearchBox;
 import BocchiTheGUI.interfaces.DataLoadable;
 
-public abstract class TableSelectionUI extends DialogUI implements DataLoadable {
+public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
     private JTable table;
     private DefaultTableModel activeTableModel;
     private List<Object[]> tableRows;

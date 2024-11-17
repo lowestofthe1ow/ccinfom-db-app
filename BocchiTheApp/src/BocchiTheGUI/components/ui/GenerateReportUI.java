@@ -3,25 +3,32 @@ package BocchiTheGUI.components.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import BocchiTheGUI.components.abs.DialogUI;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 
-public class GenerateReportUI extends DialogUI {
+import BocchiTheGUI.components.abs.PaneUI;
 
+public class GenerateReportUI extends PaneUI {
 	public GenerateReportUI() {
 		super("Generate Reports");
-		this.addButtons("Performer Sales Day", 
-						"Live House Sales Month",
-						"Rental Sales Month",
-						"Livehouse schedule Week",
-						"Staff Salary Report");
-		
-		this.setButtonActionCommands("button/tab/performer_sales", 
-									 "button/tab/livehouse_sales", 
-									 "button/tab/rental_sales", 
-									 "button/tab/livehouse_schedule",
-									 "button/tab/staff_salary");
+
+		this.add(new JLabel("Welcome to Bocchi the App"), BorderLayout.NORTH);
+
+		this.addButtons("Performer Sales Day",
+				"Live House Sales Month",
+				"Rental Sales Month",
+				"Livehouse schedule Week",
+				"Staff Salary Report");
+
+		this.setButtonActionCommands("dialog/performer_revenue",
+				"tab/livehouse_sales",
+				"tab/rental_sales",
+				"tab/livehouse_schedule",
+				"tab/staff_salary");
+
 		this.setPreferredSize(new Dimension(400, 150));
-		this.setButtonPanelLocation(BorderLayout.CENTER);
+		this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+		// this.setButtonPanelLocation(BorderLayout.CENTER);
 	}
 
 	@Override
@@ -29,5 +36,4 @@ public class GenerateReportUI extends DialogUI {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

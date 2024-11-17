@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public abstract class TextFieldsUI extends DialogUI {
+public abstract class TextFieldsUI extends PaneUI {
     protected List<JTextField> formItems;
 
     public TextFieldsUI(String dialogTitle) {

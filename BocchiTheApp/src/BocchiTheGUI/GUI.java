@@ -6,16 +6,18 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-import BocchiTheGUI.components.BocchiTheBody;
 import BocchiTheGUI.components.BocchiTheMenuBar;
 import BocchiTheGUI.components.BocchiTheTabbedPane;
 import BocchiTheGUI.components.CommandDialog;
-import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.components.abs.PaneUI;
+import BocchiTheGUI.components.ui.GenerateReportUI;
 
 public class GUI extends JFrame {
     private BocchiTheMenuBar menuBar;
     private BocchiTheTabbedPane tabbedPane;
+    private GenerateReportUI generateReportUI;
     private HashMap<String, CommandDialog> dialogs = new HashMap<>();
 
     public GUI() {
@@ -28,13 +30,24 @@ public class GUI extends JFrame {
         this.menuBar = new BocchiTheMenuBar();
         this.setJMenuBar(menuBar);
 
-        this.tabbedPane = new BocchiTheTabbedPane();
+        JPanel homePanel = new JPanel();
+        homePanel.setLayout(new BorderLayout());
+
+        this.generateReportUI = new GenerateReportUI();
+
+        homePanel.add(generateReportUI, BorderLayout.CENTER);
+
+        this.tabbedPane = new BocchiTheTabbedPane(homePanel);
         this.add(tabbedPane);
 
         /* Use the system exit call */
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setVisible(true);
+    }
+
+    public void setGenerateReportsListener(ActionListener actionListener) {
+        this.generateReportUI.addButtonListener(actionListener);
     }
 
     /**
@@ -49,15 +62,13 @@ public class GUI extends JFrame {
     public void setTabbedPaneListener(ActionListener actionListener) {
         this.tabbedPane.addTabbedPaneListener(actionListener);
     }
-    
-    public void addTab(DialogUI dialogUI, String name) {
-    	tabbedPane.newTab(name, dialogUI);
+
+    public void addTab(PaneUI dialogUI, String name) {
+        tabbedPane.newTab(name, dialogUI);
     }
-    
-    
 
     /**
-     * Creates a new {@link CommandDialog} using a given {@link DialogUI}. The
+     * Creates a new {@link CommandDialog} using a given {@link PaneUI}. The
      * created object is stored in a map with the identifier string as the key,
      * allowing it to be referenced later with {@link #showDialog(String)} and
      * {@link #closeDialog(String)}
@@ -66,7 +77,7 @@ public class GUI extends JFrame {
      * @param name     The identifier string for the dialog window
      * @param callback The callback function to execute after creating the dialog
      */
-    public void createDialog(DialogUI dialogUI, String name, Runnable callback) {
+    public void createDialog(PaneUI dialogUI, String name, Runnable callback) {
         dialogs.put(name, new CommandDialog(dialogUI, callback));
     }
 
@@ -102,7 +113,7 @@ public class GUI extends JFrame {
      * @param name     The identifier for the dialog to keep
      * @param callback The callback function to execute after closing the dialogs
      */
-    public void closeAllDialogsExcept(String name, Consumer<DialogUI> callback) {
+    public void closeAllDialogsExcept(String name, Consumer<PaneUI> callback) {
         CommandDialog keep = dialogs.get(name);
 
         dialogs.forEach((key, dialog) -> {

@@ -1,6 +1,6 @@
 package BocchiTheGUI.components.ui;
 
-import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.components.abs.PaneUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -19,7 +19,7 @@ import raven.datetime.component.time.TimeEvent;
 import raven.datetime.component.time.TimePicker;
 import raven.datetime.component.time.TimeSelectionListener;
 
-public class AddTimeslotUI extends DialogUI {
+public class AddTimeslotUI extends PaneUI {
 
     /* would love to make this fields less but.... idk how */
     private LocalDate startDate;
