@@ -49,6 +49,12 @@ public class GUI extends JFrame {
     public void setTabbedPaneListener(ActionListener actionListener) {
         this.tabbedPane.addTabbedPaneListener(actionListener);
     }
+    
+    public void addTab(DialogUI dialogUI, String name) {
+    	tabbedPane.newTab(name, dialogUI);
+    }
+    
+    
 
     /**
      * Creates a new {@link CommandDialog} using a given {@link DialogUI}. The

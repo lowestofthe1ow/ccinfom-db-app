@@ -248,7 +248,18 @@ public class Controller {
              * TODO: Call a method that creates a new tab here.
              * Create a TabUIFactory that takes identifiers starting with "tab/"
              */
+        	
+        	addTab(e.getActionCommand(), null);
         });
+    }
+    
+    
+    
+    private void addTab(String dialogIdentifier, Object[][] sqlData) {
+        DialogUI dialogUI = TabUIFactory.createTabUI(dialogIdentifier, sqlData);
+        
+        
+        gui.addTab(dialogUI, dialogIdentifier);
     }
 
     public Controller(Connection connection, GUI gui) {

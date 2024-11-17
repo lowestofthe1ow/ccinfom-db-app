@@ -5,6 +5,7 @@ import BocchiTheGUI.components.ui.AddAuditionUI;
 import BocchiTheGUI.components.ui.AddEquipmentUI;
 import BocchiTheGUI.components.ui.AddPerformerUI;
 import BocchiTheGUI.components.ui.AddTimeslotUI;
+import BocchiTheGUI.components.ui.GenerateReportUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
 import BocchiTheGUI.components.ui.ManagePerformancesUI;
@@ -90,6 +91,13 @@ public final class DialogUIFactory {
                 return new AddEquipmentTypeUI();
             case "dialog/add_equipment/add_equipment_details":
                 return new AddEquipmentDetailsUI(sqlData);
+                
+                
+                
+           /* Finance menu */
+            case "dialog/generate_reports":
+            	return new GenerateReportUI();
+           
         }
         return null;
     }

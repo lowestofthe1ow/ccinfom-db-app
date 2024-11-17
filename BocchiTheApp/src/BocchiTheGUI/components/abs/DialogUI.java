@@ -121,7 +121,12 @@ public abstract class DialogUI extends JPanel {
 
         this.add(buttonPanel, BorderLayout.SOUTH);
     }
-
+    
+    protected void setButtonPanelLocation(String location) {
+    	this.remove(buttonPanel);
+    	this.add(buttonPanel,location );
+    }
+    
     public DialogUI(String dialogTitle) {
         this.dialogTitle = dialogTitle;
         this.terminatingCommands = new ArrayList<>();
