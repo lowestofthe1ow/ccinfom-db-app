@@ -128,6 +128,20 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Fetch undamaged equipment data
+
+DROP PROCEDURE IF EXISTS get_undamaged_equipment;
+DELIMITER //
+CREATE PROCEDURE get_undamaged_equipment ()
+BEGIN
+	SELECT e.equipment_id, e.equipment_name, et.equipment_type_name, e.rental_fee
+    FROM equipment e
+    JOIN equipment_type et
+		ON e.equipment_type_id = et.equipment_type_id	
+    WHERE e.equipment_status = 'UNDAMAGED';
+END //
+DELIMITER ;
+
 -- Hiring staff
 
 DROP PROCEDURE IF EXISTS hire;
@@ -558,6 +572,8 @@ BEGIN
         MONTH(pts.timeslot_date) = month
         AND YEAR(pts.timeslot_date) = year;
 END //
+
+DELIMITER ;
 
 -- Adding equipment
 DROP PROCEDURE IF EXISTS add_equipment;
