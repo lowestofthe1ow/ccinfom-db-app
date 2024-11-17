@@ -55,7 +55,7 @@ public class Controller {
      *                         {@link DialogUI#getSQLParameterInputs()}
      */
     private void showDialog(String dialogIdentifier, Object[][] sqlData) {
-        DialogUI dialogUI = DialogManager.createDialogUI(dialogIdentifier, sqlData);
+        DialogUI dialogUI = DialogUIFactory.createDialogUI(dialogIdentifier, sqlData);
 
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, dialogIdentifier, () -> {

@@ -17,7 +17,7 @@ import BocchiTheGUI.components.ui.sub.RecordRevenueUI;
 import BocchiTheGUI.components.ui.sub.SelectStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.SelectTimeslotUI;
 
-public final class DialogManager {
+public final class DialogUIFactory {
     /**
      * Creates a new {@link DialogUI} instance of a specific subclass based on an
      * identifier string. The following is a list of all valid strings:
@@ -41,6 +41,7 @@ public final class DialogManager {
      */
     public static DialogUI createDialogUI(String dialogIdentifier, Object[][] sqlData) {
         switch (dialogIdentifier) {
+            /* Staff menu */
             case "dialog/hire_staff":
                 return new HireStaffUI();
             case "dialog/hire_staff/select_position":
@@ -54,33 +55,41 @@ public final class DialogManager {
             case "dialog/update_staff_position":
                 return new UpdateStaffPositionUI();
             case "dialog/update_staff_position/select_position":
+                /*
+                 * TODO: SelectStaffPositionUI is currently shared.
+                 * Maybe make it separate to avoid this weird constructor?
+                 */
                 return new SelectStaffPositionUI(
                         "Confirm",
                         "button/sql/add_position",
-                        "dialog/update_staff_position",
+                        "dialog/update_staff_position", /* Return to this dialog on close */
                         sqlData);
+
+            /* Audition/Performance menu */
             case "dialog/add_performer":
                 return new AddPerformerUI();
+            case "dialog/add_timeslot":
+                return new AddTimeslotUI();
             case "dialog/add_audition":
                 return new AddAuditionUI();
             case "dialog/add_audition/select_timeslot":
                 return new SelectTimeslotUI(sqlData);
             case "dialog/add_audition/select_timeslot/input_submission":
                 return new InputSubmissionUI(sqlData);
+            case "dialog/manage_auditions":
+                return new ManageAuditionsUI();
+            case "dialog/manage_performances":
+                return new ManagePerformancesUI();
+            case "dialog/manage_performances/record_revenue":
+                return new RecordRevenueUI(sqlData);
+
+            /* Equipment menu */
             case "dialog/add_equipment":
                 return new AddEquipmentUI();
             case "dialog/add_equipment/add_equipment_type":
                 return new AddEquipmentTypeUI();
             case "dialog/add_equipment/add_equipment_details":
                 return new AddEquipmentDetailsUI(sqlData);
-            case "dialog/manage_auditions":
-                return new ManageAuditionsUI();
-            case "dialog/add_timeslot":
-                return new AddTimeslotUI();
-            case "dialog/manage_performances":
-                return new ManagePerformancesUI();
-            case "dialog/manage_performances/record_revenue":
-                return new RecordRevenueUI(sqlData);
         }
         return null;
     }
