@@ -2,6 +2,7 @@ package BocchiTheGUI.components.abs;
 
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -41,5 +42,19 @@ public abstract class TextFieldsUI extends DialogUI {
 
             this.add(formItemPanel);
         }
+    }
+
+    /**
+     * {@inheritDoc} Adds the same listener to each text field and automatically
+     * sets their action commands to match that of the first button within the UI.
+     */
+    @Override
+    public void addButtonListener(ActionListener listener) {
+        super.addButtonListener(listener);
+
+        this.formItems.forEach((formItem) -> {
+            formItem.addActionListener(listener);
+            formItem.setActionCommand(this.getDefaultButtonCommand());
+        });
     }
 }

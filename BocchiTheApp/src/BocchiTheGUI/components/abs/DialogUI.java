@@ -16,6 +16,11 @@ public abstract class DialogUI extends JPanel {
     private ArrayList<JButton> buttons;
     private ArrayList<String> terminatingCommands;
 
+    /** {@return the action command of the first button tied to this UI} */
+    protected String getDefaultButtonCommand() {
+        return this.buttons.get(0).getActionCommand();
+    }
+
     protected void setRoot(String rootDialogUI) {
         this.rootDialogUI = rootDialogUI;
     }
