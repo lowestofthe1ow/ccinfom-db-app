@@ -28,6 +28,9 @@ public class Main {
 		// UIManager.put("TitlePane.titleMargins", new Insets(10, 20, 10, 20));
 		UIManager.put("TitlePane.centerTitle", Boolean.TRUE);
 
+		// UIManager.put("TitlePane.titleMargins", new Insets(10, 20, 10, 20));
+		UIManager.put("TitlePane.centerTitle", Boolean.TRUE);
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

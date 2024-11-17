@@ -2,6 +2,7 @@ package BocchiTheGUI.components.ui.sub;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import BocchiTheGUI.components.abs.TextFieldsUI;
 
@@ -21,7 +22,7 @@ public class RecordRevenueUI extends TextFieldsUI {
 
     @Override
     public Object[][] getSQLParameterInputs() {
-        ArrayList<Object> params = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
 
         Collections.addAll(params, sqlData[0]);
         params.add(Double.parseDouble(this.formItems.get(0).getText()));

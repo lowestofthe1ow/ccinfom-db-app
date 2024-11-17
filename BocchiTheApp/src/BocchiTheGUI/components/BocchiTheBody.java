@@ -1,9 +1,13 @@
 package BocchiTheGUI.components;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 public class BocchiTheBody extends JPanel {
 
@@ -14,13 +18,10 @@ public class BocchiTheBody extends JPanel {
     public BocchiTheBody(String... strings) {
         this.setLayout(new BorderLayout());
 
-        tabbedPane = new JTabbedPane();
         centerPanel = new JPanel(new BorderLayout());
         sidePanel = new BocchiTheSidePanel();
 
         this.add(new BocchiTheTabbedPane());
-
-        showInstructionsPanel();
     }
 
     private JMenu createHomeMenu() {

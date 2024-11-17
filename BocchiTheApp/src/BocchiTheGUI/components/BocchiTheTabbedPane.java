@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
@@ -45,8 +43,12 @@ public class BocchiTheTabbedPane extends JTabbedPane {
 
         /* Create the close tab button and add it to the tab header */
         JButton closeButton = createControlButton("×", (e) -> {
+            int index = this.openTabs.indexOf(tabHeader) + 1;
+            if (index == this.getSelectedIndex()) {
+                this.setSelectedIndex(0);
+            }
             /* Remove the tab from the pane (note index + 1 to account for home) */
-            this.removeTabAt(this.openTabs.indexOf(tabHeader) + 1);
+            this.removeTabAt(index);
             /* Remove the tab from the local list */
             this.openTabs.remove(tabHeader);
         });

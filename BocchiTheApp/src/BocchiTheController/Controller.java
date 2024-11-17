@@ -17,136 +17,32 @@ import javax.swing.JOptionPane;
 import BocchiTheGUI.GUI;
 import BocchiTheGUI.components.CommandDialog;
 import BocchiTheGUI.components.abs.DialogUI;
-import BocchiTheGUI.components.abs.TableSelectionUI;
-import BocchiTheGUI.components.ui.AddAuditionUI;
-import BocchiTheGUI.components.ui.AddEquipmentUI;
-import BocchiTheGUI.components.ui.AddPerformerUI;
-import BocchiTheGUI.components.ui.AddTimeslotUI;
-import BocchiTheGUI.components.ui.HireStaffUI;
-import BocchiTheGUI.components.ui.ManageAuditionsUI;
-import BocchiTheGUI.components.ui.ManagePerformancesUI;
-import BocchiTheGUI.components.ui.RemoveStaffUI;
-import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
-import BocchiTheGUI.components.ui.sub.AddEquipmentDetailsUI;
-import BocchiTheGUI.components.ui.sub.AddEquipmentTypeUI;
-import BocchiTheGUI.components.ui.sub.InputSubmissionUI;
-import BocchiTheGUI.components.ui.sub.RecordRevenueUI;
-import BocchiTheGUI.components.ui.sub.SelectStaffPositionUI;
-import BocchiTheGUI.components.ui.sub.SelectTimeslotUI;
+import BocchiTheGUI.interfaces.DataLoadable;
 
 public class Controller {
     private Connection connection = null;
     private GUI gui;
 
     /**
-     * Creates a new {@link DialogUI} instance of a specific subclass based on an
-     * identifier string. The following is a list of all valid strings:
-     * <ul>
-     * <li>{@code "dialog/hire_staff"}
-     * <li>{@code "dialog/hire_staff/select_position"}
-     * <li>{@code "dialog/remove_staff"}
-     * <li>{@code "dialog/update_staff_position"}
-     * <li>{@code "dialog/update_staff_position/select_position"}
-     * <li>{@code "dialog/manage_auditions"}
-     * <li>{@code "dialog/add_timeslot"}
-     * </ul>
-     * No instance is created if the string does not match any of the valid
-     * identifiers.
+     * Loads a {@link DataLoadable} with data obtained using the command that it
+     * specifies. Does nothing if the UI is not a DataLoadable instance. If the UI
+     * does not specify an SQL command, it
+     * loads an empty dataset.
      * 
-     * @param dialogIdentifier The identifier string
-     * @param sqlData          The SQL data to pass to the new dialog, as in
-     *                         {@link DialogUI#getSQLParameterInputs()}. Ignored in
-     *                         cases where the UI does not require it.
-     * @return The newly-created instance ({@code null} if no string matched)
+     * @param dialogUI The UI to load data into
      */
-    private DialogUI createDialogUI(String dialogIdentifier, Object[][] sqlData) {
-        switch (dialogIdentifier) {
-            case "dialog/hire_staff":
-                return new HireStaffUI();
-            case "dialog/hire_staff/select_position":
-                return new SelectStaffPositionUI(
-                        "Confirm",
-                        "button/sql/hire",
-                        null, /* ALL dialog windows are closed upon success */
-                        sqlData);
-            case "dialog/remove_staff":
-                return new RemoveStaffUI();
-            case "dialog/update_staff_position":
-                return new UpdateStaffPositionUI();
-            case "dialog/update_staff_position/select_position":
-                return new SelectStaffPositionUI(
-                        "Confirm",
-                        "button/sql/add_position",
-                        "dialog/update_staff_position",
-                        sqlData);
-            case "dialog/add_performer":
-                return new AddPerformerUI();
-            case "dialog/add_audition":
-                return new AddAuditionUI();
-            case "dialog/add_audition/select_timeslot":
-                return new SelectTimeslotUI(sqlData);
-            case "dialog/add_audition/select_timeslot/input_submission":
-                return new InputSubmissionUI(sqlData);
-            case "dialog/add_equipment":
-                return new AddEquipmentUI();
-            case "dialog/add_equipment/add_equipment_type":
-                return new AddEquipmentTypeUI();
-            case "dialog/add_equipment/add_equipment_details":
-                return new AddEquipmentDetailsUI(sqlData);
-            case "dialog/manage_auditions":
-                return new ManageAuditionsUI();
-            case "dialog/add_timeslot":
-                return new AddTimeslotUI();
-            case "dialog/manage_performances":
-                return new ManagePerformancesUI();
-            case "dialog/manage_performances/record_revenue":
-                return new RecordRevenueUI(sqlData);
-        }
-        return null;
-    }
+    private void loadDataFromSQL(DialogUI dialogUI) {
+        if (dialogUI instanceof DataLoadable) {
+            DataLoadable loadableUI = (DataLoadable) dialogUI;
+            loadableUI.loadData((sqlIdentifier) -> {
+                /* If there is no SQL command for loading data, return an empty dataset */
+                if (sqlIdentifier == null) {
+                    return new ArrayList<Object[]>();
+                }
 
-    /**
-     * Refreshes a {@link DialogUI} (i.e., updates it with data, if needed).
-     * 
-     * @param dialogUI         The UI to update
-     * @param dialogIdentifier The identifier string associated with the UI
-     */
-    private void refreshDialogUI(DialogUI dialogUI, String dialogIdentifier) {
-        /* TODO: Surely there's a way to simplify this? */
-        switch (dialogIdentifier) {
-            case "dialog/manage_auditions":
-                ManageAuditionsUI auditions = (ManageAuditionsUI) dialogUI;
-                auditions.loadTableData(executeProcedure("get_auditions"));
-                break;
-            case "dialog/update_staff_position":
-                TableSelectionUI staff = (TableSelectionUI) dialogUI;
-                staff.loadTableData(executeProcedure("get_staff"));
-                break;
-            case "dialog/remove_staff":
-                TableSelectionUI activeStaff = (TableSelectionUI) dialogUI;
-                activeStaff.loadTableData(executeProcedure("get_active_staff"));
-                break;
-            case "dialog/update_staff_position/select_position":
-            case "dialog/hire_staff/select_position":
-                SelectStaffPositionUI positions = (SelectStaffPositionUI) dialogUI;
-                positions.loadTableData(executeProcedure("get_positions"));
-                break;
-            case "dialog/add_audition":
-                TableSelectionUI performers = (TableSelectionUI) dialogUI;
-                performers.loadTableData(executeProcedure("get_performers"));
-                break;
-            case "dialog/add_audition/select_timeslot":
-                TableSelectionUI timeslots = (TableSelectionUI) dialogUI;
-                timeslots.loadTableData(executeProcedure("get_timeslots"));
-                break;
-            case "dialog/add_equipment":
-                TableSelectionUI equipment_types = (TableSelectionUI) dialogUI;
-                equipment_types.loadTableData(executeProcedure("get_equipment_types"));
-                break;
-            case "dialog/manage_performances":
-                TableSelectionUI performances = (TableSelectionUI) dialogUI;
-                performances.loadTableData(executeProcedure("get_performances"));
-                break;
+                String sqlCommand = ((String) sqlIdentifier).substring(4);
+                return this.executeProcedure(sqlCommand);
+            });
         }
     }
 
@@ -159,12 +55,12 @@ public class Controller {
      *                         {@link DialogUI#getSQLParameterInputs()}
      */
     private void showDialog(String dialogIdentifier, Object[][] sqlData) {
-        DialogUI dialogUI = createDialogUI(dialogIdentifier, sqlData);
+        DialogUI dialogUI = DialogUIFactory.createDialogUI(dialogIdentifier, sqlData);
 
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, dialogIdentifier, () -> {
-            /* Refresh the UI */
-            refreshDialogUI(dialogUI, dialogIdentifier);
+            /* Load data into the UI if it requires it */
+            this.loadDataFromSQL(dialogUI);
 
             /* Update dialog window button listeners */
             dialogUI.addButtonListener((e) -> {
@@ -186,14 +82,14 @@ public class Controller {
                         else
                             /* Close all dialogs except the "root", then refresh that */
                             gui.closeAllDialogsExcept(rootName, (rootUI) -> {
-                                refreshDialogUI(rootUI, rootName);
+                                this.loadDataFromSQL(dialogUI);
                             });
                     } else {
                         showDialog(dialogIdentifier + commandIdentifier.substring(11),
                                 dialogUI.getSQLParameterInputs());
                     }
                 } else {
-                    refreshDialogUI(dialogUI, dialogIdentifier);
+                    this.loadDataFromSQL(dialogUI);
                 }
             });
 
@@ -335,12 +231,12 @@ public class Controller {
 
     private void initializeListeners() {
         /* Set menu bar listener */
-        gui.setMenuListener((e) -> {
+        gui.setMenuBarListener((e) -> {
             showDialog(e.getActionCommand(), null);
         });
 
         /* Set window closing listener */
-        gui.setWindowListener(new WindowAdapter() {
+        gui.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 closeConnection();

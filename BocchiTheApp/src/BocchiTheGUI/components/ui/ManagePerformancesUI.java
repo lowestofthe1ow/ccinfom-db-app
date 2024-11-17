@@ -6,6 +6,8 @@ public class ManagePerformancesUI extends TableSelectionUI {
     public ManagePerformancesUI() {
         super("Manage performances", "ID", "Performer", "Timeslot", "Status");
 
+        this.setLoadDataCommand("sql/get_performances");
+
         this.addSearchBoxFilter("Filter by performer name", 1);
         this.addDatePickerFilter("Filter by timeslot", 2);
         this.addComboBoxFilter("Filter by status", 3, "PENDING", "COMPLETE", "CANCELLED");

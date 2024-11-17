@@ -15,11 +15,23 @@ import javax.swing.table.DefaultTableModel;
 import BocchiTheGUI.components.TableComboBox;
 import BocchiTheGUI.components.TableDatePicker;
 import BocchiTheGUI.components.TableSearchBox;
+import BocchiTheGUI.interfaces.DataLoadable;
 
-public abstract class TableSelectionUI extends DialogUI {
+public abstract class TableSelectionUI extends DialogUI implements DataLoadable {
     private JTable table;
     private DefaultTableModel activeTableModel;
     private List<Object[]> tableRows;
+    private String sqlLoadDataCommand;
+
+    /**
+     * A list of {@link Function}s that are called by the table during
+     * {@link #filterTable()}.
+     */
+    private List<Function<Object[], Boolean>> filters;
+
+    public void setLoadDataCommand(String command) {
+        this.sqlLoadDataCommand = command;
+    }
 
     /**
      * Creates a dialog window for table selection.
@@ -56,12 +68,6 @@ public abstract class TableSelectionUI extends DialogUI {
         scrollPane.setPreferredSize(new Dimension(500, 250));
         this.add(scrollPane);
     }
-
-    /**
-     * A list of {@link Function}s that are called by the table during
-     * {@link #filterTable()}.
-     */
-    private ArrayList<Function<Object[], Boolean>> filters;
 
     /**
      * Adds a {@link Function} to the list of filters used by the table
@@ -138,7 +144,10 @@ public abstract class TableSelectionUI extends DialogUI {
      * 
      * @param data The list of row data to insert into the table
      */
-    public void loadTableData(List<Object[]> data) {
+    @Override
+    public void loadData(Function<Object, List<Object[]>> source) {
+        List<Object[]> data = source.apply(this.sqlLoadDataCommand);
+
         /* Reset the table model */
         activeTableModel.setRowCount(0);
         table.clearSelection();
@@ -158,9 +167,9 @@ public abstract class TableSelectionUI extends DialogUI {
      */
     @Override
     public Object[][] getSQLParameterInputs() {
-        /* Get selected rows and create an empty ArrayList */
+        /* Get selected rows and create an empty list */
         int[] selectedRowIndices = table.getSelectedRows();
-        ArrayList<Object[]> retval = new ArrayList<>();
+        List<Object[]> retval = new ArrayList<>();
 
         for (int selectedRowIndex : selectedRowIndices) {
             /* Create an array containing only the audition ID */

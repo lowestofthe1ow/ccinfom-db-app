@@ -3,6 +3,7 @@ package BocchiTheGUI.components.abs;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,8 +14,8 @@ public abstract class DialogUI extends JPanel {
     private JPanel buttonPanel;
     private String rootDialogUI;
 
-    private ArrayList<JButton> buttons;
-    private ArrayList<String> terminatingCommands;
+    private List<JButton> buttons;
+    private List<String> terminatingCommands;
 
     /** {@return the action command of the first button tied to this UI} */
     protected String getDefaultButtonCommand() {
