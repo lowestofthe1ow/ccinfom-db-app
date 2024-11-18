@@ -12,6 +12,7 @@ import BocchiTheGUI.elements.ui.dialog.MonthlyLivehouseRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
+import BocchiTheGUI.elements.ui.dialog.AddPositionTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
@@ -49,6 +50,8 @@ public final class PaneUIFactory {
                 return new UpdateStaffPositionUI();
             case "dialog/update_staff_position/select_staff_position":
                 return new SelectStaffPositionUI("button/sql/add_position", "dialog/update_staff_position", sqlData);
+            case "dialog/add_position_type":
+                return new AddPositionTypeUI();
 
             /* Audition/Performance menu */
             case "dialog/add_performer":
