@@ -86,8 +86,6 @@ public class Controller {
 
                     gui.addTab(ui, commandIdentifier.substring(7));
 
-                    gui.addTab(ui, ui.getDialogTitle());
-
                 }
                 /* Something */
 
