@@ -8,16 +8,16 @@ import java.util.function.Consumer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import BocchiTheGUI.components.BocchiTheMenuBar;
-import BocchiTheGUI.components.BocchiTheTabbedPane;
-import BocchiTheGUI.components.CommandDialog;
-import BocchiTheGUI.components.abs.PaneUI;
-import BocchiTheGUI.components.ui.GenerateReportUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
+import BocchiTheGUI.elements.components.BocchiTheMenuBar;
+import BocchiTheGUI.elements.components.BocchiTheTabbedPane;
+import BocchiTheGUI.elements.components.CommandDialog;
+import BocchiTheGUI.elements.ui.tab.HomeTabUI;
 
 public class GUI extends JFrame {
     private BocchiTheMenuBar menuBar;
     private BocchiTheTabbedPane tabbedPane;
-    private GenerateReportUI generateReportUI;
+    private HomeTabUI generateReportUI;
     private HashMap<String, CommandDialog> dialogs = new HashMap<>();
 
     public GUI() {
@@ -33,7 +33,7 @@ public class GUI extends JFrame {
         JPanel homePanel = new JPanel();
         homePanel.setLayout(new BorderLayout());
 
-        this.generateReportUI = new GenerateReportUI();
+        this.generateReportUI = new HomeTabUI();
 
         homePanel.add(generateReportUI, BorderLayout.CENTER);
 
