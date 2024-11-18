@@ -112,7 +112,7 @@ public class BocchiTheTabbedPane extends JTabbedPane {
                 "Daily performer sales", "dialog/performer_revenue",
                 "Monthly livehouse sales", "dialog/monthly_livehouse_revenue",
                 "Monthly rental sales", null,
-                "Weekly livehouse schedule", null,
+                "Weekly livehouse schedule", "report/livehouse_schedule",
                 "Staff salary report", null);
 
         this.setTabComponentAt(1, this.newTabMenu);

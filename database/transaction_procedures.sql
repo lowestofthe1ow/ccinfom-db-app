@@ -664,3 +664,29 @@ BEGIN
 		VALUES (equipment_type_name);
 END //
 DELIMITER ;
+
+
+-- Get schedule for a week based on NOw(). 
+
+DROP PROCEDURE IF EXISTS get_schedule;
+DELIMITER // 
+CREATE PROCEDURE get_schedule()
+BEGIN 
+	SELECT 	pf.performer_name,
+			DAYNAME(pts.start_timestamp) AS day_name,
+			pts.start_timestamp,
+			pts.end_timestamp
+            
+	FROM 
+		performance p
+	JOIN 
+		performance_timeslot pts ON p.performance_timeslot_id = pts.performance_timeslot_id
+	JOIN 
+		performer pf ON p.performer_id = pf.performer_id
+	WHERE 
+		p.performance_status = 'PENDING'
+		AND YEARWEEK(pts.start_timestamp) = YEARWEEK(CURDATE())
+	ORDER BY
+		pts.start_timestamp;
+END //
+DELIMITER ;
