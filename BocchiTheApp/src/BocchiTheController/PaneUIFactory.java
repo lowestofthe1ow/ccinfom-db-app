@@ -8,6 +8,7 @@ import BocchiTheGUI.elements.ui.dialog.AddTimeslotUI;
 import BocchiTheGUI.elements.ui.dialog.HireStaffUI;
 import BocchiTheGUI.elements.ui.dialog.ManageAuditionsUI;
 import BocchiTheGUI.elements.ui.dialog.ManagePerformancesUI;
+import BocchiTheGUI.elements.ui.dialog.MonthlyLivehouseRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
@@ -18,7 +19,6 @@ import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
 import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
-import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueUI;
 import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
 import BocchiTheGUI.elements.ui.tab.ScheduleTab;
 

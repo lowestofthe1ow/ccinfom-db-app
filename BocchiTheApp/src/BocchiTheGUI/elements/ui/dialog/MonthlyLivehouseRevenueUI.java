@@ -1,4 +1,4 @@
-package BocchiTheGUI.elements.ui.tab;
+package BocchiTheGUI.elements.ui.dialog;
 
 import java.awt.GridLayout;
 import java.util.List;
