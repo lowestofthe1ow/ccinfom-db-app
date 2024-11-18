@@ -520,7 +520,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- TODO: Update to use timestamps
+-- TODO: ...base quotas? Idk
 DROP PROCEDURE IF EXISTS performer_report_day;
 
 DELIMITER //
@@ -531,8 +531,8 @@ CREATE PROCEDURE performer_report_day(
 BEGIN
     SELECT 
         pf.performer_name,
-        pts.timeslot_date,
-        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota)* (1 - pr.cut_percent)) AS earning_day
+        DATE(pts.start_timestamp) AS performance_day,
+        SUM(pr.ticket_price * pr.tickets_sold) AS sales_on_day
     FROM 
         performance_revenue pr
     JOIN 
@@ -543,11 +543,11 @@ BEGIN
         performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
     WHERE 
         pf.performer_id = performer_id
-        AND DATE(pts.timeslot_date) = aday
+        AND DATE(pts.start_timestamp) = aday
         AND p.performance_status = 'COMPLETE'
     GROUP BY 
         pf.performer_name, 
-        pts.timeslot_date;
+        performance_day;
 END //
 
 DELIMITER ;
