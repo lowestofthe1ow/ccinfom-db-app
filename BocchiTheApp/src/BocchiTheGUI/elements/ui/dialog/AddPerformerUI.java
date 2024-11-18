@@ -1,6 +1,6 @@
 package BocchiTheGUI.elements.ui.dialog;
 
-import BocchiTheGUI.elements.abs.TextFieldsUI;
+import BocchiTheGUI.elements.abstracts.TextFieldsUI;
 
 public class AddPerformerUI extends TextFieldsUI {
     public AddPerformerUI() {

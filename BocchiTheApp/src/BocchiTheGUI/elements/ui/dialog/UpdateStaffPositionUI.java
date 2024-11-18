@@ -1,6 +1,6 @@
 package BocchiTheGUI.elements.ui.dialog;
 
-import BocchiTheGUI.elements.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 
 public class UpdateStaffPositionUI extends TableSelectionUI {
     public UpdateStaffPositionUI() {

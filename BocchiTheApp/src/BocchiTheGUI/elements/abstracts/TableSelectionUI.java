@@ -1,4 +1,4 @@
-package BocchiTheGUI.elements.abs;
+package BocchiTheGUI.elements.abstracts;
 
 import java.awt.Dimension;
 import java.awt.LayoutManager;

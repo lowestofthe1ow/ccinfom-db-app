@@ -1,6 +1,6 @@
 package BocchiTheController;
 
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 import BocchiTheGUI.elements.ui.dialog.AddAuditionUI;
 import BocchiTheGUI.elements.ui.dialog.AddEquipmentUI;
 import BocchiTheGUI.elements.ui.dialog.AddPerformerUI;

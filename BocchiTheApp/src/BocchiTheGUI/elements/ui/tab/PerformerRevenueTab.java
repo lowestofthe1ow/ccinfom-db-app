@@ -17,7 +17,7 @@ import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.XChartPanel;
 
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 import BocchiTheGUI.interfaces.DataLoadable;
 
 public class PerformerRevenueTab extends PaneUI implements DataLoadable {

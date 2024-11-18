@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import BocchiTheGUI.elements.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 
 public class SelectStaffPositionUI extends TableSelectionUI {
     private Object[][] sqlData;

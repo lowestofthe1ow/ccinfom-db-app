@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 import BocchiTheGUI.elements.components.BocchiTheMenuBar;
 import BocchiTheGUI.elements.components.BocchiTheTabbedPane;
 import BocchiTheGUI.elements.components.CommandDialog;

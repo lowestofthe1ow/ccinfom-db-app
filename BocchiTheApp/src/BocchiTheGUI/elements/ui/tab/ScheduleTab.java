@@ -7,7 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 import BocchiTheGUI.interfaces.DataLoadable;
 
 public class ScheduleTab extends PaneUI implements DataLoadable {

@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import BocchiTheGUI.elements.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 import raven.datetime.component.date.DatePicker;
 
 public class PerformerRevenueUI extends TableSelectionUI {

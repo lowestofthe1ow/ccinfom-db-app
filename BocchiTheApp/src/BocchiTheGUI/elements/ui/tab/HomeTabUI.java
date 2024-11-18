@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 
 public class HomeTabUI extends PaneUI {
 	public HomeTabUI() {

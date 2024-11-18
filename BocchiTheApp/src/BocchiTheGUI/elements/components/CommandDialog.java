@@ -5,7 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 
 public class CommandDialog extends JDialog {
     PaneUI dialogUI;

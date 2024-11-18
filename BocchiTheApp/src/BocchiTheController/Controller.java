@@ -15,7 +15,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import BocchiTheGUI.GUI;
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 import BocchiTheGUI.elements.components.CommandDialog;
 import BocchiTheGUI.interfaces.DataLoadable;
 

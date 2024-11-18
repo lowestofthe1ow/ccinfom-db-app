@@ -1,6 +1,6 @@
 package BocchiTheGUI.elements.ui.dialog.sub;
 
-import BocchiTheGUI.elements.abs.TextFieldsUI;
+import BocchiTheGUI.elements.abstracts.TextFieldsUI;
 
 public class AddEquipmentTypeUI extends TextFieldsUI {
     public AddEquipmentTypeUI() {

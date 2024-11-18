@@ -12,7 +12,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
 import raven.datetime.component.date.DateEvent;
 import raven.datetime.component.date.DatePicker;
 import raven.datetime.component.date.DateSelectionListener;

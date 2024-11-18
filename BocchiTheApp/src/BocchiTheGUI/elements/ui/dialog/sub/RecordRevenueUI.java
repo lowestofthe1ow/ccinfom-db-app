@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import BocchiTheGUI.elements.abs.TextFieldsUI;
+import BocchiTheGUI.elements.abstracts.TextFieldsUI;
 
 public class RecordRevenueUI extends TextFieldsUI {
     private Object[][] sqlData;

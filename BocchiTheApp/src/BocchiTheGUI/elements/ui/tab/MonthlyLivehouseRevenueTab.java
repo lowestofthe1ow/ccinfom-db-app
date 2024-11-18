@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import BocchiTheGUI.elements.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 
 public class MonthlyLivehouseRevenueTab extends TableSelectionUI {
     private Object[][] sqlData;
