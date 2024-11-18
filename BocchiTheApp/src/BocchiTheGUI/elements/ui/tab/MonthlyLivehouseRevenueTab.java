@@ -1,4 +1,4 @@
-package BocchiTheGUI.elements.ui;
+package BocchiTheGUI.elements.ui.tab;
 
 import java.awt.Font;
 import java.awt.GridLayout;

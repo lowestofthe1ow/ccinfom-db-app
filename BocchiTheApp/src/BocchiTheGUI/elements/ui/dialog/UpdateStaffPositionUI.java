@@ -11,6 +11,6 @@ public class UpdateStaffPositionUI extends TableSelectionUI {
         this.addSearchBoxFilter("Filter by staff name", 1);
 
         this.addButtons("Update");
-        this.setButtonActionCommands("button/next/select_position");
+        this.setButtonActionCommands("button/next/select_staff_position");
     }
 }

@@ -1,4 +1,4 @@
-package BocchiTheGUI.elements.ui;
+package BocchiTheGUI.elements.ui.dialog;
 
 import java.awt.GridLayout;
 import java.sql.Timestamp;
@@ -36,8 +36,8 @@ public class PerformerRevenueUI extends TableSelectionUI {
         this.add(dateEditorPanel);
 
         this.addButtons("Confirm");
-        this.setButtonActionCommands("button/report/performer_report_day");
-        this.addTerminatingCommands("button/report/performer_report_day");
+        this.setButtonActionCommands("button/report/performer_revenue");
+        this.addTerminatingCommands("button/report/performer_revenue");
     }
 
     @Override

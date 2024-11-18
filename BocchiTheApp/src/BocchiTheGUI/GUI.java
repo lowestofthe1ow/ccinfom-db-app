@@ -12,7 +12,7 @@ import BocchiTheGUI.elements.abs.PaneUI;
 import BocchiTheGUI.elements.components.BocchiTheMenuBar;
 import BocchiTheGUI.elements.components.BocchiTheTabbedPane;
 import BocchiTheGUI.elements.components.CommandDialog;
-import BocchiTheGUI.elements.ui.HomeTabUI;
+import BocchiTheGUI.elements.ui.tab.HomeTabUI;
 
 public class GUI extends JFrame {
     private BocchiTheMenuBar menuBar;

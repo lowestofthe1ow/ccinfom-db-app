@@ -9,14 +9,14 @@ import BocchiTheGUI.elements.abs.TableSelectionUI;
 public class SelectStaffPositionUI extends TableSelectionUI {
     private Object[][] sqlData;
 
-    public SelectStaffPositionUI(String buttonLabel, String actionCommand, String rootName, Object[][] sqlData) {
+    public SelectStaffPositionUI(String actionCommand, String rootName, Object[][] sqlData) {
         super("Select staff position", "ID", "Position", "Salary");
 
         this.setLoadDataCommand("sql/get_positions");
 
         this.addSearchBoxFilter("Filter by position name", 1);
 
-        this.addButtons(buttonLabel);
+        this.addButtons("Confirm");
         this.setButtonActionCommands(actionCommand);
         this.addTerminatingCommands(actionCommand);
         this.setRoot(rootName);

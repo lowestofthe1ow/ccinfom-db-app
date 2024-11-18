@@ -1,12 +1,6 @@
 package BocchiTheController;
 
 import BocchiTheGUI.elements.abs.PaneUI;
-import BocchiTheGUI.elements.ui.HomeTabUI;
-import BocchiTheGUI.elements.ui.MonthlyLivehouseRevenueTab;
-import BocchiTheGUI.elements.ui.MonthlyLivehouseRevenueUI;
-import BocchiTheGUI.elements.ui.PerformerRevenueTab;
-import BocchiTheGUI.elements.ui.PerformerRevenueUI;
-import BocchiTheGUI.elements.ui.ScheduleTab;
 import BocchiTheGUI.elements.ui.dialog.AddAuditionUI;
 import BocchiTheGUI.elements.ui.dialog.AddEquipmentUI;
 import BocchiTheGUI.elements.ui.dialog.AddPerformerUI;
@@ -14,6 +8,7 @@ import BocchiTheGUI.elements.ui.dialog.AddTimeslotUI;
 import BocchiTheGUI.elements.ui.dialog.HireStaffUI;
 import BocchiTheGUI.elements.ui.dialog.ManageAuditionsUI;
 import BocchiTheGUI.elements.ui.dialog.ManagePerformancesUI;
+import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
@@ -22,22 +17,18 @@ import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
+import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
+import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueUI;
+import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
+import BocchiTheGUI.elements.ui.tab.ScheduleTab;
 
 public final class PaneUIFactory {
     /**
      * Creates a new {@link PaneUI} instance of a specific subclass based on an
-     * identifier string. The following is a list of all valid strings:
-     * <ul>
-     * <li>{@code "dialog/hire_staff"}
-     * <li>{@code "dialog/hire_staff/select_position"}
-     * <li>{@code "dialog/remove_staff"}
-     * <li>{@code "dialog/update_staff_position"}
-     * <li>{@code "dialog/update_staff_position/select_position"}
-     * <li>{@code "dialog/manage_auditions"}
-     * <li>{@code "dialog/add_timeslot"}
-     * </ul>
-     * No instance is created if the string does not match any of the valid
-     * identifiers.
+     * identifier string. No instance is created if the string does not match any of
+     * the valid identifiers. Optionally, some instances may require additional
+     * data. This is supplied through a 2-dimensional {@link Object} array that is
+     * ignored when it is not needed.
      * 
      * @param dialogIdentifier The identifier string
      * @param sqlData          The SQL data to pass to the new dialog, as in
@@ -50,26 +41,14 @@ public final class PaneUIFactory {
             /* Staff menu */
             case "dialog/hire_staff":
                 return new HireStaffUI();
-            case "dialog/hire_staff/select_position":
-                return new SelectStaffPositionUI(
-                        "Confirm",
-                        "button/sql/hire",
-                        null, /* ALL dialog windows are closed upon success */
-                        sqlData);
+            case "dialog/hire_staff/select_staff_position":
+                return new SelectStaffPositionUI("button/sql/hire", null, sqlData);
             case "dialog/remove_staff":
                 return new RemoveStaffUI();
             case "dialog/update_staff_position":
                 return new UpdateStaffPositionUI();
-            case "dialog/update_staff_position/select_position":
-                /*
-                 * TODO: SelectStaffPositionUI is currently shared.
-                 * Maybe make it separate to avoid this weird constructor?
-                 */
-                return new SelectStaffPositionUI(
-                        "Confirm",
-                        "button/sql/add_position",
-                        "dialog/update_staff_position", /* Return to this dialog on close */
-                        sqlData);
+            case "dialog/update_staff_position/select_staff_position":
+                return new SelectStaffPositionUI("button/sql/add_position", "dialog/update_staff_position", sqlData);
 
             /* Audition/Performance menu */
             case "dialog/add_performer":
@@ -97,26 +76,19 @@ public final class PaneUIFactory {
             case "dialog/add_equipment/add_equipment_details":
                 return new AddEquipmentDetailsUI(sqlData);
 
-            /* Finance menu */
-            case "dialog/generate_reports":
-                return new HomeTabUI();
-
+            /* Report generation dialogs */
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
-
-            /* Generate Reports */
-            case "report/performer_report_day":
-                return new PerformerRevenueTab(sqlData);
-
             case "dialog/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueUI();
 
+            /* Report tabs */
+            case "report/performer_revenue":
+                return new PerformerRevenueTab(sqlData);
             case "report/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueTab(sqlData);
-
             case "report/livehouse_schedule":
                 return new ScheduleTab(sqlData);
-
         }
         return null;
     }

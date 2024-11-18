@@ -1,36 +1,24 @@
-package BocchiTheGUI.elements.ui;
+package BocchiTheGUI.elements.ui.tab;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 
-import javax.swing.BoxLayout;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
-import org.knowm.xchart.PieChart;
-import org.knowm.xchart.PieChartBuilder;
-import org.knowm.xchart.XChartPanel;
 
 import BocchiTheGUI.elements.abs.PaneUI;
 import BocchiTheGUI.interfaces.DataLoadable;
 
 public class ScheduleTab extends PaneUI implements DataLoadable {
-    private Object[][] sqlData;
-    private ArrayList<JLabel> labels;
+    /* TODO: Re-add these when they're needed */
+    // private Object[][] sqlData;
+    // private ArrayList<JLabel> labels;
 
     public ScheduleTab(Object[][] sqlData) {
         super("Schedule");
-        this.sqlData = sqlData;
-        this.labels = new ArrayList<>();
+        // this.sqlData = sqlData;
+        // this.labels = new ArrayList<>();
 
     }
 
