@@ -28,7 +28,7 @@ public class GenerateReportUI extends PaneUI {
 		this.setButtonActionCommands("dialog/performer_revenue",
 				"tab/livehouse_sales",
 				"tab/rental_sales",
-				"tab/livehouse_schedule",
+				"report/livehouse_schedule",
 				"tab/staff_salary");
 
 		this.setPreferredSize(new Dimension(400, 150));

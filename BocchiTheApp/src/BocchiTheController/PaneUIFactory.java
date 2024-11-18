@@ -12,6 +12,7 @@ import BocchiTheGUI.components.ui.ManagePerformancesUI;
 import BocchiTheGUI.components.ui.PerformerRevenueTab;
 import BocchiTheGUI.components.ui.PerformerRevenueUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
+import BocchiTheGUI.components.ui.ScheduleTab;
 import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
 import BocchiTheGUI.components.ui.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.components.ui.sub.AddEquipmentTypeUI;
@@ -104,6 +105,11 @@ public final class PaneUIFactory {
             /* Generate Reports */
             case "report/performer_report_day":
                 return new PerformerRevenueTab(sqlData);
+                
+                
+                
+            case "report/livehouse_schedule":
+            	return new ScheduleTab(sqlData);
         }
         return null;
     }
