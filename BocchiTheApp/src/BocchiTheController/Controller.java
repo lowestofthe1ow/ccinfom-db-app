@@ -34,14 +34,20 @@ public class Controller {
     private void loadDataFromSQL(PaneUI dialogUI) {
         if (dialogUI instanceof DataLoadable) {
             DataLoadable loadableUI = (DataLoadable) dialogUI;
-            loadableUI.loadData((sqlIdentifier) -> {
+            loadableUI.loadData((sqlIdentifier, sqlParams) -> {
                 /* If there is no SQL command for loading data, return an empty dataset */
                 if (sqlIdentifier == null) {
                     return new ArrayList<Object[]>();
                 }
-                System.out.println(sqlIdentifier);
+
                 String sqlCommand = ((String) sqlIdentifier).substring(4);
-                return this.executeProcedure(sqlCommand);
+
+                /* Check whether to use the passed parameters */
+                if (sqlParams == null) {
+                    return this.executeProcedure(sqlCommand);
+                } else {
+                    return this.executeProcedure(sqlCommand, sqlParams);
+                }
             });
         }
     }
@@ -69,11 +75,15 @@ public class Controller {
                 /* Check if the button pressed was an SQL button */
                 if (commandIdentifier.contains("button/sql/"))
                     parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
-
+                /* Otherwise, check if it was a report generation button */
                 else if (commandIdentifier.contains("button/report/")) {
-                    /* Execute SQL here */
-                	gui.addTab(dialogUI, dialogUI.getName());
-                	
+                    /* Create the tab UI */
+                    PaneUI ui = PaneUIFactory.createPaneUI(
+                            commandIdentifier.substring(7), /* The SQL command */
+                            dialogUI.getSQLParameterInputs() /* The SQL parameters */);
+                    /* Load data into the new tab */
+                    this.loadDataFromSQL(ui);
+                    gui.addTab(ui, "New tab");
                 }
                 /* Something */
 
@@ -261,8 +271,6 @@ public class Controller {
             showDialog(e.getActionCommand(), null);
         });
     }
-
- 
 
     public Controller(Connection connection, GUI gui) {
         this.connection = connection;

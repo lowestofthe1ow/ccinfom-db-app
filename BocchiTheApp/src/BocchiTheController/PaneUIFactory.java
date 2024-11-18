@@ -100,12 +100,10 @@ public final class PaneUIFactory {
 
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
-                
-                
-                
+
             /* Generate Reports */
             case "report/performer_report_day":
-            	return new PerformerRevenueTab();
+                return new PerformerRevenueTab(sqlData);
         }
         return null;
     }

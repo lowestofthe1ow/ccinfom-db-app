@@ -84,11 +84,13 @@ public class BocchiTheTabbedPane extends JTabbedPane {
         this.insertTab(
                 null,
                 null,
-                new JPanel(),
+                panel,
                 null,
                 this.openTabs.size());
 
         this.setTabComponentAt(this.openTabs.size(), tabHeader);
+
+        this.setSelectedIndex(this.openTabs.size());
     }
 
     /**

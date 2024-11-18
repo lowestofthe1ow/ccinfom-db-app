@@ -1,7 +1,6 @@
 package BocchiTheGUI.components.abs;
 
 import java.awt.event.ActionListener;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 

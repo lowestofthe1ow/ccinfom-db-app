@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.swing.BoxLayout;
@@ -22,6 +23,7 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
     private DefaultTableModel activeTableModel;
     private List<Object[]> tableRows;
     private String sqlLoadDataCommand;
+    private String[] sqlLoadDataParams;
 
     /**
      * A list of {@link Function}s that are called by the table during
@@ -145,8 +147,8 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
      * @param data The list of row data to insert into the table
      */
     @Override
-    public void loadData(Function<Object, List<Object[]>> source) {
-        List<Object[]> data = source.apply(this.sqlLoadDataCommand);
+    public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
+        List<Object[]> data = source.apply(this.sqlLoadDataCommand, this.sqlLoadDataParams);
 
         /* Reset the table model */
         activeTableModel.setRowCount(0);
