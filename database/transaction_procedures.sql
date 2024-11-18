@@ -1,3 +1,42 @@
+DROP PROCEDURE IF EXISTS get_months_on_record;
+DELIMITER //
+CREATE PROCEDURE get_months_on_record ()
+BEGIN
+	SELECT 
+		MONTHNAME(pt.start_timestamp) AS month_on_record,
+        YEAR(pt.start_timestamp) AS year_on_record
+	FROM performance p
+	JOIN performance_timeslot pt
+		ON p.performance_timeslot_id = pt.performance_timeslot_id
+	WHERE p.performance_status = 'COMPLETE'
+	GROUP BY month_on_record, year_on_record;
+END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_performances_in_month;
+DELIMITER //
+CREATE PROCEDURE get_performances_in_month (
+	month_name VARCHAR(255),
+    year_name INT
+)
+BEGIN
+	SELECT 
+		p.performance_id,
+		pr.performer_name,
+		pt.start_timestamp,
+        p.performance_status
+	FROM performance p
+	JOIN performance_timeslot pt
+	ON p.performance_timeslot_id = pt.performance_timeslot_id
+	JOIN performer pr
+	ON p.performer_id = pr.performer_id
+    WHERE MONTHNAME(pt.start_timestamp) = month_name
+    AND YEAR(pt.start_timestamp) = year_name
+    AND p.performance_status = 'COMPLETE'
+    ORDER BY pt.start_timestamp DESC;
+END //
+DELIMITER ;
+
 -- Fetch performance data
 
 DROP PROCEDURE IF EXISTS get_performances;
@@ -571,12 +610,16 @@ DROP PROCEDURE IF EXISTS cut_report_month;
 
 DELIMITER //
 CREATE PROCEDURE cut_report_month(
-    IN month INT,
+    IN month_name VARCHAR(255),
     IN year INT
 )
 BEGIN
     SELECT 
-        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota) * (1-pr.cut_percent) ) AS monthCut
+        SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS monthCut
     FROM 
         performance_revenue pr
     JOIN 
@@ -584,8 +627,8 @@ BEGIN
     JOIN 
         performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
     WHERE 
-        MONTH(pts.timeslot_date) = month
-        AND YEAR(pts.timeslot_date) = year;
+        MONTHNAME(pts.start_timestamp) = month_name
+        AND YEAR(pts.end_timestamp) = year;
 END //
 
 DELIMITER ;

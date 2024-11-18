@@ -31,8 +31,12 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
      */
     private List<Function<Object[], Boolean>> filters;
 
-    public void setLoadDataCommand(String command) {
+    protected void setLoadDataCommand(String command) {
         this.sqlLoadDataCommand = command;
+    }
+
+    protected void setLoadDataParams(String... params) {
+        this.sqlLoadDataParams = params;
     }
 
     /**
@@ -158,6 +162,7 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
         for (Object[] row : data) {
             activeTableModel.addRow(row);
             tableRows.add(row);
+            System.out.println(row[1]);
         }
 
         filterTable();

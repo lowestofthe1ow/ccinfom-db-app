@@ -9,6 +9,8 @@ import BocchiTheGUI.components.ui.GenerateReportUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
 import BocchiTheGUI.components.ui.ManagePerformancesUI;
+import BocchiTheGUI.components.ui.MonthlyLivehouseRevenueTab;
+import BocchiTheGUI.components.ui.MonthlyLivehouseRevenueUI;
 import BocchiTheGUI.components.ui.PerformerRevenueTab;
 import BocchiTheGUI.components.ui.PerformerRevenueUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
@@ -104,6 +106,12 @@ public final class PaneUIFactory {
             /* Generate Reports */
             case "report/performer_report_day":
                 return new PerformerRevenueTab(sqlData);
+
+            case "dialog/monthly_livehouse_revenue":
+                return new MonthlyLivehouseRevenueUI();
+
+            case "report/monthly_livehouse_revenue":
+                return new MonthlyLivehouseRevenueTab(sqlData);
         }
         return null;
     }

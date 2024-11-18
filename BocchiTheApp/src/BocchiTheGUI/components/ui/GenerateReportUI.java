@@ -26,7 +26,7 @@ public class GenerateReportUI extends PaneUI {
 				"Staff salary report");
 
 		this.setButtonActionCommands("dialog/performer_revenue",
-				"tab/livehouse_sales",
+				"dialog/monthly_livehouse_revenue",
 				"tab/rental_sales",
 				"tab/livehouse_schedule",
 				"tab/staff_salary");
