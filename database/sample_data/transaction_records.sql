@@ -31,6 +31,7 @@ INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('10', '4', '32', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('11', '12', '35', '5000.00', 'PENDING');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('12', '19', '18', '5000.00', 'PENDING');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('13', '19', '20', '5000.00', 'PENDING');
 
 INSERT INTO performance_revenue (`performance_id`, `ticket_price`, `tickets_sold`, `cut_percent`) VALUES ('1', '100.00', '23', '0.10');
 INSERT INTO performance_revenue (`performance_id`, `ticket_price`, `tickets_sold`, `cut_percent`) VALUES ('2', '100.00', '29', '0.10');

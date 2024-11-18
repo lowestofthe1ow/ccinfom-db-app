@@ -83,7 +83,11 @@ public class Controller {
                             dialogUI.getSQLParameterInputs() /* SQL data */);
                     /* Load data into the new tab */
                     this.loadDataFromSQL(ui);
+
                     gui.addTab(ui, commandIdentifier.substring(7));
+
+                    gui.addTab(ui, ui.getDialogTitle());
+
                 }
                 /* Something */
 
