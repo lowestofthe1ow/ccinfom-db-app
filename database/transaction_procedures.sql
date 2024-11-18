@@ -532,7 +532,22 @@ BEGIN
     SELECT 
         pf.performer_name,
         DATE(pts.start_timestamp) AS performance_day,
-        SUM(pr.ticket_price * pr.tickets_sold) AS sales_on_day
+        SUM(pr.ticket_price * pr.tickets_sold) AS sales_on_day,
+        SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * (1 - pr.cut_percent)
+                ELSE 0
+			END) AS performer_profit_on_day,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold < p.base_quota
+					THEN p.base_quota - pr.ticket_price * pr.tickets_sold
+				ELSE 0
+			END) AS performer_debt_on_day,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS livehouse_profit_on_day
     FROM 
         performance_revenue pr
     JOIN 

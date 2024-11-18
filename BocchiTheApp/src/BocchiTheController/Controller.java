@@ -87,13 +87,14 @@ public class Controller {
                         else
                             /* Close all dialogs except the "root", then refresh that */
                             gui.closeAllDialogsExcept(rootName, (rootUI) -> {
-                                this.loadDataFromSQL(dialogUI);
+                                this.loadDataFromSQL(rootUI);
                             });
                     } else {
                         showDialog(dialogIdentifier + commandIdentifier.substring(11),
                                 dialogUI.getSQLParameterInputs());
                     }
                 } else {
+                    System.out.println("Attempting to load data!");
                     this.loadDataFromSQL(dialogUI);
                 }
             });
