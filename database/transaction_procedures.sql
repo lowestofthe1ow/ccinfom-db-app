@@ -187,6 +187,40 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Fetch equipment rental data
+
+DROP PROCEDURE IF EXISTS get_equipment_rentals;
+DELIMITER //
+CREATE PROCEDURE get_equipment_rentals ()
+BEGIN
+	SELECT er.rental_id, e.equipment_name, p.performer_name, er.start_date, er.end_date,
+		er.equipment_status
+    FROM equipment_rental er
+    JOIN equipment e
+		ON er.equipment_id = e.equipment_id
+    JOIN performer p
+		ON er.performer_id = p.performer_id
+	WHERE er.equipment_status = 'PENDING';
+END //
+DELIMITER ;
+
+-- Fetch unpaid equipment rental data
+
+DROP PROCEDURE IF EXISTS get_unpaid_rentals;
+DELIMITER //
+CREATE PROCEDURE get_unpaid_rentals ()
+BEGIN
+	SELECT er.rental_id, e.equipment_name, p.performer_name, er.start_date, er.end_date,
+		er.payment_status
+    FROM equipment_rental er
+    JOIN equipment e
+		ON er.equipment_id = e.equipment_id
+    JOIN performer p
+		ON er.performer_id = p.performer_id
+	WHERE er.payment_status = 'NOT_PAID';
+END //
+DELIMITER ;
+
 -- Hiring staff
 
 DROP PROCEDURE IF EXISTS hire;
@@ -683,6 +717,26 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Pay rental
+DROP PROCEDURE IF EXISTS pay_rental;
+DELIMITER //
+CREATE PROCEDURE pay_rental (
+	IN rental_id int
+)
+BEGIN
+	IF (
+		SELECT er.payment_status
+        FROM equipment_rental er
+        WHERE er.rental_id = rental_id
+	) <> 'NOT_PAID' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Rental has already been paid or cancelled.';
+	ELSE
+		UPDATE equipment_rental er
+			SET er.payment_status = 'PAID'
+            WHERE er.rental_id = rental_id;
+	END IF;
+END //
+DELIMITER ;
 
 -- Get schedule for a week based on NOw(). 
 

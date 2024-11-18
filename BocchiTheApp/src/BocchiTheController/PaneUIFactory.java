@@ -13,12 +13,18 @@ import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.AddPositionTypeUI;
+import BocchiTheGUI.elements.ui.dialog.RentEquipmentUI;
+import BocchiTheGUI.elements.ui.dialog.ManageRentalsUI;
+import BocchiTheGUI.elements.ui.dialog.PayRentalUI;
+import BocchiTheGUI.elements.ui.dialog.CancelRentalUI;
+
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
+import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerUI;
 import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
 import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
 import BocchiTheGUI.elements.ui.tab.ScheduleTab;
@@ -78,6 +84,16 @@ public final class PaneUIFactory {
                 return new AddEquipmentTypeUI();
             case "dialog/add_equipment/add_equipment_details":
                 return new AddEquipmentDetailsUI(sqlData);
+            case "dialog/rent_equipment":
+                return new RentEquipmentUI();
+            case "dialog/rent_equipment/select_performer":
+                return new SelectPerformerUI("button/sql/rent_equipment", "dialog/rent_equipment", sqlData);
+            case "dialog/manage_rentals":
+                return new ManageRentalsUI();
+            case "dialog/pay_rental":
+                return new PayRentalUI();
+            case "dialog/cancel_rental":
+                return new CancelRentalUI();
 
             /* Report generation dialogs */
             case "dialog/performer_revenue":
