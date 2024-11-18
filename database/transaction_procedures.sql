@@ -22,14 +22,20 @@ CREATE PROCEDURE get_performances_in_month (
 BEGIN
 	SELECT 
 		p.performance_id,
-		pr.performer_name,
+		pf.performer_name,
 		pt.start_timestamp,
-        p.performance_status
+        (CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS monthCut
 	FROM performance p
 	JOIN performance_timeslot pt
 	ON p.performance_timeslot_id = pt.performance_timeslot_id
-	JOIN performer pr
-	ON p.performer_id = pr.performer_id
+	JOIN performer pf
+	ON p.performer_id = pf.performer_id
+    JOIN performance_revenue pr
+    ON p.performance_id = pr.performance_id
     WHERE MONTHNAME(pt.start_timestamp) = month_name
     AND YEAR(pt.start_timestamp) = year_name
     AND p.performance_status = 'COMPLETE'

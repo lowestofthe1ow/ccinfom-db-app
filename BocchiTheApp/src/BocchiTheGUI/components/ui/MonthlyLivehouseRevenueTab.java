@@ -16,7 +16,7 @@ public class MonthlyLivehouseRevenueTab extends TableSelectionUI {
     private JLabel revenueLabel;
 
     public MonthlyLivehouseRevenueTab(Object[][] sqlData) {
-        super("Monthly livehouse revenue", "ID", "Performer name", "Start timestamp", "Status");
+        super("Monthly livehouse revenue", "ID", "Performer name", "Start timestamp", "Livehouse profits");
         this.sqlData = sqlData;
         this.setLoadDataCommand("sql/get_performances_in_month");
         this.setLoadDataParams((String[]) sqlData[0]);
