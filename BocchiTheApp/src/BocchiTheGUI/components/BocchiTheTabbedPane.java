@@ -1,33 +1,55 @@
 package BocchiTheGUI.components;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
 public class BocchiTheTabbedPane extends JTabbedPane {
     private ArrayList<JPanel> openTabs;
-    private JButton newTabButton;
+    private JMenuBar newTabMenu;
+
+    private JMenuBar createNewTabMenu(String... menuItems) {
+        JMenuBar newTab = new JMenuBar();
+        JMenu menu = new JMenu("+");
+
+        newTab.add(menu);
+        newTab.setFont(new Font("Arial", Font.PLAIN, 18));
+        newTab.setFocusable(false);
+
+        for (int i = 0; i < menuItems.length; i += 2) {
+            JMenuItem menuItem = new JMenuItem(menuItems[i]);
+            menuItem.setActionCommand(menuItems[i + 1]);
+            menu.add(menuItem);
+        }
+
+        return newTab;
+    }
 
     /**
-     * Creates a control button in the tabbed pane (close tab or new tab)
+     * Creates a close button to add to a specific tab
      * 
      * @param label    The label to add to the button
      * @param listener The listener to attach
      * @return The created button
      */
-    private JButton createControlButton(String label, ActionListener listener) {
+    private JButton createCloseButton(String label, ActionListener listener) {
         JButton button = new JButton(label);
 
         button.setFont(new Font("Arial", Font.PLAIN, 18));
         button.setFocusable(false);
-        // button.setBorder(new EmptyBorder(0, 0, 0, 0));
+        button.setBorder(new EmptyBorder(0, 0, 0, 0));
         button.addActionListener(listener);
+        button.setBackground(new Color(255, 255, 255, 128));
 
         return button;
     }
@@ -43,7 +65,7 @@ public class BocchiTheTabbedPane extends JTabbedPane {
         tabHeader.add(new JLabel(label));
 
         /* Create the close tab button and add it to the tab header */
-        JButton closeButton = createControlButton("×", (e) -> {
+        JButton closeButton = createCloseButton("×", (e) -> {
             int index = this.openTabs.indexOf(tabHeader) + 1;
             if (index == this.getSelectedIndex()) {
                 this.setSelectedIndex(0);
@@ -75,19 +97,21 @@ public class BocchiTheTabbedPane extends JTabbedPane {
      * @param actionListener The listener to attach
      */
     public void addTabbedPaneListener(ActionListener actionListener) {
-        this.newTabButton.addActionListener(actionListener);
+        this.newTabMenu.getMenu(0).getItem(0).addActionListener(actionListener);
     }
 
     public BocchiTheTabbedPane(JPanel homePanel) {
         this.addTab("Home", homePanel);
         this.addTab(null, null);
 
-        this.newTabButton = createControlButton("+", (e) -> {
-            this.newTab("New tab", new JPanel());
-            // this.add(createMenu("Thing", "tab/thing"));
-        });
+        this.newTabMenu = createNewTabMenu(
+                "Daily performer sales", "dialog/performer_revenue",
+                "Monthly livehouse sales", null,
+                "Monthly rental sales", null,
+                "Weekly livehouse schedule", null,
+                "Staff salary report", null);
 
-        this.setTabComponentAt(1, newTabButton);
+        this.setTabComponentAt(1, this.newTabMenu);
         this.setEnabledAt(1, false);
 
         this.openTabs = new ArrayList<>();

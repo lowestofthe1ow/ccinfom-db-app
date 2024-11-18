@@ -48,6 +48,7 @@ public class GUI extends JFrame {
 
     public void setGenerateReportsListener(ActionListener actionListener) {
         this.generateReportUI.addButtonListener(actionListener);
+        this.tabbedPane.addTabbedPaneListener(actionListener);
     }
 
     /**
@@ -57,10 +58,6 @@ public class GUI extends JFrame {
      */
     public void setMenuBarListener(ActionListener actionListener) {
         this.menuBar.addMenuListener(actionListener);
-    }
-
-    public void setTabbedPaneListener(ActionListener actionListener) {
-        this.tabbedPane.addTabbedPaneListener(actionListener);
     }
 
     public void addTab(PaneUI dialogUI, String name) {

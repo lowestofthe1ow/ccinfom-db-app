@@ -14,11 +14,11 @@ public class GenerateReportUI extends PaneUI {
 
 		this.add(new JLabel("Welcome to Bocchi the App"), BorderLayout.NORTH);
 
-		this.addButtons("Performer Sales Day",
-				"Live House Sales Month",
-				"Rental Sales Month",
-				"Livehouse schedule Week",
-				"Staff Salary Report");
+		this.addButtons("Daily performer sales",
+				"Monthly livehouse sales",
+				"Monthly rental sales",
+				"Weekly livehouse schedule",
+				"Staff salary report");
 
 		this.setButtonActionCommands("dialog/performer_revenue",
 				"tab/livehouse_sales",
@@ -29,6 +29,7 @@ public class GenerateReportUI extends PaneUI {
 		this.setPreferredSize(new Dimension(400, 150));
 		this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 		// this.setButtonPanelLocation(BorderLayout.CENTER);
+
 	}
 
 	@Override
