@@ -2,50 +2,56 @@ package BocchiTheGUI.components.ui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.PanelUI;
 
+import BocchiTheGUI.components.abs.PaneUI;
 import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.interfaces.DataLoadable;
 
-public class PerformerRevenueTab extends TableSelectionUI {
-
-    private JLabel revenueLabel;
-    private JLabel quotaLabel;
+public class PerformerRevenueTab extends PaneUI implements DataLoadable {
+	
+	
+	private ArrayList<JLabel> labels;
 
     public PerformerRevenueTab() {
-        super("Performer Revenue", "ID", "Performer Name");
-        this.setLoadDataCommand("tab/performer_revenue");
-        this.addSearchBoxFilter("Filter by Name", 1);
-        this.addButtons("Generate");
-        this.setButtonActionCommands("performer_revenue");
-
+    	super("Performer Report Day");
+    	this.labels = new ArrayList<>();
+    	displayItPretty();
+    	repaint();
+    	revalidate();
     }
-
-    private void addBottomPanel() {
-
-        JPanel bottomPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        revenueLabel = new JLabel("Revenue: 0.00", SwingConstants.CENTER);
-
-        quotaLabel = new JLabel("Quota: 0.00%", SwingConstants.CENTER);
-
-        bottomPanel.add(revenueLabel);
-        bottomPanel.add(quotaLabel);
-
-        // Add the bottom panel to the main layout (assumes BorderLayout)
-        this.add(bottomPanel, BorderLayout.SOUTH);
+    
+    private void displayItPretty() {
+    	for(JLabel a : labels) {
+    		this.add(a);
+    	}
     }
+    
+	@Override
+	public void loadData(Function<Object, List<Object[]>> source) {
+		// TODO Auto-generated method stub
+		List<Object[]> data = source.apply("sql/performer_report_day");
+		 for (Object[] row : data) {
+	           
+                Object item = row[0];
+                JLabel label = new JLabel(item.toString(), JLabel.LEFT);
+                labels.add(label);
+               // add(label);
+	        }
+	}
 
-    public void updateRevenue(double revenue) {
-        revenueLabel.setText(String.format("Revenue: $%.2f", revenue));
-    }
-
-    public void updateQuota(double quota) {
-        quotaLabel.setText(String.format("Quota: %.2f%%", quota));
-    }
+	@Override
+	public Object[][] getSQLParameterInputs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

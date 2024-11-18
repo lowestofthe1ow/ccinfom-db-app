@@ -9,6 +9,7 @@ import BocchiTheGUI.components.ui.GenerateReportUI;
 import BocchiTheGUI.components.ui.HireStaffUI;
 import BocchiTheGUI.components.ui.ManageAuditionsUI;
 import BocchiTheGUI.components.ui.ManagePerformancesUI;
+import BocchiTheGUI.components.ui.PerformerRevenueTab;
 import BocchiTheGUI.components.ui.PerformerRevenueUI;
 import BocchiTheGUI.components.ui.RemoveStaffUI;
 import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
@@ -99,6 +100,12 @@ public final class PaneUIFactory {
 
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
+                
+                
+                
+            /* Generate Reports */
+            case "report/performer_report_day":
+            	return new PerformerRevenueTab();
         }
         return null;
     }

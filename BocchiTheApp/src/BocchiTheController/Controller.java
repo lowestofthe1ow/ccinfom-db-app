@@ -39,7 +39,7 @@ public class Controller {
                 if (sqlIdentifier == null) {
                     return new ArrayList<Object[]>();
                 }
-
+                System.out.println(sqlIdentifier);
                 String sqlCommand = ((String) sqlIdentifier).substring(4);
                 return this.executeProcedure(sqlCommand);
             });
@@ -70,9 +70,11 @@ public class Controller {
                 if (commandIdentifier.contains("button/sql/"))
                     parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
 
-                else if (commandIdentifier.contains("button/report/"))
+                else if (commandIdentifier.contains("button/report/")) {
                     /* Execute SQL here */
-                    System.out.println(dialogUI.getSQLParameterInputs());
+                	gui.addTab(dialogUI, dialogUI.getName());
+                	
+                }
                 /* Something */
 
                 /* Check if the button command terminates the window */
@@ -260,11 +262,7 @@ public class Controller {
         });
     }
 
-    private void addTab(String dialogIdentifier, Object[][] sqlData) {
-        PaneUI dialogUI = TabUIFactory.createTabUI(dialogIdentifier, sqlData);
-
-        // gui.addTab(dialogUI, dialogIdentifier);
-    }
+ 
 
     public Controller(Connection connection, GUI gui) {
         this.connection = connection;
