@@ -277,6 +277,24 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Add staff position types
+
+DROP PROCEDURE IF EXISTS add_position_type;
+DELIMITER //
+CREATE PROCEDURE add_position_type (
+	IN position_name VARCHAR(255),
+    IN salary DECIMAL(10, 2)
+)
+BEGIN
+	IF salary < 500 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Salary is under minimum wage';
+	ELSE
+		INSERT INTO position_type (`position_name`, `salary`)
+		VALUES (position_name, salary);
+	END IF;
+END //
+DELIMITER ;
+
 -- Renting out equipment
 
 DROP PROCEDURE IF EXISTS rent_equipment;
