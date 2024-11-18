@@ -6,7 +6,7 @@ public class AddEquipmentUI extends TableSelectionUI {
     public AddEquipmentUI() {
         super("Add equipment", "ID", "Equipment type");
 
-        this.setLoadDataCommand("sql/get_equipment");
+        this.setLoadDataCommand("sql/get_equipment_types");
 
         this.addSearchBoxFilter("Filter by equipment type", 1);
 
