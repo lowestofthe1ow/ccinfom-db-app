@@ -1,4 +1,4 @@
-package BocchiTheGUI.components;
+package BocchiTheGUI.elements.components;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

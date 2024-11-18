@@ -1,4 +1,4 @@
-package BocchiTheGUI.components.ui;
+package BocchiTheGUI.elements.ui;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abs.TableSelectionUI;
 
 public class MonthlyLivehouseRevenueTab extends TableSelectionUI {
     private Object[][] sqlData;

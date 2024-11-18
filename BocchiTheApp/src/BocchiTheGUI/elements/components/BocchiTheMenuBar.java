@@ -1,4 +1,4 @@
-package BocchiTheGUI.components;
+package BocchiTheGUI.elements.components;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

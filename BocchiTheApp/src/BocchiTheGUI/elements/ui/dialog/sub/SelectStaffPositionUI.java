@@ -1,10 +1,10 @@
-package BocchiTheGUI.components.ui.sub;
+package BocchiTheGUI.elements.ui.dialog.sub;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abs.TableSelectionUI;
 
 public class SelectStaffPositionUI extends TableSelectionUI {
     private Object[][] sqlData;

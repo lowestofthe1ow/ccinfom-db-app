@@ -1,4 +1,4 @@
-package BocchiTheGUI.components.ui;
+package BocchiTheGUI.elements.ui;
 
 import java.awt.GridLayout;
 import java.sql.Timestamp;
@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abs.TableSelectionUI;
 import raven.datetime.component.date.DatePicker;
 
 public class PerformerRevenueUI extends TableSelectionUI {

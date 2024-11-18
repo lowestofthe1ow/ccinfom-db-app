@@ -1,27 +1,27 @@
 package BocchiTheController;
 
-import BocchiTheGUI.components.abs.PaneUI;
-import BocchiTheGUI.components.ui.AddAuditionUI;
-import BocchiTheGUI.components.ui.AddEquipmentUI;
-import BocchiTheGUI.components.ui.AddPerformerUI;
-import BocchiTheGUI.components.ui.AddTimeslotUI;
-import BocchiTheGUI.components.ui.GenerateReportUI;
-import BocchiTheGUI.components.ui.HireStaffUI;
-import BocchiTheGUI.components.ui.ManageAuditionsUI;
-import BocchiTheGUI.components.ui.ManagePerformancesUI;
-import BocchiTheGUI.components.ui.MonthlyLivehouseRevenueTab;
-import BocchiTheGUI.components.ui.MonthlyLivehouseRevenueUI;
-import BocchiTheGUI.components.ui.PerformerRevenueTab;
-import BocchiTheGUI.components.ui.PerformerRevenueUI;
-import BocchiTheGUI.components.ui.RemoveStaffUI;
-import BocchiTheGUI.components.ui.ScheduleTab;
-import BocchiTheGUI.components.ui.UpdateStaffPositionUI;
-import BocchiTheGUI.components.ui.sub.AddEquipmentDetailsUI;
-import BocchiTheGUI.components.ui.sub.AddEquipmentTypeUI;
-import BocchiTheGUI.components.ui.sub.InputSubmissionUI;
-import BocchiTheGUI.components.ui.sub.RecordRevenueUI;
-import BocchiTheGUI.components.ui.sub.SelectStaffPositionUI;
-import BocchiTheGUI.components.ui.sub.SelectTimeslotUI;
+import BocchiTheGUI.elements.abs.PaneUI;
+import BocchiTheGUI.elements.ui.HomeTabUI;
+import BocchiTheGUI.elements.ui.MonthlyLivehouseRevenueTab;
+import BocchiTheGUI.elements.ui.MonthlyLivehouseRevenueUI;
+import BocchiTheGUI.elements.ui.PerformerRevenueTab;
+import BocchiTheGUI.elements.ui.PerformerRevenueUI;
+import BocchiTheGUI.elements.ui.ScheduleTab;
+import BocchiTheGUI.elements.ui.dialog.AddAuditionUI;
+import BocchiTheGUI.elements.ui.dialog.AddEquipmentUI;
+import BocchiTheGUI.elements.ui.dialog.AddPerformerUI;
+import BocchiTheGUI.elements.ui.dialog.AddTimeslotUI;
+import BocchiTheGUI.elements.ui.dialog.HireStaffUI;
+import BocchiTheGUI.elements.ui.dialog.ManageAuditionsUI;
+import BocchiTheGUI.elements.ui.dialog.ManagePerformancesUI;
+import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
+import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
+import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
+import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
+import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
+import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
+import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
+import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
 
 public final class PaneUIFactory {
     /**
@@ -99,7 +99,7 @@ public final class PaneUIFactory {
 
             /* Finance menu */
             case "dialog/generate_reports":
-                return new GenerateReportUI();
+                return new HomeTabUI();
 
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
@@ -108,17 +108,14 @@ public final class PaneUIFactory {
             case "report/performer_report_day":
                 return new PerformerRevenueTab(sqlData);
 
-
             case "dialog/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueUI();
 
             case "report/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueTab(sqlData);
-     
-                
-                
+
             case "report/livehouse_schedule":
-            	return new ScheduleTab(sqlData);
+                return new ScheduleTab(sqlData);
 
         }
         return null;

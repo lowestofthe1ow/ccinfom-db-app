@@ -1,4 +1,4 @@
-package BocchiTheGUI.components.ui;
+package BocchiTheGUI.elements.ui;
 
 import java.awt.Dimension;
 
@@ -7,15 +7,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import BocchiTheGUI.components.abs.PaneUI;
+import BocchiTheGUI.elements.abs.PaneUI;
 
-public class GenerateReportUI extends PaneUI {
-	public GenerateReportUI() {
+public class HomeTabUI extends PaneUI {
+	public HomeTabUI() {
 		super("Generate Reports");
 
 		JPanel main = new JPanel();
 		main.setLayout(new BoxLayout(main, BoxLayout.LINE_AXIS));
-		// main.setPreferredSize(new Dimension(50, 50));
 		main.add(new JLabel("Welcome to Bocchi the App"));
 		this.add(main);
 
@@ -33,7 +32,6 @@ public class GenerateReportUI extends PaneUI {
 
 		this.setPreferredSize(new Dimension(400, 150));
 		this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-		// this.setButtonPanelLocation(BorderLayout.CENTER);
 	}
 
 	@Override

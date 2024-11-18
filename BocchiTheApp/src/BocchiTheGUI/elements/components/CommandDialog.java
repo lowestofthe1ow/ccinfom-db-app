@@ -1,11 +1,11 @@
-package BocchiTheGUI.components;
+package BocchiTheGUI.elements.components;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 
-import BocchiTheGUI.components.abs.PaneUI;
+import BocchiTheGUI.elements.abs.PaneUI;
 
 public class CommandDialog extends JDialog {
     PaneUI dialogUI;

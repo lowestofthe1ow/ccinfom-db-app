@@ -1,4 +1,4 @@
-package BocchiTheGUI.components.ui;
+package BocchiTheGUI.elements.ui.dialog;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -12,7 +12,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import BocchiTheGUI.components.abs.PaneUI;
+import BocchiTheGUI.elements.abs.PaneUI;
 import raven.datetime.component.date.DateEvent;
 import raven.datetime.component.date.DatePicker;
 import raven.datetime.component.date.DateSelectionListener;

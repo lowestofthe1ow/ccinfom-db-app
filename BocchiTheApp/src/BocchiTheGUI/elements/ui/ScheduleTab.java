@@ -1,4 +1,4 @@
-package BocchiTheGUI.components.ui;
+package BocchiTheGUI.elements.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,10 +20,10 @@ import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.XChartPanel;
 
-import BocchiTheGUI.components.abs.PaneUI;
+import BocchiTheGUI.elements.abs.PaneUI;
 import BocchiTheGUI.interfaces.DataLoadable;
 
-public class ScheduleTab  extends PaneUI implements DataLoadable {
+public class ScheduleTab extends PaneUI implements DataLoadable {
     private Object[][] sqlData;
     private ArrayList<JLabel> labels;
 
@@ -34,20 +34,18 @@ public class ScheduleTab  extends PaneUI implements DataLoadable {
 
     }
 
-
     @Override
     public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
-    
+
         List<Object[]> data = source.apply("sql/get_schedule", null);
-        
-        
-        String[] columnNames = {"Performer Name", "Day", "Start Time", "End Time"}; 
+
+        String[] columnNames = { "Performer Name", "Day", "Start Time", "End Time" };
 
         // Create a table model and populate it with data
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
         for (Object[] row : data) {
-            tableModel.addRow(row); 
+            tableModel.addRow(row);
         }
 
         JTable table = new JTable(tableModel);
@@ -57,7 +55,6 @@ public class ScheduleTab  extends PaneUI implements DataLoadable {
 
         JScrollPane scrollPane = new JScrollPane(table);
         this.add(scrollPane);
-     
 
     }
 

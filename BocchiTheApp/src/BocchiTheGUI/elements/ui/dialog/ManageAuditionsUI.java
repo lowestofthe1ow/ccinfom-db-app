@@ -1,6 +1,6 @@
-package BocchiTheGUI.components.ui;
+package BocchiTheGUI.elements.ui.dialog;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import BocchiTheGUI.elements.abs.TableSelectionUI;
 
 public class ManageAuditionsUI extends TableSelectionUI {
 	public ManageAuditionsUI() {

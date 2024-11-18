@@ -1,4 +1,4 @@
-package BocchiTheGUI.components.ui;
+package BocchiTheGUI.elements.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +17,7 @@ import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.XChartPanel;
 
-import BocchiTheGUI.components.abs.PaneUI;
+import BocchiTheGUI.elements.abs.PaneUI;
 import BocchiTheGUI.interfaces.DataLoadable;
 
 public class PerformerRevenueTab extends PaneUI implements DataLoadable {
@@ -34,13 +34,14 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
         if (labels.isEmpty()) {
             this.add(new JLabel("There is no data to display for this performer on the given date."));
         }
-       
+
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); 
-      
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
         String content = "<html>"
                 + "<body style='font-family: Arial, sans-serif;'>"
-                + "<h1 style='color: #3366cc;'>Sales Information for " + labels.get(0).getText() + " on " + labels.get(1).getText() + "</h1>"
+                + "<h1 style='color: #3366cc;'>Sales Information for " + labels.get(0).getText() + " on "
+                + labels.get(1).getText() + "</h1>"
                 + "<p style='font-size: 12px;'>"
                 + "<b>Sales:</b> " + labels.get(2).getText() + "<br>"
                 + "<b>Performer Profit:</b> " + labels.get(3).getText() + "<br>"
@@ -51,36 +52,35 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
                 + "</html>";
 
         JEditorPane editorPane = new JEditorPane("text/html", content);
-        editorPane.setEditable(false); 
-        editorPane.setPreferredSize(new Dimension(600, 200)); 
-        editorPane.setBackground(Color.white); 
-      
+        editorPane.setEditable(false);
+        editorPane.setPreferredSize(new Dimension(600, 200));
+        editorPane.setBackground(Color.white);
+
         panel.add(editorPane);
- 
+
         XChartPanel<PieChart> chartPanel = new XChartPanel<>(createPieChart());
 
         panel.add(chartPanel);
 
-
         add(panel);
     }
 
-    
-	private PieChart createPieChart() {
-	
-		PieChart chart = new PieChartBuilder().width(400).height(400).build();
-		Map<String, Double> data = new HashMap<>();
-		data.put("Sales on Day", Double.parseDouble(labels.get(2).getText()));
-		data.put("Performer Profit On Day", Double.parseDouble(labels.get(3).getText()));
-		data.put("Performer Debt On Day", Double.parseDouble(labels.get(4).getText()));
-		data.put("LiveHouse Profit On Day", Double.parseDouble(labels.get(5).getText()));
-	
-		for (Map.Entry<String, Double> entry : data.entrySet()) {
-		    chart.addSeries(entry.getKey(), entry.getValue());
-		}
-		
-		return chart;
-	}
+    private PieChart createPieChart() {
+
+        PieChart chart = new PieChartBuilder().width(400).height(400).build();
+        Map<String, Double> data = new HashMap<>();
+        data.put("Sales on Day", Double.parseDouble(labels.get(2).getText()));
+        data.put("Performer Profit On Day", Double.parseDouble(labels.get(3).getText()));
+        data.put("Performer Debt On Day", Double.parseDouble(labels.get(4).getText()));
+        data.put("LiveHouse Profit On Day", Double.parseDouble(labels.get(5).getText()));
+
+        for (Map.Entry<String, Double> entry : data.entrySet()) {
+            chart.addSeries(entry.getKey(), entry.getValue());
+        }
+
+        return chart;
+    }
+
     @Override
     public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
         /* Fetch data from Controller using data from previous dialog window */

@@ -1,4 +1,4 @@
-package BocchiTheGUI.components.abs;
+package BocchiTheGUI.elements.abs;
 
 import java.awt.Dimension;
 import java.awt.LayoutManager;
@@ -13,9 +13,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import BocchiTheGUI.components.TableComboBox;
-import BocchiTheGUI.components.TableDatePicker;
-import BocchiTheGUI.components.TableSearchBox;
+import BocchiTheGUI.elements.components.TableComboBox;
+import BocchiTheGUI.elements.components.TableDatePicker;
+import BocchiTheGUI.elements.components.TableSearchBox;
 import BocchiTheGUI.interfaces.DataLoadable;
 
 public abstract class TableSelectionUI extends PaneUI implements DataLoadable {

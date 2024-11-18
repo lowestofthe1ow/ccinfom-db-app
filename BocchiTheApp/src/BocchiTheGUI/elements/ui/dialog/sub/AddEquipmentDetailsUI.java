@@ -1,6 +1,6 @@
-package BocchiTheGUI.components.ui.sub;
+package BocchiTheGUI.elements.ui.dialog.sub;
 
-import BocchiTheGUI.components.abs.TextFieldsUI;
+import BocchiTheGUI.elements.abs.TextFieldsUI;
 
 public class AddEquipmentDetailsUI extends TextFieldsUI {
     private Object[][] sqlData;

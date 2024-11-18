@@ -1,4 +1,4 @@
-package BocchiTheGUI.components;
+package BocchiTheGUI.elements.components;
 
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;

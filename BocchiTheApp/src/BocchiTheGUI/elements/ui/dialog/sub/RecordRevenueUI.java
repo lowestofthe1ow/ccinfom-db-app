@@ -1,10 +1,10 @@
-package BocchiTheGUI.components.ui.sub;
+package BocchiTheGUI.elements.ui.dialog.sub;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import BocchiTheGUI.components.abs.TextFieldsUI;
+import BocchiTheGUI.elements.abs.TextFieldsUI;
 
 public class RecordRevenueUI extends TextFieldsUI {
     private Object[][] sqlData;
