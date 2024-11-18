@@ -99,7 +99,9 @@ public class BocchiTheTabbedPane extends JTabbedPane {
      * @param actionListener The listener to attach
      */
     public void addTabbedPaneListener(ActionListener actionListener) {
-        this.newTabMenu.getMenu(0).getItem(0).addActionListener(actionListener);
+        for (int i = 0; i < this.newTabMenu.getMenu(0).getItemCount(); i++) {
+            this.newTabMenu.getMenu(0).getItem(i).addActionListener(actionListener);
+        }
     }
 
     public BocchiTheTabbedPane(JPanel homePanel) {

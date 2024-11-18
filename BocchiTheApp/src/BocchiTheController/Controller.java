@@ -79,11 +79,11 @@ public class Controller {
                 else if (commandIdentifier.contains("button/report/")) {
                     /* Create the tab UI */
                     PaneUI ui = PaneUIFactory.createPaneUI(
-                            commandIdentifier.substring(7), /* The SQL command */
-                            dialogUI.getSQLParameterInputs() /* The SQL parameters */);
+                            commandIdentifier.substring(7), /* Tab pane name */
+                            dialogUI.getSQLParameterInputs() /* SQL data */);
                     /* Load data into the new tab */
                     this.loadDataFromSQL(ui);
-                    gui.addTab(ui, "New tab");
+                    gui.addTab(ui, commandIdentifier.substring(7));
                 }
                 /* Something */
 
