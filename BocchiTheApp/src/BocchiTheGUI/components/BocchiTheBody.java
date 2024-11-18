@@ -9,8 +9,6 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import BocchiTheGUI.components.ui.GenerateReportUI;
-
 public class BocchiTheBody extends JPanel {
 
     private JTabbedPane tabbedPane;

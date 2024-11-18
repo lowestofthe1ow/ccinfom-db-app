@@ -499,9 +499,9 @@ DROP PROCEDURE IF EXISTS record_performance_revenue;
 DELIMITER //
 CREATE PROCEDURE record_performance_revenue (
 	IN performance_id INT,
-    IN ticket_price DECIMAL,
+    IN ticket_price DECIMAL(10,2),
     IN tickets_sold INT,
-    IN cut_percent DECIMAL
+    IN cut_percent DECIMAL(2,2)
 )
 BEGIN
 	IF (

@@ -1,9 +1,14 @@
 package BocchiTheGUI.components.ui;
 
-import BocchiTheGUI.components.abs.TableSelectionUI;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import BocchiTheGUI.components.abs.TableSelectionUI;
 
 public class PerformerRevenueTab extends TableSelectionUI {
 

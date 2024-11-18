@@ -1,5 +1,6 @@
 package BocchiTheGUI.components.ui.sub;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,7 @@ public class RecordRevenueUI extends TextFieldsUI {
         params.add(Double.parseDouble(this.formItems.get(0).getText()));
         params.add(this.formItems.get(1).getText());
         // TODO: This isn't working lol
-        params.add(Double.parseDouble(this.formItems.get(2).getText()));
+        params.add(this.formItems.get(2).getText());
         System.out.println(params.get(3));
 
         Object[][] retval = {

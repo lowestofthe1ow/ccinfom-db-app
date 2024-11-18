@@ -1,17 +1,18 @@
 package BocchiTheGUI.components.ui;
 
-import BocchiTheGUI.components.abs.PaneUI;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import javax.swing.BorderFactory;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JFormattedTextField;
+
+import BocchiTheGUI.components.abs.PaneUI;
 import raven.datetime.component.date.DateEvent;
 import raven.datetime.component.date.DatePicker;
 import raven.datetime.component.date.DateSelectionListener;
@@ -34,12 +35,13 @@ public class AddTimeslotUI extends PaneUI {
         JPanel endPanel = createDateTimePickerPanel("End");
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 1, 3, 10));
+        panel.setLayout(new GridLayout(2, 1));
+
         panel.add(startPanel);
         panel.add(endPanel);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        add(panel, BorderLayout.CENTER);
+        this.add(panel);
 
         addButtons("Confirm");
         setButtonActionCommands("button/sql/add_performance_timeslot");

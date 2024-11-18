@@ -1,11 +1,12 @@
 package BocchiTheGUI.components.abs;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -134,6 +135,6 @@ public abstract class PaneUI extends JPanel {
         this.dialogTitle = dialogTitle;
         this.terminatingCommands = new ArrayList<>();
         this.buttons = new ArrayList<>();
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 }
