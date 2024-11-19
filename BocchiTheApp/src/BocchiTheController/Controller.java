@@ -68,6 +68,17 @@ public class Controller {
         return true;
     }
 
+    private void showTab(String tabIdentifier, Object[][] sqlData) {
+        /* Create the tab UI */
+        System.out.println(tabIdentifier);
+        PaneUI ui = PaneUIFactory.createPaneUI(
+                tabIdentifier, /* Tab pane name */
+                sqlData);
+        /* Load data into the new tab */
+        if (this.loadDataFromSQL(ui))
+            gui.addTab(ui, tabIdentifier);
+    }
+
     /**
      * Creates a {@link CommandDialog} and loads in a {@link PaneUI}.
      * 
@@ -94,13 +105,7 @@ public class Controller {
                     parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
                 /* Otherwise, check if it was a report generation button */
                 else if (commandIdentifier.contains("button/report/")) {
-                    /* Create the tab UI */
-                    PaneUI ui = PaneUIFactory.createPaneUI(
-                            commandIdentifier.substring(7), /* Tab pane name */
-                            dialogUI.getSQLParameterInputs() /* SQL data */);
-                    /* Load data into the new tab */
-                    if (this.loadDataFromSQL(ui))
-                        gui.addTab(ui, commandIdentifier.substring(7));
+                    showTab(commandIdentifier.substring(7), dialogUI.getSQLParameterInputs());
                 }
 
                 /* Check if the button command terminates the window */
@@ -281,14 +286,7 @@ public class Controller {
             String commandIdentifier = e.getActionCommand();
             /* TODO: Helper function for this */
             if (commandIdentifier.contains("report/")) {
-                /* Create the tab UI */
-                System.out.println(commandIdentifier);
-                PaneUI ui = PaneUIFactory.createPaneUI(
-                        commandIdentifier, /* Tab pane name */
-                        null);
-                /* Load data into the new tab */
-                if (this.loadDataFromSQL(ui))
-                    gui.addTab(ui, commandIdentifier);
+                showTab(e.getActionCommand(), null);
             } else
                 showDialog(e.getActionCommand(), null);
         });
