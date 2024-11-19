@@ -19,11 +19,11 @@ import BocchiTheGUI.elements.ui.dialog.RentEquipmentUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
+import BocchiTheGUI.elements.ui.dialog.sub.AddStaffDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerMonthUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerUI;
-import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
 import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
 import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
@@ -47,17 +47,19 @@ public final class PaneUIFactory {
         switch (dialogIdentifier) {
             /* Staff menu */
             case "dialog/hire_staff":
-                return new HireStaffUI();
+                return new HireStaffUI("button/next/select_staff_position", null, sqlData);
             case "dialog/hire_staff/select_staff_position":
-                return new SelectStaffPositionUI("button/sql/hire", null, sqlData);
+                return new AddStaffDetailsUI(sqlData);
             case "dialog/remove_staff":
                 return new RemoveStaffUI();
             case "dialog/update_staff_position":
                 return new UpdateStaffPositionUI();
             case "dialog/update_staff_position/select_staff_position":
-                return new SelectStaffPositionUI("button/sql/add_position", "dialog/update_staff_position", sqlData);
-            case "dialog/add_position_type":
-                return new AddPositionTypeUI();
+                return new HireStaffUI("button/sql/add_position", "dialog/update_staff_position", sqlData);
+            case "dialog/hire_staff/add_position_type":
+                return new AddPositionTypeUI("dialog/hire_staff");
+            case "dialog/update_staff_position/select_staff_position/add_position_type":
+                return new AddPositionTypeUI("dialog/update_staff_position");
 
             /* Audition/Performance menu */
             case "dialog/add_performer":

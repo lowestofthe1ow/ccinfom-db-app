@@ -3,13 +3,14 @@ package BocchiTheGUI.elements.ui.dialog;
 import BocchiTheGUI.elements.abstracts.TextFieldsUI;
 
 public class AddPositionTypeUI extends TextFieldsUI {
-    public AddPositionTypeUI() {
+    public AddPositionTypeUI(String root) {
         super("Add position type");
 
         addForms("Position name", "Salary");
         addButtons("Confirm");
         setButtonActionCommands("button/sql/add_position_type");
         addTerminatingCommands("button/sql/add_position_type");
+        setRoot(root);
     }
 
     @Override

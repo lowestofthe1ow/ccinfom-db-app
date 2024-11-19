@@ -1,17 +1,21 @@
-package BocchiTheGUI.elements.ui.dialog;
+package BocchiTheGUI.elements.ui.dialog.sub;
 
 import BocchiTheGUI.elements.abstracts.TextFieldsUI;
 
 /* TODO: What is this for lol */
 @SuppressWarnings("serial")
 
-public class HireStaffUI extends TextFieldsUI {
-    public HireStaffUI() {
-        super("Hire staff");
+public class AddStaffDetailsUI extends TextFieldsUI {
+    Object[][] sqlData;
 
+    public AddStaffDetailsUI(Object[][] sqlData) {
+        super("Hire staff");
+        this.sqlData = sqlData;
         addForms("First name: ", "Last name: ", "Contact number: ");
         addButtons("Confirm");
-        setButtonActionCommands("button/next/select_staff_position");
+        setButtonActionCommands("button/sql/hire");
+        addTerminatingCommands("button/sql/hire");
+        setRoot("dialog/hire_staff");
     }
 
     private String getFirstName() {
@@ -33,9 +37,11 @@ public class HireStaffUI extends TextFieldsUI {
     @Override
     public Object[][] getSQLParameterInputs() {
         Object[][] retval = { {
+
                 getFirstName(),
                 getLastName(),
-                getContactNo()
+                getContactNo(),
+                this.sqlData[0][0]
         } };
         return retval;
     }
