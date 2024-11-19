@@ -120,7 +120,8 @@ public class Controller {
                         else
                             /* Close all dialogs except the "root", then refresh that */
                             gui.closeAllDialogsExcept(rootName, (rootUI) -> {
-                                this.loadDataFromSQL(rootUI);
+                                if (!this.loadDataFromSQL(rootUI))
+                                    gui.closeAllDialogs();
                             });
                     } else {
                         showDialog(dialogIdentifier + commandIdentifier.substring(11),
