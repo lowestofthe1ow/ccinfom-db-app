@@ -21,6 +21,7 @@ import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
+import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerMonthUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
@@ -97,6 +98,8 @@ public final class PaneUIFactory {
             /* Report generation dialogs */
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
+            case "dialog/performer_revenue/select_performer_month":
+                return new SelectPerformerMonthUI(sqlData);
             case "dialog/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueUI();
 

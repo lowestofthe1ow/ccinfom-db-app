@@ -1,3 +1,20 @@
+DROP PROCEDURE IF EXISTS get_months_with_performances_by;
+DELIMITER //
+CREATE PROCEDURE get_months_with_performances_by (
+	IN performer_id INT
+)
+BEGIN
+	SELECT 
+		MONTHNAME(pt.start_timestamp) AS month_on_record,
+        YEAR(pt.start_timestamp) AS year_on_record
+	FROM performance p
+	JOIN performance_timeslot pt
+		ON p.performance_timeslot_id = pt.performance_timeslot_id
+	WHERE p.performance_status = 'COMPLETE' AND p.performer_id = performer_id
+	GROUP BY month_on_record, year_on_record;
+END //
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS get_months_on_record;
 DELIMITER //
 CREATE PROCEDURE get_months_on_record ()

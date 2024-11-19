@@ -30,26 +30,42 @@ public class Controller {
      * loads an empty dataset.
      * 
      * @param dialogUI The UI to load data into
+     * @return {@code true} if the load operation succeeded {@code false} otherwise
      */
-    private void loadDataFromSQL(PaneUI dialogUI) {
+    private boolean loadDataFromSQL(PaneUI dialogUI) {
         if (dialogUI instanceof DataLoadable) {
             DataLoadable loadableUI = (DataLoadable) dialogUI;
-            loadableUI.loadData((sqlIdentifier, sqlParams) -> {
-                /* If there is no SQL command for loading data, return an empty dataset */
-                if (sqlIdentifier == null) {
-                    return new ArrayList<Object[]>();
-                }
 
-                String sqlCommand = ((String) sqlIdentifier).substring(4);
+            try {
+                loadableUI.loadData((sqlIdentifier, sqlParams) -> {
+                    /* If there is no SQL command for loading data, return an empty dataset */
+                    if (sqlIdentifier == null) {
+                        return new ArrayList<Object[]>();
+                    }
 
-                /* Check whether to use the passed parameters */
-                if (sqlParams == null) {
-                    return this.executeProcedure(sqlCommand);
-                } else {
-                    return this.executeProcedure(sqlCommand, sqlParams);
-                }
-            });
+                    String sqlCommand = ((String) sqlIdentifier).substring(4);
+                    List<Object[]> data;
+
+                    /* Check whether to use the passed parameters */
+                    if (sqlParams == null) {
+                        data = this.executeProcedure(sqlCommand);
+                    } else {
+                        data = this.executeProcedure(sqlCommand, sqlParams);
+                    }
+
+                    if (data.size() == 0) {
+                        throw new IllegalArgumentException("No data in the database exists for this query");
+                    }
+
+                    return data;
+                });
+            } catch (Exception e) {
+                showMessageDialog(null, e.getMessage(), "Database error",
+                        JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         }
+        return true;
     }
 
     /**
@@ -66,7 +82,8 @@ public class Controller {
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, dialogIdentifier, () -> {
             /* Load data into the UI if it requires it */
-            this.loadDataFromSQL(dialogUI);
+            if (!this.loadDataFromSQL(dialogUI))
+                return;
 
             /* Update dialog window button listeners */
             dialogUI.addButtonListener((e) -> {
@@ -82,12 +99,10 @@ public class Controller {
                             commandIdentifier.substring(7), /* Tab pane name */
                             dialogUI.getSQLParameterInputs() /* SQL data */);
                     /* Load data into the new tab */
-                    this.loadDataFromSQL(ui);
-
-                    gui.addTab(ui, commandIdentifier.substring(7));
+                    if (this.loadDataFromSQL(ui))
+                        gui.addTab(ui, commandIdentifier.substring(7));
 
                 }
-                /* Something */
 
                 /* Check if the button command terminates the window */
                 if (dialogUI.isTerminatingCommand(commandIdentifier)) {
@@ -108,8 +123,8 @@ public class Controller {
                                 dialogUI.getSQLParameterInputs());
                     }
                 } else {
-                    System.out.println("Attempting to load data!");
-                    this.loadDataFromSQL(dialogUI);
+                    if (!this.loadDataFromSQL(dialogUI))
+                        return;
                 }
             });
 
