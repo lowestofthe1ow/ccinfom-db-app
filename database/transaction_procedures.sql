@@ -800,7 +800,7 @@ BEGIN
     JOIN 
         equipment e ON er.equipment_id = e.equipment_id
     WHERE 
-        AND MONTHNAME(er.start_date) = month_name
+        MONTHNAME(er.start_date) = month_name
         AND YEAR(er.start_date) = year
 		AND er.payment_status = 'PAID'
     GROUP BY 
@@ -871,32 +871,31 @@ CREATE PROCEDURE get_staff_assignments(
     IN year INT
 )
 BEGIN
-    SELECT 
-        s.staff_id AS StaffID,
-        CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
-        COUNT(DISTINCT(sa.performance_id)) AS assignments_completed
-    FROM 
-        staff s
-    JOIN 
-        staff_position sp ON s.staff_id = sp.staff_id
-    LEFT JOIN 
-        staff_assignment sa ON s.staff_id = sa.staff_id 
-    JOIN 
-        performance p ON p.performance_id = sa.performance_id
-    JOIN 
-        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
-        AND MONTHNAME(pts.start_timestamp) = month_name
-        AND YEAR(pts.end_timestamp) = year
-        AND p.performance_status = 'COMPLETE'
-    GROUP BY 
-        s.staff_id, staff_name
-    ORDER BY 
-        assignments_completed DESC;
+    SELECT
+    sp.staff_id,
+    CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
+    s.contact_no,
+    SUM(pt.salary)
+	FROM staff s
+	JOIN staff_position sp
+		ON s.staff_id = sp.staff_id
+	JOIN staff_assignment sa
+		ON s.staff_id = sa.staff_id
+	JOIN performance p
+		ON sa.performance_id = p.performance_id
+	JOIN performance_timeslot ps
+		ON p.performance_timeslot_id = ps.performance_timeslot_id
+	JOIN position_type pt
+		ON sp.position_id = pt.position_id
+	WHERE ((sp.end_date IS NULL AND DATE(ps.start_timestamp) >= sp.start_date)
+		OR (DATE(ps.start_timestamp) BETWEEN sp.start_date AND sp.end_date))
+		AND YEAR(ps.start_timestamp) = year
+		AND MONTHNAME(ps.start_timestamp) = month_name
+	GROUP BY sp.staff_id
+	ORDER BY staff_id;
 END //
 
 DELIMITER ;
-
-
 
 DROP PROCEDURE IF EXISTS change_equipment_status;
 DELIMITER //
@@ -944,4 +943,3 @@ BEGIN
 END //
 
 DELIMITER ;
-
