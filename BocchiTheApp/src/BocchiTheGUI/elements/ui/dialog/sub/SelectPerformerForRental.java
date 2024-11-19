@@ -18,16 +18,14 @@ import raven.datetime.component.date.DateEvent;
 import raven.datetime.component.date.DatePicker;
 import raven.datetime.component.date.DateSelectionListener;
 
-public class SelectPerformerUI extends TableSelectionUI {
+public class SelectPerformerForRental extends TableSelectionUI {
     private Object[][] sqlData;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public SelectPerformerUI(String actionCommand, String rootName, Object[][] sqlData) {
+    public SelectPerformerForRental(Object[][] sqlData) {
         super("Select performer", "ID", "Performer name", "Contact person", "Contact no.");
-
         this.setLoadDataCommand("sql/get_performers");
-
         this.addSearchBoxFilter("Filter by performer name", 1);
 
         JPanel startDatePanel = createDatePickerPanel("Start");
@@ -36,9 +34,9 @@ public class SelectPerformerUI extends TableSelectionUI {
         this.add(endDatePanel);
 
         this.addButtons("Confirm");
-        this.setButtonActionCommands(actionCommand);
-        this.addTerminatingCommands(actionCommand);
-        this.setRoot(rootName);
+        this.setButtonActionCommands("button/sql/rent_equipment");
+        this.addTerminatingCommands("button/sql/rent_equipment");
+        this.setRoot("dialog/rent_equipment");
         this.sqlData = sqlData;
     }
 
@@ -80,10 +78,10 @@ public class SelectPerformerUI extends TableSelectionUI {
         params.add(endDate.toString());
 
         Object[][] retval = {
-            params.toArray()
+                params.toArray()
         };
 
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
             System.out.println(params.get(i));
 
         return retval;

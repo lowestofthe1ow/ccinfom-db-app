@@ -1,18 +1,6 @@
 package BocchiTheGUI.elements.ui.dialog;
 
-import java.awt.GridLayout;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.function.BiFunction;
-
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
 import BocchiTheGUI.elements.abstracts.TableSelectionUI;
-import raven.datetime.component.date.DatePicker;
 
 public class PerformerRevenueUI extends TableSelectionUI {
 

@@ -168,6 +168,16 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
         filterTable();
     }
 
+    @Override
+    public boolean allowEmptyDatasets() {
+        return false;
+    }
+
+    @Override
+    public String getLoadFailureMessage() {
+        return "No corresponding data in the database exists for this action";
+    }
+
     /**
      * {@inheritDoc} Each query represents a row included in the table selection
      * (which may include multiple rows).

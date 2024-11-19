@@ -22,9 +22,10 @@ import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerMonthUI;
-import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerUI;
+import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerForRental;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
+import BocchiTheGUI.elements.ui.dialog.sub.SelectUpdatedStaffPositionUI;
 import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
 import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
 import BocchiTheGUI.elements.ui.tab.ScheduleTab;
@@ -49,13 +50,13 @@ public final class PaneUIFactory {
             case "dialog/hire_staff":
                 return new HireStaffUI();
             case "dialog/hire_staff/select_staff_position":
-                return new SelectStaffPositionUI("button/sql/hire", null, sqlData);
+                return new SelectStaffPositionUI(sqlData);
             case "dialog/remove_staff":
                 return new RemoveStaffUI();
             case "dialog/update_staff_position":
                 return new UpdateStaffPositionUI();
             case "dialog/update_staff_position/select_staff_position":
-                return new SelectStaffPositionUI("button/sql/add_position", "dialog/update_staff_position", sqlData);
+                return new SelectUpdatedStaffPositionUI(sqlData);
             case "dialog/add_position_type":
                 return new AddPositionTypeUI();
 
@@ -87,7 +88,7 @@ public final class PaneUIFactory {
             case "dialog/rent_equipment":
                 return new RentEquipmentUI();
             case "dialog/rent_equipment/select_performer":
-                return new SelectPerformerUI("button/sql/rent_equipment", "dialog/rent_equipment", sqlData);
+                return new SelectPerformerForRental(sqlData);
             case "dialog/manage_rentals":
                 return new ManageRentalsUI();
             case "dialog/pay_rental":

@@ -6,7 +6,6 @@ import java.util.function.BiFunction;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -51,5 +50,15 @@ public class MonthlyLivehouseRevenueUI extends PaneUI implements DataLoadable {
         /* Refresh the month selector */
         monthSelector.revalidate();
         monthSelector.repaint();
+    }
+
+    @Override
+    public boolean allowEmptyDatasets() {
+        return false;
+    }
+
+    @Override
+    public String getLoadFailureMessage() {
+        return "There are no recorded performances in the database";
     }
 }

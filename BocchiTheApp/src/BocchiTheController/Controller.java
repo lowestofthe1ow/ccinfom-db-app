@@ -35,7 +35,6 @@ public class Controller {
     private boolean loadDataFromSQL(PaneUI dialogUI) {
         if (dialogUI instanceof DataLoadable) {
             DataLoadable loadableUI = (DataLoadable) dialogUI;
-
             try {
                 loadableUI.loadData((sqlIdentifier, sqlParams) -> {
                     /* If there is no SQL command for loading data, return an empty dataset */
@@ -53,8 +52,9 @@ public class Controller {
                         data = this.executeProcedure(sqlCommand, sqlParams);
                     }
 
-                    if (data.size() == 0) {
-                        throw new IllegalArgumentException("No data in the database exists for this query");
+                    /* Throw a checked exception if attempting to load an empty dataset */
+                    if (data.size() == 0 && !loadableUI.allowEmptyDatasets()) {
+                        throw new IllegalArgumentException(loadableUI.getLoadFailureMessage());
                     }
 
                     return data;

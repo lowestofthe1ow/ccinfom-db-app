@@ -100,4 +100,14 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
     public Object[][] getSQLParameterInputs() {
         return null;
     }
+
+    @Override
+    public boolean allowEmptyDatasets() {
+        return false;
+    }
+
+    @Override
+    public String getLoadFailureMessage() {
+        return "There are no recorded performances by this performer in the database";
+    }
 }
