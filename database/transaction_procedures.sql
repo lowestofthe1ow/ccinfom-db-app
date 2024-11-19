@@ -217,7 +217,7 @@ BEGIN
 		ON er.equipment_id = e.equipment_id
     JOIN performer p
 		ON er.performer_id = p.performer_id
-	WHERE er.payment_status = 'NOT_PAID';
+	WHERE er.payment_status = 'NOT_PAID' AND er.equipment_status <> 'PENDING';
 END //
 DELIMITER ;
 
