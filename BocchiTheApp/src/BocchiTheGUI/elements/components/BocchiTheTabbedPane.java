@@ -111,7 +111,7 @@ public class BocchiTheTabbedPane extends JTabbedPane {
         this.newTabMenu = createNewTabMenu(
                 "Daily performer sales", "dialog/performer_revenue",
                 "Monthly livehouse sales", "dialog/monthly_livehouse_revenue",
-                "Monthly rental sales", null,
+                "Monthly rental sales", "dialog/monthly_rental_revenue",
                 "Weekly livehouse schedule", "report/livehouse_schedule",
                 "Staff salary report", "dialog/staff_salary");
 

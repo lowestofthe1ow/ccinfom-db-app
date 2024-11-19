@@ -16,6 +16,8 @@ import BocchiTheGUI.elements.ui.dialog.PayRentalUI;
 import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.RentEquipmentUI;
+import BocchiTheGUI.elements.ui.dialog.RentalSalesUI;
+import BocchiTheGUI.elements.ui.dialog.UpdateEquipmentStatusUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.StaffSalaryUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
@@ -27,8 +29,10 @@ import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerForRental;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectUpdatedStaffPositionUI;
+import BocchiTheGUI.elements.ui.dialog.sub.UpdateEquipmentStatusSub;
 import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
 import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
+import BocchiTheGUI.elements.ui.tab.RentalSalesTab;
 import BocchiTheGUI.elements.ui.tab.ScheduleTab;
 import BocchiTheGUI.elements.ui.tab.StaffSalaryTab;
 
@@ -97,7 +101,12 @@ public final class PaneUIFactory {
                 return new PayRentalUI();
             case "dialog/cancel_rental":
                 return new CancelRentalUI();
-
+            case "dialog/update_equipment_status":
+                return new UpdateEquipmentStatusUI();
+            case "dialog/update_equipment_status/change_equipment_status":
+                return new UpdateEquipmentStatusSub(sqlData);
+                
+                
             /* Report generation dialogs */
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
@@ -107,6 +116,8 @@ public final class PaneUIFactory {
                 return new MonthlyLivehouseRevenueUI();
             case "dialog/staff_salary":
                 return new StaffSalaryUI();
+            case "dialog/monthly_rental_sales":
+            	return new RentalSalesUI();
 
             /* Report tabs */
             case "report/performer_report_month":
@@ -117,6 +128,8 @@ public final class PaneUIFactory {
                 return new ScheduleTab(sqlData);
             case "report/staff_salary":
                 return new StaffSalaryTab(sqlData);
+            case "report/monthly_rental_sales":
+            	return new RentalSalesTab(sqlData);
         }
         return null;
     }

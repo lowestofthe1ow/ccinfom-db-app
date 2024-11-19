@@ -786,7 +786,9 @@ DROP PROCEDURE IF  EXISTS equipment_rental_report;
 DELIMITER //
 
 CREATE PROCEDURE equipment_rental_report(
-    IN report_month DATE
+    IN performer_id INT,
+    IN month_name VARCHAR(255),
+    IN year INT
 )
 BEGIN
     SELECT 
@@ -798,7 +800,8 @@ BEGIN
     JOIN 
         equipment e ON er.equipment_id = e.equipment_id
     WHERE 
-        DATE_FORMAT(er.start_date, '%Y-%m') = DATE_FORMAT(report_month, '%Y-%m')
+        AND MONTHNAME(er.start_date) = month_name
+        AND YEAR(er.start_date) = year
 		AND er.payment_status = 'PAID'
     GROUP BY 
         e.equipment_name
@@ -889,6 +892,55 @@ BEGIN
         s.staff_id, staff_name
     ORDER BY 
         assignments_completed DESC;
+END //
+
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS change_equipment_status;
+DELIMITER //
+CREATE PROCEDURE change_equipment_status(
+    IN equipment_id INT,
+    IN new_status VARCHAR(10)
+)
+BEGIN
+    DECLARE current_status VARCHAR(10);
+    DECLARE cancel_period INT;
+
+    SELECT e.equipment_status INTO current_status
+    FROM equipment e
+    WHERE e.equipment_id = equipment_id;
+
+    IF current_status = new_status THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'The equipment is already in the specified status.';
+    END IF;
+
+    IF new_status = 'MIN_DMG' THEN
+        SET cancel_period = 7;
+    ELSEIF new_status = 'MAJ_DMG' THEN
+        SET cancel_period = 14;
+    ELSEIF new_status = 'MISSING' THEN
+        SET cancel_period = 0; 
+    ELSE
+        SET cancel_period = NULL; 
+    END IF;
+
+    IF cancel_period IS NOT NULL THEN
+        UPDATE equipment_rental er
+        SET er.payment_status = 'CANCELLED'
+        WHERE er.equipment_id = equipment_id
+        AND (
+            cancel_period = 0 OR 
+            er.start_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL cancel_period DAY)
+        );
+        
+    END IF;
+
+	UPDATE equipment e
+	SET e.equipment_status = new_status
+	WHERE e.equipment_id = equipment_id;
 END //
 
 DELIMITER ;
