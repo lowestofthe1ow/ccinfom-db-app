@@ -2,7 +2,10 @@ package BocchiTheGUI.elements.ui.dialog;
 
 import java.awt.GridLayout;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.function.BiFunction;
 
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,42 +15,56 @@ import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 import raven.datetime.component.date.DatePicker;
 
 public class PerformerRevenueUI extends TableSelectionUI {
-    private DatePicker datePicker;
 
+    private JComboBox<String> monthSelector;
+    
     public PerformerRevenueUI() {
         super("Generate performer revenue summary", "ID", "Performer", "Contact person", "Contact number");
-
+        
         this.setLoadDataCommand("sql/get_performers");
 
         this.addSearchBoxFilter("Filter by performer name", 1);
         this.addSearchBoxFilter("Filter by contact person name", 2);
 
-        // TODO: Should this be in a new dialog?
-        datePicker = new DatePicker();
-        JFormattedTextField dateEditor = new JFormattedTextField();
-        datePicker.setEditor(dateEditor);
+        JPanel monthSelectorPanel = new JPanel();
+        monthSelectorPanel.setLayout(new GridLayout(1, 2));
+        monthSelectorPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
+        this.monthSelector = new JComboBox<>();
 
-        JPanel dateEditorPanel = new JPanel();
-        dateEditorPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
-        dateEditorPanel.setLayout(new GridLayout(2, 1));
+        monthSelectorPanel.add(new JLabel("Select month"));
+        monthSelectorPanel.add(monthSelector);
 
-        dateEditorPanel.add(new JLabel("Select a date"));
-        dateEditorPanel.add(dateEditor);
-        this.add(dateEditorPanel);
+        this.add(monthSelectorPanel);
 
         this.addButtons("Confirm");
-        this.setButtonActionCommands("button/report/performer_revenue");
-        this.addTerminatingCommands("button/report/performer_revenue");
+        this.setButtonActionCommands("button/report/performer_report_month");
+        this.addTerminatingCommands("button/report/performer_report_month");
     }
 
     @Override
     public Object[][] getSQLParameterInputs() {
         Object[][] retval = {
-                {
-                        super.getSQLParameterInputs()[0][0],
-                        Timestamp.valueOf(datePicker.getSelectedDate().atStartOfDay())
-                }
+            {
+                (Integer) super.getSQLParameterInputs()[0][0],
+                ((String) this.monthSelector.getSelectedItem()).split(" ")[0],
+                ((String) this.monthSelector.getSelectedItem()).split(" ")[1]  
+            }
         };
         return retval;
+    }
+    
+    @Override
+    public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
+    	
+    	super.loadData(source);
+        List<Object[]> data = source.apply("sql/get_months_on_record", null);
+
+        data.forEach((row) -> {
+            monthSelector.addItem((String) row[0] + " " + (Integer) row[1]);
+        });
+
+        /* Refresh the month selector */
+        monthSelector.revalidate();
+        monthSelector.repaint();
     }
 }

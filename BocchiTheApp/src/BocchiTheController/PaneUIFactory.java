@@ -101,7 +101,7 @@ public final class PaneUIFactory {
                 return new MonthlyLivehouseRevenueUI();
 
             /* Report tabs */
-            case "report/performer_revenue":
+            case "report/performer_report_month":
                 return new PerformerRevenueTab(sqlData);
             case "report/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueTab(sqlData);
