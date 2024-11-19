@@ -3,6 +3,7 @@ package BocchiTheGUI.elements.ui.dialog.sub;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 
@@ -35,5 +36,19 @@ public class SelectStaffPositionUI extends TableSelectionUI {
         };
 
         return retval;
+    }
+
+    /*
+     * TODO: We allow empty data here because we're planning to add Add Positions to
+     * this dialog
+     */
+    @Override
+    public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
+        /* We're allowing this component to load empty data */
+        try {
+            super.loadData(source);
+        } catch (Exception e) {
+            /* TODO: Put a warning in here idk */
+        }
     }
 }

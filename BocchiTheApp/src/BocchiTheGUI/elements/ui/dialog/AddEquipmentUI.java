@@ -1,5 +1,8 @@
 package BocchiTheGUI.elements.ui.dialog;
 
+import java.util.List;
+import java.util.function.BiFunction;
+
 import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 
 public class AddEquipmentUI extends TableSelectionUI {
@@ -14,5 +17,15 @@ public class AddEquipmentUI extends TableSelectionUI {
         this.setButtonActionCommands(
                 "button/next/add_equipment_details",
                 "button/next/add_equipment_type");
+    }
+
+    @Override
+    public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
+        /* We're allowing this component to load empty data */
+        try {
+            super.loadData(source);
+        } catch (Exception e) {
+            /* TODO: Put a warning in here idk */
+        }
     }
 }
