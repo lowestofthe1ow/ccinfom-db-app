@@ -47,7 +47,8 @@ public class RentalSalesUI extends PaneUI implements DataLoadable  {
 
 	@Override
 	public Object[][] getSQLParameterInputs() {
-		Object[][] retval = { ((String) this.monthSelector.getSelectedItem()).split(" ")};
+		Object[][] retval = { 
+				((String) this.monthSelector.getSelectedItem()).split(" ")};
         return retval;
 	}
 

@@ -23,10 +23,10 @@ INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('2', '16', '7', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('3', '8', '6', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('4', '13', '5', '5000.00', 'COMPLETE');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('5', '2', '25', '5000.00', 'COMPLETE');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('6', '5', '17', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('5', '2', '25', '5000.00', 'COMPLETE'); --
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('6', '5', '17', '5000.00', 'COMPLETE'); --
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('7', '11', '21', '5000.00', 'COMPLETE');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('8', '1', '33', '5000.00', 'COMPLETE');
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('8', '1', '33', '5000.00', 'COMPLETE'); -- mika misono
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('9', '17', '2', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('10', '4', '32', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('11', '12', '35', '5000.00', 'PENDING');
@@ -91,8 +91,8 @@ INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`)
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('6', '1', '2024-10-01', '2024-10-31');
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('7', '1', '2024-10-01', '2024-10-31');
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('8', '1', '2024-10-01', NULL);
-INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('9', '1', '2024-10-01', '2024-10-31');
-INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('9', '2', '2024-11-01', NULL);
+INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('9', '1', '2024-11-01', '2024-11-15');
+INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('9', '2', '2024-11-16', NULL);
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('10', '1', '2024-11-01', NULL);
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('11', '1', '2024-11-01', NULL);
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('12', '1', '2024-11-01', NULL);

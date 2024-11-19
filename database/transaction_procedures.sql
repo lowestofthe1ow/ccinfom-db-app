@@ -782,11 +782,10 @@ DELIMITER ;
 
 
 -- Rental report per month
-DROP PROCEDURE IF  EXISTS equipment_rental_report;
+DROP PROCEDURE IF EXISTS equipment_rental_report;
 DELIMITER //
 
 CREATE PROCEDURE equipment_rental_report(
-    IN performer_id INT,
     IN month_name VARCHAR(255),
     IN year INT
 )
@@ -800,7 +799,7 @@ BEGIN
     JOIN 
         equipment e ON er.equipment_id = e.equipment_id
     WHERE 
-        AND MONTHNAME(er.start_date) = month_name
+        MONTHNAME(er.start_date) = month_name
         AND YEAR(er.start_date) = year
 		AND er.payment_status = 'PAID'
     GROUP BY 
@@ -861,41 +860,7 @@ END //
 DELIMITER ;
 
 
--- get staff assignments
-
-
-DROP PROCEDURE IF EXISTS get_staff_assignments;
-DELIMITER //
-
-CREATE PROCEDURE get_staff_assignments(
-    IN target_month DATE
-)
-BEGIN
-    SELECT 
-        s.staff_id AS StaffID,
-        CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
-        COUNT(DISTINCT(sa.performance_id)) AS assignments_completed
-    FROM 
-        staff s
-    JOIN 
-        staff_position sp ON s.staff_id = sp.staff_id
-    LEFT JOIN 
-        staff_assignment sa ON s.staff_id = sa.staff_id 
-    JOIN 
-        performance p ON p.performance_id = sa.performance_id
-    JOIN 
-        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
-        AND MONTH(pts.start_timestamp) = MONTH(target_month)
-        AND YEAR(pts.start_timestamp) = YEAR(target_month)
-    GROUP BY 
-        s.staff_id, staff_name
-    ORDER BY 
-        assignments_completed DESC;
-END //
-
-DELIMITER ;
-
-
+-- Change equipment status 
 
 DROP PROCEDURE IF EXISTS change_equipment_status;
 DELIMITER //
