@@ -6,6 +6,7 @@ import BocchiTheGUI.elements.ui.dialog.AddEquipmentUI;
 import BocchiTheGUI.elements.ui.dialog.AddPerformerUI;
 import BocchiTheGUI.elements.ui.dialog.AddPositionTypeUI;
 import BocchiTheGUI.elements.ui.dialog.AddTimeslotUI;
+import BocchiTheGUI.elements.ui.dialog.AssignStaffUI;
 import BocchiTheGUI.elements.ui.dialog.CancelRentalUI;
 import BocchiTheGUI.elements.ui.dialog.HireStaffUI;
 import BocchiTheGUI.elements.ui.dialog.ManageAuditionsUI;
@@ -22,14 +23,17 @@ import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.StaffSalaryUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
+import BocchiTheGUI.elements.ui.dialog.sub.AssignToPerformanceUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
-import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerMonthUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerForRental;
+import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerMonthUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectTimeslotUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectUpdatedStaffPositionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.UpdateEquipmentStatusSub;
+import BocchiTheGUI.elements.ui.dialog.sub.ViewAssignedPerformancesUI;
+import BocchiTheGUI.elements.ui.dialog.sub.ViewAssignedStaffUI;
 import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
 import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
 import BocchiTheGUI.elements.ui.tab.RentalSalesTab;
@@ -83,6 +87,14 @@ public final class PaneUIFactory {
                 return new ManagePerformancesUI();
             case "dialog/manage_performances/record_revenue":
                 return new RecordRevenueUI(sqlData);
+            case "dialog/assign_staff":
+                return new AssignStaffUI();
+            case "dialog/assign_staff/assign_to_performance":
+                return new AssignToPerformanceUI(sqlData);
+            case "dialog/assign_staff/assign_to_performance/view_assigned_performances":
+                return new ViewAssignedPerformancesUI(sqlData);
+            case "dialog/assign_staff/view_assigned_staff":
+                return new ViewAssignedStaffUI(sqlData);
 
             /* Equipment menu */
             case "dialog/add_equipment":
@@ -105,8 +117,7 @@ public final class PaneUIFactory {
                 return new UpdateEquipmentStatusUI();
             case "dialog/update_equipment_status/change_equipment_status":
                 return new UpdateEquipmentStatusSub(sqlData);
-                
-                
+
             /* Report generation dialogs */
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
@@ -117,7 +128,7 @@ public final class PaneUIFactory {
             case "dialog/staff_salary":
                 return new StaffSalaryUI();
             case "dialog/monthly_rental_sales":
-            	return new RentalSalesUI();
+                return new RentalSalesUI();
 
             /* Report tabs */
             case "report/performer_report_month":
@@ -129,7 +140,7 @@ public final class PaneUIFactory {
             case "report/staff_salary":
                 return new StaffSalaryTab(sqlData);
             case "report/monthly_rental_sales":
-            	return new RentalSalesTab(sqlData);
+                return new RentalSalesTab(sqlData);
         }
         return null;
     }

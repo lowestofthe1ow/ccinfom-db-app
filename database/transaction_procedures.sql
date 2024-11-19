@@ -224,6 +224,21 @@ BEGIN
 END //
 DELIMITER ;
 
+
+-- Fetch undamaged equipment data
+
+DROP PROCEDURE IF EXISTS get_equipment;
+DELIMITER //
+CREATE PROCEDURE get_equipment()
+BEGIN
+	SELECT e.equipment_id, e.equipment_name, et.equipment_type_name, e.equipment_status
+    FROM equipment e
+    JOIN equipment_type et
+		ON e.equipment_type_id = et.equipment_type_id;
+   
+END //
+DELIMITER ;
+
 -- Fetch equipment rental data
 
 DROP PROCEDURE IF EXISTS get_equipment_rentals;
@@ -869,7 +884,7 @@ BEGIN
     WHERE 
         MONTHNAME(er.start_date) = month_name
         AND YEAR(er.start_date) = year
-		AND er.payment_status = 'PAID'
+		-- AND er.payment_status = 'PAID'
     GROUP BY 
         e.equipment_name
     ORDER BY 
