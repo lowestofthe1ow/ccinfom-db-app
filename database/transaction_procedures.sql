@@ -860,12 +860,12 @@ DELIMITER ;
 
 -- get staff assignments
 
-
 DROP PROCEDURE IF EXISTS get_staff_assignments;
 DELIMITER //
 
 CREATE PROCEDURE get_staff_assignments(
-    IN target_month DATE
+    IN month_name VARCHAR(255),
+    IN year INT
 )
 BEGIN
     SELECT 
@@ -882,8 +882,9 @@ BEGIN
         performance p ON p.performance_id = sa.performance_id
     JOIN 
         performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
-        AND MONTH(pts.start_timestamp) = MONTH(target_month)
-        AND YEAR(pts.start_timestamp) = YEAR(target_month)
+        AND MONTHNAME(pts.start_timestamp) = month_name
+        AND YEAR(pts.end_timestamp) = year
+        AND p.performance_status = 'COMPLETE'
     GROUP BY 
         s.staff_id, staff_name
     ORDER BY 

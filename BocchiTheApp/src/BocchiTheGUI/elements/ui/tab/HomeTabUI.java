@@ -28,7 +28,7 @@ public class HomeTabUI extends PaneUI {
 				"dialog/monthly_livehouse_revenue",
 				"tab/rental_sales",
 				"report/livehouse_schedule",
-				"tab/staff_salary");
+				"dialog/staff_salary");
 
 		this.setPreferredSize(new Dimension(400, 150));
 		this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));

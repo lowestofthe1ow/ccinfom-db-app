@@ -17,6 +17,7 @@ import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.RentEquipmentUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
+import BocchiTheGUI.elements.ui.dialog.StaffSalaryUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
@@ -29,6 +30,7 @@ import BocchiTheGUI.elements.ui.dialog.sub.SelectUpdatedStaffPositionUI;
 import BocchiTheGUI.elements.ui.tab.MonthlyLivehouseRevenueTab;
 import BocchiTheGUI.elements.ui.tab.PerformerRevenueTab;
 import BocchiTheGUI.elements.ui.tab.ScheduleTab;
+import BocchiTheGUI.elements.ui.tab.StaffSalaryTab;
 
 public final class PaneUIFactory {
     /**
@@ -103,6 +105,8 @@ public final class PaneUIFactory {
                 return new SelectPerformerMonthUI(sqlData);
             case "dialog/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueUI();
+            case "dialog/staff_salary":
+                return new StaffSalaryUI();
 
             /* Report tabs */
             case "report/performer_report_month":
@@ -111,6 +115,8 @@ public final class PaneUIFactory {
                 return new MonthlyLivehouseRevenueTab(sqlData);
             case "report/livehouse_schedule":
                 return new ScheduleTab(sqlData);
+            case "report/staff_salary":
+                return new StaffSalaryTab(sqlData);
         }
         return null;
     }
