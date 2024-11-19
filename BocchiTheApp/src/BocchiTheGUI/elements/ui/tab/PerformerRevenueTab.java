@@ -84,7 +84,7 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
     @Override
     public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
         /* Fetch data from Controller using data from previous dialog window */
-        List<Object[]> data = source.apply("sql/performer_report_day", sqlData[0]);
+        List<Object[]> data = source.apply("sql/performer_report_month", sqlData[0]);
 
         for (Object[] row : data) {
             for (Object item : row) {
