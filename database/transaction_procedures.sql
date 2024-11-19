@@ -1,3 +1,4 @@
+
 DROP PROCEDURE IF EXISTS get_months_with_performances_by;
 DELIMITER //
 CREATE PROCEDURE get_months_with_performances_by (
@@ -61,6 +62,25 @@ END //
 DELIMITER ;
 
 -- Fetch performance data
+
+DROP PROCEDURE IF EXISTS get_pending_performances;
+DELIMITER //
+CREATE PROCEDURE get_pending_performances ()
+BEGIN
+	SELECT 
+		p.performance_id,
+		pr.performer_name,
+		pt.start_timestamp,
+        p.performance_status
+	FROM performance p
+	JOIN performance_timeslot pt
+	ON p.performance_timeslot_id = pt.performance_timeslot_id
+	JOIN performer pr
+	ON p.performer_id = pr.performer_id
+    WHERE p.performance_status = 'PENDING'
+    ORDER BY pt.start_timestamp DESC;
+END //
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS get_performances;
 DELIMITER //
@@ -585,7 +605,53 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS view_assigned_performances;
+DELIMITER //
+CREATE PROCEDURE view_assigned_performances (
+    IN staff_id INT
+)
+BEGIN
+	SELECT 
+		p.performance_id,
+		pr.performer_name,
+		pt.start_timestamp,
+        p.performance_status
+	FROM performance p
+	JOIN performance_timeslot pt
+	ON p.performance_timeslot_id = pt.performance_timeslot_id
+	JOIN performer pr
+	ON p.performer_id = pr.performer_id
+    JOIN staff_assignment sa
+    ON sa.performance_id = p.performance_id
+    WHERE sa.staff_id = staff_id
+    ORDER BY pt.start_timestamp DESC;
+END //
+DELIMITER ;
+
 -- Assigning staff to performance
+
+DROP PROCEDURE IF EXISTS view_assigned_staff;
+DELIMITER //
+CREATE PROCEDURE view_assigned_staff (
+    IN performance_id INT
+)
+BEGIN
+	SELECT s.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, IFNULL(pt.position_name, 'N/A'), IFNULL(pt.salary, 'N/A')
+	FROM staff s
+    JOIN staff_assignment sa
+    ON sa.staff_id = s.staff_id
+	LEFT JOIN staff_position sp
+	ON s.staff_id = sp.staff_id
+    AND sp.start_date = (
+		SELECT MAX(start_date)
+        FROM staff_position sp2
+		WHERE sp.staff_id = sp2.staff_id
+	) AND sp.end_date IS NULL
+    LEFT JOIN position_type pt
+    ON sp.position_id = pt.position_id
+    WHERE sa.performance_id = performance_id;
+END //
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS assign_staff;
 DELIMITER //
@@ -600,6 +666,8 @@ BEGIN
         WHERE p.performance_id = performance_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
+	ELSEIF staff_id IN (SELECT sa.staff_id FROM staff_assignment sa WHERE sa.performance_id = performance_id) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performer is already assigned to this performance';
 	ELSE
 		INSERT INTO staff_assignment (`staff_id`, `performance_id`)
 			VALUES (staff_id, performance_id);
@@ -782,11 +850,10 @@ DELIMITER ;
 
 
 -- Rental report per month
-DROP PROCEDURE IF  EXISTS equipment_rental_report;
+DROP PROCEDURE IF EXISTS equipment_rental_report;
 DELIMITER //
 
 CREATE PROCEDURE equipment_rental_report(
-    IN performer_id INT,
     IN month_name VARCHAR(255),
     IN year INT
 )
@@ -861,41 +928,7 @@ END //
 DELIMITER ;
 
 
--- get staff assignments
-
-DROP PROCEDURE IF EXISTS get_staff_assignments;
-DELIMITER //
-
-CREATE PROCEDURE get_staff_assignments(
-    IN month_name VARCHAR(255),
-    IN year INT
-)
-BEGIN
-    SELECT
-    sp.staff_id,
-    CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
-    s.contact_no,
-    SUM(pt.salary)
-	FROM staff s
-	JOIN staff_position sp
-		ON s.staff_id = sp.staff_id
-	JOIN staff_assignment sa
-		ON s.staff_id = sa.staff_id
-	JOIN performance p
-		ON sa.performance_id = p.performance_id
-	JOIN performance_timeslot ps
-		ON p.performance_timeslot_id = ps.performance_timeslot_id
-	JOIN position_type pt
-		ON sp.position_id = pt.position_id
-	WHERE ((sp.end_date IS NULL AND DATE(ps.start_timestamp) >= sp.start_date)
-		OR (DATE(ps.start_timestamp) BETWEEN sp.start_date AND sp.end_date))
-		AND YEAR(ps.start_timestamp) = year
-		AND MONTHNAME(ps.start_timestamp) = month_name
-	GROUP BY sp.staff_id
-	ORDER BY staff_id;
-END //
-
-DELIMITER ;
+-- Change equipment status 
 
 DROP PROCEDURE IF EXISTS change_equipment_status;
 DELIMITER //
@@ -942,4 +975,38 @@ BEGIN
 	WHERE e.equipment_id = equipment_id;
 END //
 
+DELIMITER ;
+
+-- Change equipment status 
+
+DROP PROCEDURE IF EXISTS get_staff_assignments;
+DELIMITER //
+CREATE PROCEDURE get_staff_assignments (
+    IN month_name VARCHAR(255),
+    IN year INT
+)
+BEGIN
+	SELECT
+    sp.staff_id,
+    CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
+    s.contact_no,
+    SUM(pt.salary)
+	FROM staff s
+	JOIN staff_position sp
+		ON s.staff_id = sp.staff_id
+	JOIN staff_assignment sa
+		ON s.staff_id = sa.staff_id
+	JOIN performance p
+		ON sa.performance_id = p.performance_id
+	JOIN performance_timeslot ps
+		ON p.performance_timeslot_id = ps.performance_timeslot_id
+	JOIN position_type pt
+		ON sp.position_id = pt.position_id
+	WHERE ((sp.end_date IS NULL AND DATE(ps.start_timestamp) >= sp.start_date)
+		OR (DATE(ps.start_timestamp) BETWEEN sp.start_date AND sp.end_date))
+		AND YEAR(ps.start_timestamp) = 2024
+		AND MONTHNAME(ps.start_timestamp) = 'November'
+	GROUP BY sp.staff_id
+	ORDER BY staff_id;
+END //
 DELIMITER ;
