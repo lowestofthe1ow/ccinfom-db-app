@@ -762,3 +762,116 @@ BEGIN
 		pts.start_timestamp;
 END //
 DELIMITER ;
+
+
+-- Rental report per month
+DROP PROCEDURE IF  EXISTS equipment_rental_report;
+DELIMITER //
+
+CREATE PROCEDURE equipment_rental_report(
+    IN report_month DATE
+)
+BEGIN
+    SELECT 
+        e.equipment_name,
+        COUNT(er.rental_id) AS rentals_month,
+        SUM(e.rental_fee) AS rental_costs_month
+    FROM 
+        equipment_rental er
+    JOIN 
+        equipment e ON er.equipment_id = e.equipment_id
+    WHERE 
+        DATE_FORMAT(er.start_date, '%Y-%m') = DATE_FORMAT(report_month, '%Y-%m')
+		AND er.payment_status = 'PAID'
+    GROUP BY 
+        e.equipment_name
+    ORDER BY 
+        rental_costs_month DESC;
+END //
+
+DELIMITER ;
+
+
+-- performer report month
+
+DROP PROCEDURE IF EXISTS performer_report_month;
+DELIMITER //
+CREATE PROCEDURE performer_report_month(
+    IN performer_id INT,
+    IN month_name VARCHAR(255),
+    IN year INT
+)
+BEGIN
+    SELECT 
+        pf.performer_name,
+        DATE_FORMAT(pts.start_timestamp, '%Y-%m') AS performance_month,
+        SUM(pr.ticket_price * pr.tickets_sold) AS total_sales,
+        SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * (1 - pr.cut_percent)
+                ELSE 0
+			END) AS performer_profit_month,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold < p.base_quota
+					THEN p.base_quota - pr.ticket_price * pr.tickets_sold
+				ELSE 0
+			END) AS performer_debt_month,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS livehouse_profit_month
+    FROM 
+        performance_revenue pr
+    JOIN 
+        performance p ON pr.performance_id = p.performance_id
+    JOIN 
+        performer pf ON p.performer_id = pf.performer_id
+    JOIN 
+        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    WHERE 
+        pf.performer_id = performer_id
+		AND MONTHNAME(pts.start_timestamp) = month_name
+        AND YEAR(pts.end_timestamp) = year
+        AND p.performance_status = 'COMPLETE'
+    GROUP BY 
+        pf.performer_name, 
+        performance_month;
+END //
+DELIMITER ;
+
+
+-- get staff assignments
+
+
+DROP PROCEDURE IF EXISTS get_staff_assignments;
+DELIMITER //
+
+CREATE PROCEDURE get_staff_assignments(
+    IN target_month DATE
+)
+BEGIN
+    SELECT 
+        s.staff_id AS StaffID,
+        CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
+        COUNT(DISTINCT(sa.performance_id)) AS assignments_completed
+    FROM 
+        staff s
+    JOIN 
+        staff_position sp ON s.staff_id = sp.staff_id
+    LEFT JOIN 
+        staff_assignment sa ON s.staff_id = sa.staff_id 
+    JOIN 
+        performance p ON p.performance_id = sa.performance_id
+    JOIN 
+        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+        AND MONTH(pts.start_timestamp) = MONTH(target_month)
+        AND YEAR(pts.start_timestamp) = YEAR(target_month)
+    GROUP BY 
+        s.staff_id, staff_name
+    ORDER BY 
+        assignments_completed DESC;
+END //
+
+DELIMITER ;
+
