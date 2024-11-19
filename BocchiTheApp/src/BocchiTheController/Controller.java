@@ -101,7 +101,6 @@ public class Controller {
                     /* Load data into the new tab */
                     if (this.loadDataFromSQL(ui))
                         gui.addTab(ui, commandIdentifier.substring(7));
-
                 }
 
                 /* Check if the button command terminates the window */
@@ -279,13 +278,19 @@ public class Controller {
         });
 
         gui.setGenerateReportsListener((e) -> {
-            /*
-             * TODO: Call a method that creates a new tab here.
-             * Create a TabUIFactory that takes identifiers starting with "tab/"
-             */
-
-            // addTab(e.getActionCommand(), null);
-            showDialog(e.getActionCommand(), null);
+            String commandIdentifier = e.getActionCommand();
+            /* TODO: Helper function for this */
+            if (commandIdentifier.contains("report/")) {
+                /* Create the tab UI */
+                System.out.println(commandIdentifier);
+                PaneUI ui = PaneUIFactory.createPaneUI(
+                        commandIdentifier, /* Tab pane name */
+                        null);
+                /* Load data into the new tab */
+                if (this.loadDataFromSQL(ui))
+                    gui.addTab(ui, commandIdentifier);
+            } else
+                showDialog(e.getActionCommand(), null);
         });
     }
 
