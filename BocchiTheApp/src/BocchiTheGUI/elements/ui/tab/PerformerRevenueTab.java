@@ -2,6 +2,7 @@ package BocchiTheGUI.elements.ui.tab;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,10 +44,10 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
                 + "<h1 style='color: #3366cc;'>Sales Information for " + labels.get(0).getText() + " on "
                 + labels.get(1).getText() + "</h1>"
                 + "<p style='font-size: 12px;'>"
-                + "<b>Sales:</b> " + labels.get(2).getText() + "<br>"
-                + "<b>Performer Profit:</b> " + labels.get(3).getText() + "<br>"
-                + "<b>Performer Debt:</b> " + labels.get(4).getText() + "<br>"
-                + "<b>Livehouse Profit:</b> " + labels.get(5).getText()
+                + "<b>Monthly sales:</b> " + labels.get(2).getText() + "<br>"
+                + "<b>Monthly performer profit:</b> " + labels.get(3).getText() + "<br>"
+                //+ "<b>Monthly unmet sales quotas:</b> " + labels.get(4).getText() + "<br>"
+                + "<b>Monthly livehouse Profit:</b> " + labels.get(5).getText()
                 + "</p>"
                 + "</body>"
                 + "</html>";
@@ -57,23 +58,47 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
         editorPane.setBackground(Color.white);
 
         panel.add(editorPane);
-
-        XChartPanel<PieChart> chartPanel = new XChartPanel<>(createPieChart());
-
-        panel.add(chartPanel);
-
         add(panel);
+
+        JPanel chartPanel = new JPanel();
+        chartPanel.setLayout(new GridLayout(1, 2));
+
+        XChartPanel<PieChart> chartPanel1 = new XChartPanel<>(createPieChart());
+        chartPanel.add(chartPanel1);
+
+        XChartPanel<PieChart> chartPanel2 = new XChartPanel<>(createPieChart2());
+        chartPanel.add(chartPanel2);
+
+        this.add(chartPanel);
     }
 
     private PieChart createPieChart() {
 
         PieChart chart = new PieChartBuilder().width(400).height(400).build();
         Map<String, Double> data = new HashMap<>();
-        data.put("Sales on Day", Double.parseDouble(labels.get(2).getText()));
-        data.put("Performer Profit On Day", Double.parseDouble(labels.get(3).getText()));
-        data.put("Performer Debt On Day", Double.parseDouble(labels.get(4).getText()));
-        data.put("LiveHouse Profit On Day", Double.parseDouble(labels.get(5).getText()));
+        data.put("Monthly performer profit", Double.parseDouble(labels.get(3).getText()));
+        data.put("Monthly livehouse profit", Double.parseDouble(labels.get(5).getText()));
 
+        for (Map.Entry<String, Double> entry : data.entrySet()) {
+            chart.addSeries(entry.getKey(), entry.getValue());
+        }
+
+        return chart;
+    }
+
+    private PieChart createPieChart2() {
+
+        PieChart chart = new PieChartBuilder().width(400).height(400).build();
+        Map<String, Double> data = new HashMap<>();
+
+        double monthlyperfsales = Double.parseDouble(labels.get(2).getText());
+        double unmet =  Double.parseDouble(labels.get(4).getText());
+        double perfprofit = Double.parseDouble(labels.get(3).getText());
+        double liveprofit = Double.parseDouble(labels.get(5).getText());
+        
+        data.put("Monthly performer sales", monthlyperfsales);
+        data.put("Monthly unmet sales quotas",  unmet - perfprofit - liveprofit < 0 ? 0 : unmet - perfprofit - liveprofit);
+       
         for (Map.Entry<String, Double> entry : data.entrySet()) {
             chart.addSeries(entry.getKey(), entry.getValue());
         }
