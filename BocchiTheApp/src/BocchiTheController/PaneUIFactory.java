@@ -127,7 +127,7 @@ public final class PaneUIFactory {
                 return new MonthlyLivehouseRevenueUI();
             case "dialog/staff_salary":
                 return new StaffSalaryUI();
-            case "dialog/monthly_rental_sales":
+            case "dialog/monthly_rental_revenue":
                 return new RentalSalesUI();
 
             /* Report tabs */
