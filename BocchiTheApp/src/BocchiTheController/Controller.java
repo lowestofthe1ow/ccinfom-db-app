@@ -15,8 +15,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import BocchiTheGUI.GUI;
-import BocchiTheGUI.components.CommandDialog;
-import BocchiTheGUI.components.abs.DialogUI;
+import BocchiTheGUI.elements.abstracts.PaneUI;
+import BocchiTheGUI.elements.components.CommandDialog;
 import BocchiTheGUI.interfaces.DataLoadable;
 
 public class Controller {
@@ -30,37 +30,71 @@ public class Controller {
      * loads an empty dataset.
      * 
      * @param dialogUI The UI to load data into
+     * @return {@code true} if the load operation succeeded {@code false} otherwise
      */
-    private void loadDataFromSQL(DialogUI dialogUI) {
+    private boolean loadDataFromSQL(PaneUI dialogUI) {
         if (dialogUI instanceof DataLoadable) {
             DataLoadable loadableUI = (DataLoadable) dialogUI;
-            loadableUI.loadData((sqlIdentifier) -> {
-                /* If there is no SQL command for loading data, return an empty dataset */
-                if (sqlIdentifier == null) {
-                    return new ArrayList<Object[]>();
-                }
+            try {
+                loadableUI.loadData((sqlIdentifier, sqlParams) -> {
+                    /* If there is no SQL command for loading data, return an empty dataset */
+                    if (sqlIdentifier == null) {
+                        return new ArrayList<Object[]>();
+                    }
 
-                String sqlCommand = ((String) sqlIdentifier).substring(4);
-                return this.executeProcedure(sqlCommand);
-            });
+                    String sqlCommand = ((String) sqlIdentifier).substring(4);
+                    List<Object[]> data;
+
+                    /* Check whether to use the passed parameters */
+                    if (sqlParams == null) {
+                        data = this.executeProcedure(sqlCommand);
+                    } else {
+                        data = this.executeProcedure(sqlCommand, sqlParams);
+                    }
+
+                    /* Throw a checked exception if attempting to load an empty dataset */
+                    if (data.size() == 0 && !loadableUI.allowEmptyDatasets()) {
+                        throw new IllegalArgumentException(loadableUI.getLoadFailureMessage());
+                    }
+
+                    return data;
+                });
+            } catch (Exception e) {
+                showMessageDialog(null, e.getMessage(), "Database error",
+                        JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         }
+        return true;
+    }
+
+    private void showTab(String tabIdentifier, Object[][] sqlData) {
+        /* Create the tab UI */
+        System.out.println(tabIdentifier);
+        PaneUI ui = PaneUIFactory.createPaneUI(
+                tabIdentifier, /* Tab pane name */
+                sqlData);
+        /* Load data into the new tab */
+        if (this.loadDataFromSQL(ui))
+            gui.addTab(ui, tabIdentifier);
     }
 
     /**
-     * Creates a {@link CommandDialog} and loads in a {@link DialogUI}.
+     * Creates a {@link CommandDialog} and loads in a {@link PaneUI}.
      * 
      * @param dialogIdentifier The action command representing the UI to load into
      *                         the window
      * @param sqlData          The SQL data to pass to the new dialog, as in
-     *                         {@link DialogUI#getSQLParameterInputs()}
+     *                         {@link PaneUI#getSQLParameterInputs()}
      */
     private void showDialog(String dialogIdentifier, Object[][] sqlData) {
-        DialogUI dialogUI = DialogUIFactory.createDialogUI(dialogIdentifier, sqlData);
+        PaneUI dialogUI = PaneUIFactory.createPaneUI(dialogIdentifier, sqlData);
 
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, dialogIdentifier, () -> {
             /* Load data into the UI if it requires it */
-            this.loadDataFromSQL(dialogUI);
+            if (!this.loadDataFromSQL(dialogUI))
+                return;
 
             /* Update dialog window button listeners */
             dialogUI.addButtonListener((e) -> {
@@ -69,6 +103,10 @@ public class Controller {
                 /* Check if the button pressed was an SQL button */
                 if (commandIdentifier.contains("button/sql/"))
                     parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
+                /* Otherwise, check if it was a report generation button */
+                else if (commandIdentifier.contains("button/report/")) {
+                    showTab(commandIdentifier.substring(7), dialogUI.getSQLParameterInputs());
+                }
 
                 /* Check if the button command terminates the window */
                 if (dialogUI.isTerminatingCommand(commandIdentifier)) {
@@ -82,14 +120,15 @@ public class Controller {
                         else
                             /* Close all dialogs except the "root", then refresh that */
                             gui.closeAllDialogsExcept(rootName, (rootUI) -> {
-                                this.loadDataFromSQL(dialogUI);
+                                this.loadDataFromSQL(rootUI);
                             });
                     } else {
                         showDialog(dialogIdentifier + commandIdentifier.substring(11),
                                 dialogUI.getSQLParameterInputs());
                     }
                 } else {
-                    this.loadDataFromSQL(dialogUI);
+                    if (!this.loadDataFromSQL(dialogUI))
+                        return;
                 }
             });
 
@@ -241,6 +280,15 @@ public class Controller {
             public void windowClosing(WindowEvent e) {
                 closeConnection();
             }
+        });
+
+        gui.setGenerateReportsListener((e) -> {
+            String commandIdentifier = e.getActionCommand();
+            /* TODO: Helper function for this */
+            if (commandIdentifier.contains("report/")) {
+                showTab(e.getActionCommand(), null);
+            } else
+                showDialog(e.getActionCommand(), null);
         });
     }
 

@@ -1,4 +1,86 @@
+
+DROP PROCEDURE IF EXISTS get_months_with_performances_by;
+DELIMITER //
+CREATE PROCEDURE get_months_with_performances_by (
+	IN performer_id INT
+)
+BEGIN
+	SELECT 
+		MONTHNAME(pt.start_timestamp) AS month_on_record,
+        YEAR(pt.start_timestamp) AS year_on_record
+	FROM performance p
+	JOIN performance_timeslot pt
+		ON p.performance_timeslot_id = pt.performance_timeslot_id
+	WHERE p.performance_status = 'COMPLETE' AND p.performer_id = performer_id
+	GROUP BY month_on_record, year_on_record;
+END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_months_on_record;
+DELIMITER //
+CREATE PROCEDURE get_months_on_record ()
+BEGIN
+	SELECT 
+		MONTHNAME(pt.start_timestamp) AS month_on_record,
+        YEAR(pt.start_timestamp) AS year_on_record
+	FROM performance p
+	JOIN performance_timeslot pt
+		ON p.performance_timeslot_id = pt.performance_timeslot_id
+	WHERE p.performance_status = 'COMPLETE'
+	GROUP BY month_on_record, year_on_record;
+END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_performances_in_month;
+DELIMITER //
+CREATE PROCEDURE get_performances_in_month (
+	month_name VARCHAR(255),
+    year_name INT
+)
+BEGIN
+	SELECT 
+		p.performance_id,
+		pf.performer_name,
+		pt.start_timestamp,
+        (CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS monthCut
+	FROM performance p
+	JOIN performance_timeslot pt
+	ON p.performance_timeslot_id = pt.performance_timeslot_id
+	JOIN performer pf
+	ON p.performer_id = pf.performer_id
+    JOIN performance_revenue pr
+    ON p.performance_id = pr.performance_id
+    WHERE MONTHNAME(pt.start_timestamp) = month_name
+    AND YEAR(pt.start_timestamp) = year_name
+    AND p.performance_status = 'COMPLETE'
+    ORDER BY pt.start_timestamp DESC;
+END //
+DELIMITER ;
+
 -- Fetch performance data
+
+DROP PROCEDURE IF EXISTS get_pending_performances;
+DELIMITER //
+CREATE PROCEDURE get_pending_performances ()
+BEGIN
+	SELECT 
+		p.performance_id,
+		pr.performer_name,
+		pt.start_timestamp,
+        p.performance_status
+	FROM performance p
+	JOIN performance_timeslot pt
+	ON p.performance_timeslot_id = pt.performance_timeslot_id
+	JOIN performer pr
+	ON p.performer_id = pr.performer_id
+    WHERE p.performance_status = 'PENDING'
+    ORDER BY pt.start_timestamp DESC;
+END //
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS get_performances;
 DELIMITER //
@@ -142,6 +224,55 @@ BEGIN
 END //
 DELIMITER ;
 
+
+-- Fetch undamaged equipment data
+
+DROP PROCEDURE IF EXISTS get_equipment;
+DELIMITER //
+CREATE PROCEDURE get_equipment()
+BEGIN
+	SELECT e.equipment_id, e.equipment_name, et.equipment_type_name, e.equipment_status
+    FROM equipment e
+    JOIN equipment_type et
+		ON e.equipment_type_id = et.equipment_type_id;
+   
+END //
+DELIMITER ;
+
+-- Fetch equipment rental data
+
+DROP PROCEDURE IF EXISTS get_equipment_rentals;
+DELIMITER //
+CREATE PROCEDURE get_equipment_rentals ()
+BEGIN
+	SELECT er.rental_id, e.equipment_name, p.performer_name, er.start_date, er.end_date,
+		er.equipment_status
+    FROM equipment_rental er
+    JOIN equipment e
+		ON er.equipment_id = e.equipment_id
+    JOIN performer p
+		ON er.performer_id = p.performer_id
+	WHERE er.equipment_status = 'PENDING';
+END //
+DELIMITER ;
+
+-- Fetch unpaid equipment rental data
+
+DROP PROCEDURE IF EXISTS get_unpaid_rentals;
+DELIMITER //
+CREATE PROCEDURE get_unpaid_rentals ()
+BEGIN
+	SELECT er.rental_id, e.equipment_name, p.performer_name, er.start_date, er.end_date,
+		er.payment_status
+    FROM equipment_rental er
+    JOIN equipment e
+		ON er.equipment_id = e.equipment_id
+    JOIN performer p
+		ON er.performer_id = p.performer_id
+	WHERE er.payment_status = 'NOT_PAID' AND er.equipment_status <> 'PENDING';
+END //
+DELIMITER ;
+
 -- Hiring staff
 
 DROP PROCEDURE IF EXISTS hire;
@@ -228,6 +359,24 @@ BEGIN
 			WHERE sp.end_date IS NULL AND sp.staff_id = staff_id;
 		INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`)
 			VALUES (staff_id, position_id, DATE(NOW()), NULL);
+	END IF;
+END //
+DELIMITER ;
+
+-- Add staff position types
+
+DROP PROCEDURE IF EXISTS add_position_type;
+DELIMITER //
+CREATE PROCEDURE add_position_type (
+	IN position_name VARCHAR(255),
+    IN salary DECIMAL(10, 2)
+)
+BEGIN
+	IF salary < 500 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Salary is under minimum wage';
+	ELSE
+		INSERT INTO position_type (`position_name`, `salary`)
+		VALUES (position_name, salary);
 	END IF;
 END //
 DELIMITER ;
@@ -471,7 +620,53 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS view_assigned_performances;
+DELIMITER //
+CREATE PROCEDURE view_assigned_performances (
+    IN staff_id INT
+)
+BEGIN
+	SELECT 
+		p.performance_id,
+		pr.performer_name,
+		pt.start_timestamp,
+        p.performance_status
+	FROM performance p
+	JOIN performance_timeslot pt
+	ON p.performance_timeslot_id = pt.performance_timeslot_id
+	JOIN performer pr
+	ON p.performer_id = pr.performer_id
+    JOIN staff_assignment sa
+    ON sa.performance_id = p.performance_id
+    WHERE sa.staff_id = staff_id
+    ORDER BY pt.start_timestamp DESC;
+END //
+DELIMITER ;
+
 -- Assigning staff to performance
+
+DROP PROCEDURE IF EXISTS view_assigned_staff;
+DELIMITER //
+CREATE PROCEDURE view_assigned_staff (
+    IN performance_id INT
+)
+BEGIN
+	SELECT s.staff_id, CONCAT(first_name, ' ', last_name) AS full_name, contact_no, IFNULL(pt.position_name, 'N/A'), IFNULL(pt.salary, 'N/A')
+	FROM staff s
+    JOIN staff_assignment sa
+    ON sa.staff_id = s.staff_id
+	LEFT JOIN staff_position sp
+	ON s.staff_id = sp.staff_id
+    AND sp.start_date = (
+		SELECT MAX(start_date)
+        FROM staff_position sp2
+		WHERE sp.staff_id = sp2.staff_id
+	) AND sp.end_date IS NULL
+    LEFT JOIN position_type pt
+    ON sp.position_id = pt.position_id
+    WHERE sa.performance_id = performance_id;
+END //
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS assign_staff;
 DELIMITER //
@@ -486,6 +681,8 @@ BEGIN
         WHERE p.performance_id = performance_id
 	) <> 'PENDING' THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
+	ELSEIF staff_id IN (SELECT sa.staff_id FROM staff_assignment sa WHERE sa.performance_id = performance_id) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performer is already assigned to this performance';
 	ELSE
 		INSERT INTO staff_assignment (`staff_id`, `performance_id`)
 			VALUES (staff_id, performance_id);
@@ -499,9 +696,9 @@ DROP PROCEDURE IF EXISTS record_performance_revenue;
 DELIMITER //
 CREATE PROCEDURE record_performance_revenue (
 	IN performance_id INT,
-    IN ticket_price DECIMAL,
+    IN ticket_price DECIMAL(10,2),
     IN tickets_sold INT,
-    IN cut_percent DECIMAL
+    IN cut_percent DECIMAL(2,2)
 )
 BEGIN
 	IF (
@@ -520,7 +717,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- TODO: Update to use timestamps
+-- TODO: ...base quotas? Idk
 DROP PROCEDURE IF EXISTS performer_report_day;
 
 DELIMITER //
@@ -531,8 +728,23 @@ CREATE PROCEDURE performer_report_day(
 BEGIN
     SELECT 
         pf.performer_name,
-        pts.timeslot_date,
-        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota)* (1 - pr.cut_percent)) AS earning_day
+        DATE(pts.start_timestamp) AS performance_day,
+        SUM(pr.ticket_price * pr.tickets_sold) AS sales_on_day,
+        SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * (1 - pr.cut_percent)
+                ELSE 0
+			END) AS performer_profit_on_day,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold < p.base_quota
+					THEN p.base_quota - pr.ticket_price * pr.tickets_sold
+				ELSE 0
+			END) AS performer_debt_on_day,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS livehouse_profit_on_day
     FROM 
         performance_revenue pr
     JOIN 
@@ -543,11 +755,11 @@ BEGIN
         performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
     WHERE 
         pf.performer_id = performer_id
-        AND DATE(pts.timeslot_date) = aday
+        AND DATE(pts.start_timestamp) = aday
         AND p.performance_status = 'COMPLETE'
     GROUP BY 
         pf.performer_name, 
-        pts.timeslot_date;
+        performance_day;
 END //
 
 DELIMITER ;
@@ -556,12 +768,16 @@ DROP PROCEDURE IF EXISTS cut_report_month;
 
 DELIMITER //
 CREATE PROCEDURE cut_report_month(
-    IN month INT,
+    IN month_name VARCHAR(255),
     IN year INT
 )
 BEGIN
     SELECT 
-        SUM((pr.ticket_price * pr.tickets_sold - p.base_quota) * (1-pr.cut_percent) ) AS monthCut
+        SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS monthCut
     FROM 
         performance_revenue pr
     JOIN 
@@ -569,8 +785,8 @@ BEGIN
     JOIN 
         performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
     WHERE 
-        MONTH(pts.timeslot_date) = month
-        AND YEAR(pts.timeslot_date) = year;
+        MONTHNAME(pts.start_timestamp) = month_name
+        AND YEAR(pts.end_timestamp) = year;
 END //
 
 DELIMITER ;
@@ -598,5 +814,214 @@ CREATE PROCEDURE add_equipment_type (
 BEGIN
 	INSERT INTO equipment_type (`equipment_type_name`) 
 		VALUES (equipment_type_name);
+END //
+DELIMITER ;
+
+-- Pay rental
+DROP PROCEDURE IF EXISTS pay_rental;
+DELIMITER //
+CREATE PROCEDURE pay_rental (
+	IN rental_id int
+)
+BEGIN
+	IF (
+		SELECT er.payment_status
+        FROM equipment_rental er
+        WHERE er.rental_id = rental_id
+	) <> 'NOT_PAID' THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Rental has already been paid or cancelled.';
+	ELSE
+		UPDATE equipment_rental er
+			SET er.payment_status = 'PAID'
+            WHERE er.rental_id = rental_id;
+	END IF;
+END //
+DELIMITER ;
+
+-- Get schedule for a week based on NOw(). 
+
+DROP PROCEDURE IF EXISTS get_schedule;
+DELIMITER // 
+CREATE PROCEDURE get_schedule()
+BEGIN 
+	SELECT 	pf.performer_name,
+			DAYNAME(pts.start_timestamp) AS day_name,
+			pts.start_timestamp,
+			pts.end_timestamp
+            
+	FROM 
+		performance p
+	JOIN 
+		performance_timeslot pts ON p.performance_timeslot_id = pts.performance_timeslot_id
+	JOIN 
+		performer pf ON p.performer_id = pf.performer_id
+	WHERE 
+		p.performance_status = 'PENDING'
+		AND YEARWEEK(pts.start_timestamp) = YEARWEEK(CURDATE())
+	ORDER BY
+		pts.start_timestamp;
+END //
+DELIMITER ;
+
+
+-- Rental report per month
+DROP PROCEDURE IF EXISTS equipment_rental_report;
+DELIMITER //
+
+CREATE PROCEDURE equipment_rental_report(
+    IN month_name VARCHAR(255),
+    IN year INT
+)
+BEGIN
+    SELECT 
+        e.equipment_name,
+        COUNT(er.rental_id) AS rentals_month,
+        SUM(e.rental_fee) AS rental_costs_month
+    FROM 
+        equipment_rental er
+    JOIN 
+        equipment e ON er.equipment_id = e.equipment_id
+    WHERE 
+        MONTHNAME(er.start_date) = month_name
+        AND YEAR(er.start_date) = year
+		-- AND er.payment_status = 'PAID'
+    GROUP BY 
+        e.equipment_name
+    ORDER BY 
+        rental_costs_month DESC;
+END //
+
+DELIMITER ;
+
+
+-- performer report month
+
+DROP PROCEDURE IF EXISTS performer_report_month;
+DELIMITER //
+CREATE PROCEDURE performer_report_month(
+    IN performer_id INT,
+    IN month_name VARCHAR(255),
+    IN year INT
+)
+BEGIN
+    SELECT 
+        pf.performer_name,
+        DATE_FORMAT(pts.start_timestamp, '%Y-%m') AS performance_month,
+        SUM(pr.ticket_price * pr.tickets_sold) AS total_sales,
+        SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * (1 - pr.cut_percent)
+                ELSE 0
+			END) AS performer_profit_month,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold < p.base_quota
+					THEN p.base_quota - pr.ticket_price * pr.tickets_sold
+				ELSE 0
+			END) AS performer_debt_month,
+		SUM(CASE
+				WHEN pr.ticket_price * pr.tickets_sold > p.base_quota
+					THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+				ELSE 0
+			END) AS livehouse_profit_month
+    FROM 
+        performance_revenue pr
+    JOIN 
+        performance p ON pr.performance_id = p.performance_id
+    JOIN 
+        performer pf ON p.performer_id = pf.performer_id
+    JOIN 
+        performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    WHERE 
+        pf.performer_id = performer_id
+		AND MONTHNAME(pts.start_timestamp) = month_name
+        AND YEAR(pts.end_timestamp) = year
+        AND p.performance_status = 'COMPLETE'
+    GROUP BY 
+        pf.performer_name, 
+        performance_month;
+END //
+DELIMITER ;
+
+
+-- Change equipment status 
+
+DROP PROCEDURE IF EXISTS change_equipment_status;
+DELIMITER //
+CREATE PROCEDURE change_equipment_status(
+    IN equipment_id INT,
+    IN new_status VARCHAR(10)
+)
+BEGIN
+    DECLARE current_status VARCHAR(10);
+    DECLARE cancel_period INT;
+
+    SELECT e.equipment_status INTO current_status
+    FROM equipment e
+    WHERE e.equipment_id = equipment_id;
+
+    IF current_status = new_status THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'The equipment is already in the specified status.';
+    END IF;
+
+    IF new_status = 'MIN_DMG' THEN
+        SET cancel_period = 7;
+    ELSEIF new_status = 'MAJ_DMG' THEN
+        SET cancel_period = 14;
+    ELSEIF new_status = 'MISSING' THEN
+        SET cancel_period = 0; 
+    ELSE
+        SET cancel_period = NULL; 
+    END IF;
+
+    IF cancel_period IS NOT NULL THEN
+        UPDATE equipment_rental er
+        SET er.payment_status = 'CANCELLED'
+        WHERE er.equipment_id = equipment_id
+        AND (
+            cancel_period = 0 OR 
+            er.start_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL cancel_period DAY)
+        );
+        
+    END IF;
+
+	UPDATE equipment e
+	SET e.equipment_status = new_status
+	WHERE e.equipment_id = equipment_id;
+END //
+
+DELIMITER ;
+
+-- Change equipment status 
+
+DROP PROCEDURE IF EXISTS get_staff_assignments;
+DELIMITER //
+CREATE PROCEDURE get_staff_assignments (
+    IN month_name VARCHAR(255),
+    IN year INT
+)
+BEGIN
+	SELECT
+    sp.staff_id,
+    CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
+    s.contact_no,
+    SUM(pt.salary)
+	FROM staff s
+	JOIN staff_position sp
+		ON s.staff_id = sp.staff_id
+	JOIN staff_assignment sa
+		ON s.staff_id = sa.staff_id
+	JOIN performance p
+		ON sa.performance_id = p.performance_id
+	JOIN performance_timeslot ps
+		ON p.performance_timeslot_id = ps.performance_timeslot_id
+	JOIN position_type pt
+		ON sp.position_id = pt.position_id
+	WHERE ((sp.end_date IS NULL AND DATE(ps.start_timestamp) >= sp.start_date)
+		OR (DATE(ps.start_timestamp) BETWEEN sp.start_date AND sp.end_date))
+		AND YEAR(ps.start_timestamp) = 2024
+		AND MONTHNAME(ps.start_timestamp) = 'November'
+	GROUP BY sp.staff_id
+	ORDER BY staff_id;
 END //
 DELIMITER ;

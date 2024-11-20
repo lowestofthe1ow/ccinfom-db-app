@@ -1,6 +1,7 @@
 package BocchiTheMain;
 
 import java.awt.Color;
+import java.awt.Insets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -22,7 +23,11 @@ public class Main {
 			e.printStackTrace();
 		}
 		System.setProperty("flatlaf.menuBarEmbedded", "true");
+		UIManager.put("TabbedPane.buttonInsets", new Insets(0, 0, 0, 0));
 		UIManager.put("RootPane.background", Color.PINK);
+		// UIManager.put("TitlePane.titleMargins", new Insets(10, 20, 10, 20));
+		UIManager.put("TitlePane.centerTitle", Boolean.TRUE);
+
 		// UIManager.put("TitlePane.titleMargins", new Insets(10, 20, 10, 20));
 		UIManager.put("TitlePane.centerTitle", Boolean.TRUE);
 
