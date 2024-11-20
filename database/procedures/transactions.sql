@@ -1,13 +1,22 @@
--- Hiring staff
-DROP PROCEDURE IF EXISTS hire;
-
 DELIMITER //
+
+/* =========================================================================
+   Generates a list of all the months for which a performer has a 'COMPLETE'
+   performance.
+
+   @params performer_id:    The ID of the performer
+   @return month_on_record: The name of the month (e.g 'January')
+           year_on_record:  The year
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS hire //
 CREATE PROCEDURE hire (
 	IN first_name VARCHAR(255),
 	IN last_name VARCHAR(255),
 	IN contact_no DECIMAL(11, 0),
 	IN position_id INT
-) BEGIN
+)
+-- ----------------------------------------------------------------------------
+BEGIN
 
 INSERT INTO
 	staff (`first_name`, `last_name`, `contact_no`)
@@ -799,4 +808,4 @@ ORDER BY
 	staff_id;
 
 END //
-DELIMITER;
+DELIMITER ;
