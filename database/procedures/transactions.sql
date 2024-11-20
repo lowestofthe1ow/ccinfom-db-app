@@ -141,7 +141,7 @@ ELSEIF (
 		staff_position sp
 	WHERE
 		sp.staff_id = staff_id
-) >= DATE (NOW ())
+) >= DATE (NOW())
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 ELSE
