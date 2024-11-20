@@ -1,15 +1,13 @@
 package BocchiTheGUI.elements.ui.tab;
 
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.List;
 import java.util.function.BiFunction;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import BocchiTheGUI.elements.abstracts.TableSelectionUI;
+import BocchiTheGUI.elements.components.LabelForm;
 
 public class MonthlyLivehouseRevenueTab extends TableSelectionUI {
     private Object[][] sqlData;
@@ -21,20 +19,14 @@ public class MonthlyLivehouseRevenueTab extends TableSelectionUI {
         this.setLoadDataCommand("sql/get_performances_in_month");
         this.setLoadDataParams((String[]) sqlData[0]);
 
-        JPanel labelPanel = new JPanel();
-        labelPanel.setLayout(new GridLayout(1, 2));
-        labelPanel.setBorder(new EmptyBorder(5, 20, 5, 20));
-
         JLabel label = new JLabel("Monthly revenue for " + (String) sqlData[0][0] + " " + (String) sqlData[0][1]);
         label.setFont(new Font("IBM Plex Sans", Font.BOLD, 18));
-        labelPanel.add(label);
 
         revenueLabel = new JLabel();
         revenueLabel.setFont(new Font("IBM Plex Sans", Font.PLAIN, 18));
-        labelPanel.add(revenueLabel);
 
         this.addSearchBoxFilter("Filter by performer name", 1);
-        this.add(labelPanel);
+        this.add(new LabelForm(label, revenueLabel));
     }
 
     @Override

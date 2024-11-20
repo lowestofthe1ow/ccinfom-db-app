@@ -1,16 +1,12 @@
 package BocchiTheGUI.elements.components;
 
-import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.function.Function;
 
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
-public class TableComboBox extends JPanel {
+public class TableComboBox extends LabelForm {
     private JComboBox<String> comboBox;
     private int filterColumnIndex;
 
@@ -31,9 +27,6 @@ public class TableComboBox extends JPanel {
     }
 
     public TableComboBox(String label, int filterColumnIndex, Runnable onUpdate) {
-        this.setLayout(new GridLayout(2, 1));
-        this.setBorder(new EmptyBorder(5, 20, 5, 20));
-
         this.filterColumnIndex = filterColumnIndex;
         this.comboBox = new JComboBox<String>();
 
@@ -43,7 +36,6 @@ public class TableComboBox extends JPanel {
             }
         });
 
-        this.add(new JLabel(label));
-        this.add(comboBox);
+        this.setContent(label, comboBox);
     }
 }

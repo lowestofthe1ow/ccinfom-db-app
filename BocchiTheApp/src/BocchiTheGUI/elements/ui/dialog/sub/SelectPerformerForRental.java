@@ -1,19 +1,16 @@
 package BocchiTheGUI.elements.ui.dialog.sub;
 
+import java.awt.Dimension;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
 import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import BocchiTheGUI.elements.abstracts.TableSelectionUI;
+import BocchiTheGUI.elements.components.LabelForm;
 import raven.datetime.component.date.DateEvent;
 import raven.datetime.component.date.DatePicker;
 import raven.datetime.component.date.DateSelectionListener;
@@ -41,10 +38,6 @@ public class SelectPerformerForRental extends TableSelectionUI {
     }
 
     private JPanel createDatePickerPanel(String labelText) {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panel.setLayout(new GridLayout(1, 2, 3, 0));
-
         DatePicker datePicker = new DatePicker();
         JFormattedTextField dateEditor = new JFormattedTextField();
         dateEditor.setPreferredSize(new Dimension(100, 25));
@@ -60,11 +53,8 @@ public class SelectPerformerForRental extends TableSelectionUI {
                 }
             }
         });
-
-        panel.add(new JLabel(labelText + " Date:"));
-        panel.add(dateEditor);
-
-        return panel;
+        
+        return new LabelForm(labelText + " Date:", dateEditor);
     }
 
     @Override

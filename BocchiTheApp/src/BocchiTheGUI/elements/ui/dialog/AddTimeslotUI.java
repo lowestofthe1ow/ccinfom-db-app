@@ -9,10 +9,10 @@ import java.time.LocalTime;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import BocchiTheGUI.elements.abstracts.PaneUI;
+import BocchiTheGUI.elements.components.LabelForm;
 import raven.datetime.component.date.DateEvent;
 import raven.datetime.component.date.DatePicker;
 import raven.datetime.component.date.DateSelectionListener;
@@ -48,9 +48,6 @@ public class AddTimeslotUI extends PaneUI {
     }
 
     private JPanel createDateTimePickerPanel(String labelText) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(1, 2, 3, 0));
-
         DatePicker datePicker = new DatePicker();
         JFormattedTextField dateEditor = new JFormattedTextField();
         dateEditor.setPreferredSize(new Dimension(100, 25));
@@ -85,11 +82,11 @@ public class AddTimeslotUI extends PaneUI {
             }
         });
 
-        panel.add(new JLabel(labelText + " Date/Time:"));
-        panel.add(dateEditor);
-        panel.add(timeEditor);
+        JPanel dateTimeEditor = new JPanel();
+        dateTimeEditor.add(dateEditor);
+        dateTimeEditor.add(timeEditor);
 
-        return panel;
+        return new LabelForm(labelText + " Date/Time:", dateTimeEditor);
     }
 
     @Override

@@ -165,7 +165,7 @@ FROM
     JOIN performer pf ON p.performer_id = pf.performer_id
 WHERE
     p.performance_status = 'PENDING'
-    AND YEARWEEK (pts.start_timestamp) = YEARWEEK (CURDATE ())
+    AND YEARWEEK (pts.start_timestamp) = YEARWEEK (CURDATE())
 ORDER BY
     pts.start_timestamp;
 END //

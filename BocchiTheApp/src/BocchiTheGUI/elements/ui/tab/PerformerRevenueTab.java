@@ -32,6 +32,7 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
     }
 
     private void displayItPretty() {
+        /* This should not occur in normal circumstances */
         if (labels.isEmpty()) {
             this.add(new JLabel("There is no data to display for this performer on the given date."));
         }
