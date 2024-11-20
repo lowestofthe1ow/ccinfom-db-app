@@ -1,12 +1,12 @@
 DELIMITER //
 
 /* =========================================================================
-   Generates a list of all the months for which a performer has a 'COMPLETE'
-   performance.
+   Hire staff. Create a new staff record and new staff position record.
 
-   @params performer_id:    The ID of the performer
-   @return month_on_record: The name of the month (e.g 'January')
-           year_on_record:  The year
+   @params 	first_name:    	The first name of the staff
+			last_name:		The last name of the staff
+            contact_no		The contact number of the staff
+            position_id		The position of the staff
    ========================================================================= */
 DROP PROCEDURE IF EXISTS hire //
 CREATE PROCEDURE hire (
@@ -17,12 +17,10 @@ CREATE PROCEDURE hire (
 )
 -- ----------------------------------------------------------------------------
 BEGIN
-
 INSERT INTO
 	staff (`first_name`, `last_name`, `contact_no`)
 VALUES
 	(first_name, last_name, contact_no);
-
 INSERT INTO
 	staff_position (
 		`staff_id`,
@@ -37,26 +35,27 @@ VALUES
 		DATE (NOW ()),
 		NULL
 	);
-
 END //
-DELIMITER;
 
--- Removing staff
-DROP PROCEDURE IF EXISTS remove_staff;
+/* =========================================================================
+   Remove staff. Set the end date of staff's current position to today.
 
-DELIMITER //
+   @params 	staff_id:    	The ID of the staff
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS remove_staff //
 CREATE PROCEDURE remove_staff (
 	IN staff_id INT
-) BEGIN
-
+)
+-- ----------------------------------------------------------------------------
+BEGIN
 IF staff_id NOT IN (
 	SELECT
 		staff_id
 	FROM
 		staff
-) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such staff';
-
+)
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such staff';
 ELSEIF (
 	SELECT
 		MAX(start_date)
@@ -64,11 +63,10 @@ ELSEIF (
 		staff_position sp
 	WHERE
 		sp.staff_id = staff_id
-) >= DATE (NOW ()) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
-
+) >= DATE (NOW ())
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 ELSEIF (
-	-- TODO: This is ugly
 	SELECT
 		sp.end_date
 	FROM
@@ -83,35 +81,40 @@ ELSEIF (
 			WHERE
 				sp.staff_id = staff_id
 		)
-) IS NOT NULL THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff is not active';
-
+) IS NOT NULL
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff is not active';
 ELSE
-UPDATE staff_position sp
-SET
-	sp.end_date = DATE (NOW ())
-WHERE
-	sp.end_date IS NULL
-	AND sp.staff_id = staff_id;
-
+	UPDATE staff_position sp
+	SET
+		sp.end_date = DATE (NOW ())
+	WHERE
+		sp.end_date IS NULL
+		AND sp.staff_id = staff_id;
 END IF;
-
 END //
-DELIMITER;
 
--- Updating staff positions
-DROP PROCEDURE IF EXISTS add_position;
+/* =========================================================================
+   Add position. Create a new position record for the staff.
 
-DELIMITER //
-CREATE PROCEDURE add_position (IN staff_id INT, IN position_id INT) BEGIN
- IF staff_id NOT IN (
+   @params 	staff_id:    	The ID of the staff
+			position_id:	The ID of the position to be assigned to the staff
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS add_position //
+CREATE PROCEDURE add_position (
+	IN staff_id INT,
+    IN position_id INT
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF staff_id NOT IN (
 	SELECT
 		staff_id
 	FROM
 		staff
-) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such staff';
-
+)
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such staff';
 ELSEIF (
 	SELECT
 		sp.position_id
@@ -128,9 +131,9 @@ ELSEIF (
 		)
 		AND sp.staff_id = staff_id
 		AND sp.end_date IS NULL
-) = position_id THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff is already assigned that position';
-
+) = position_id
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff is already assigned that position';
 ELSEIF (
 	SELECT
 		MAX(start_date)
@@ -138,17 +141,16 @@ ELSEIF (
 		staff_position sp
 	WHERE
 		sp.staff_id = staff_id
-) >= DATE (NOW ()) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
-
+) >= DATE (NOW ())
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 ELSE
-UPDATE staff_position sp
-SET
-	sp.end_date = DATE (NOW ())
-WHERE
-	sp.end_date IS NULL
-	AND sp.staff_id = staff_id;
-
+	UPDATE staff_position sp
+	SET
+		sp.end_date = DATE (NOW ())
+	WHERE
+		sp.end_date IS NULL
+		AND sp.staff_id = staff_id;
 INSERT INTO
 	staff_position (
 		`staff_id`,
@@ -158,55 +160,61 @@ INSERT INTO
 	)
 VALUES
 	(staff_id, position_id, DATE (NOW ()), NULL);
-
 END IF;
-
 END //
-DELIMITER;
 
--- Add staff position types
-DROP PROCEDURE IF EXISTS add_position_type;
+/* =========================================================================
+   Add position type. Create a new position type.
 
-DELIMITER //
+   @params 	position_name:  The name of the position type
+			salary:			The salary for the position type
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS add_position_type //
 CREATE PROCEDURE add_position_type (
 	IN position_name VARCHAR(255),
 	IN salary DECIMAL(10, 2)
-) BEGIN
- IF salary < 500 THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Salary is under minimum wage';
-
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF salary < 500
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Salary is under minimum wage';
 ELSE
-INSERT INTO
-	position_type (`position_name`, `salary`)
-VALUES
-	(position_name, salary);
-
+	INSERT INTO
+		position_type (`position_name`, `salary`)
+	VALUES
+		(position_name, salary);
 END IF;
-
 END //
-DELIMITER;
 
--- Renting out equipment
-DROP PROCEDURE IF EXISTS rent_equipment;
+/* =========================================================================
+   Rent equipment. Create a new equipment rental.
 
-DELIMITER //
+   @params 	performer_id:	The ID of the performer renting equipment
+			equipment_id:	The ID of the equipment
+            start_date:		The start of rent period
+            end_date:		The end of rent period
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS rent_equipment //
 CREATE PROCEDURE rent_equipment (
 	IN performer_id INT,
 	IN equipment_id INT,
 	IN start_date DATE,
 	IN end_date DATE
-) BEGIN
- IF start_date >= end_date THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Invalid date range (equipment must be rented for at least a day)';
-
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF start_date >= end_date
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Invalid date range (equipment must be rented for at least a day)';
 ELSEIF equipment_id NOT IN (
 	SELECT
 		equipment_id
 	FROM
 		equipment
-) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such equipment';
-
+)
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such equipment';
 ELSEIF (
 	SELECT
 		equipment_status
@@ -214,9 +222,9 @@ ELSEIF (
 		equipment e
 	WHERE
 		e.equipment_id = equipment_id
-) <> 'UNDAMAGED' THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Damaged or missing equipment cannot be rented out';
-
+) <> 'UNDAMAGED'
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Damaged or missing equipment cannot be rented out';
 ELSEIF (
 	SELECT
 		COUNT(*)
@@ -227,47 +235,50 @@ ELSEIF (
 		AND end_date >= er.start_date
 		AND er.equipment_id = equipment_id
 		AND er.payment_status <> 'CANCELLED'
-) > 0 THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Equipment unavailable on specified date range';
-
+) > 0
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Equipment unavailable on specified date range';
 ELSE
-INSERT INTO
-	equipment_rental (
-		`performer_id`,
-		`equipment_id`,
-		`start_date`,
-		`end_date`,
-		`equipment_status`,
-		`payment_status`
-	)
-VALUES
-	(
-		performer_id,
-		equipment_id,
-		start_date,
-		end_date,
-		'PENDING',
-		'NOT_PAID'
-	);
-
+	INSERT INTO
+		equipment_rental (
+			`performer_id`,
+			`equipment_id`,
+			`start_date`,
+			`end_date`,
+			`equipment_status`,
+			`payment_status`
+		)
+	VALUES
+		(
+			performer_id,
+			equipment_id,
+			start_date,
+			end_date,
+			'PENDING',
+			'NOT_PAID'
+		);
 END IF;
-
 END //
-DELIMITER;
 
--- Cancelling an equipment rental
-DROP PROCEDURE IF EXISTS cancel_rental;
-
-DELIMITER //
-CREATE PROCEDURE cancel_rental (IN rental_id INT) BEGIN
- IF rental_id NOT IN (
+/* =========================================================================
+   Cancel rental. Set rental as cancelled.
+   
+   @params 	rental_id:		The ID of the equipment rental
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS cancel_rental //
+CREATE PROCEDURE cancel_rental (
+	IN rental_id INT
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF rental_id NOT IN (
 	SELECT
 		rental_id
 	FROM
 		equipment_rental
-) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such rental';
-
+)
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such rental';
 ELSEIF (
 	SELECT
 		er.equipment_status
@@ -275,9 +286,9 @@ ELSEIF (
 		equipment_rental er
 	WHERE
 		er.rental_id = rental_id
-) <> 'PENDING' THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Rental has already been returned and evaluated';
-
+) <> 'PENDING'
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Rental has already been returned and evaluated';
 ELSEIF (
 	SELECT
 		start_date
@@ -285,26 +296,26 @@ ELSEIF (
 		equipment_rental er
 	WHERE
 		er.rental_id = rental_id
-) <= DATE (NOW ()) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Rental cannot be cancelled on the day it is to be rented out';
-
+) <= DATE (NOW ())
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Rental cannot be cancelled on the day it is to be rented out';
 ELSE
-UPDATE equipment_rental er
-SET
-	er.equipment_status = 'UNDAMAGED',
-	er.payment_status = 'CANCELLED'
-WHERE
-	er.rental_id = rental_id;
-
+	UPDATE equipment_rental er
+	SET
+		er.equipment_status = 'UNDAMAGED',
+		er.payment_status = 'CANCELLED'
+	WHERE
+		er.rental_id = rental_id;
 END IF;
-
 END //
-DELIMITER;
 
--- Resolving an equipment rental
-DROP PROCEDURE IF EXISTS resolve_equipment_status;
+/* =========================================================================
+   Resolve equipment status. Create a new position record for the staff.
 
-DELIMITER //
+   @params 	rental_id:    		The ID of the equipment rental
+			equipment_status:	The status of the equipment
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS resolve_equipment_status //
 CREATE PROCEDURE resolve_equipment_status (
 	IN rental_id INT,
 	IN equipment_status ENUM (
@@ -314,14 +325,17 @@ CREATE PROCEDURE resolve_equipment_status (
 		'MISSING',
 		'PENDING'
 	)
-) BEGIN
- IF rental_id NOT IN (
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF rental_id NOT IN (
 	SELECT
 		rental_id
 	FROM
 		equipment_rental
-) THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such rental';
+)
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such rental';
 
 ELSEIF (
 	SELECT
@@ -330,49 +344,51 @@ ELSEIF (
 		equipment_rental er
 	WHERE
 		er.rental_id = rental_id
-) <> 'PENDING' THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Rental has already been returned and evaluated';
-
+) <> 'PENDING'
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Rental has already been returned and evaluated';
 ELSE
-UPDATE equipment_rental er
-SET
-	er.equipment_status = equipment_status
-WHERE
-	er.rental_id = rental_id;
-
-UPDATE equipment e
-SET
-	e.equipment_status = equipment_status
-WHERE
-	e.equipment_id = (
-		SELECT
-			er.equipment_id
-		FROM
-			equipment_rental er
-		WHERE
-			er.rental_id = rental_id
-	);
-
+	UPDATE equipment_rental er
+	SET
+		er.equipment_status = equipment_status
+	WHERE
+		er.rental_id = rental_id;
+	UPDATE equipment e
+	SET
+		e.equipment_status = equipment_status
+	WHERE
+		e.equipment_id = (
+			SELECT
+				er.equipment_id
+			FROM
+				equipment_rental er
+			WHERE
+				er.rental_id = rental_id
+		);
 END IF;
-
 END //
-DELIMITER;
 
--- Accepting an audition 
-DROP PROCEDURE IF EXISTS accept_audition;
+/* =========================================================================
+   Accept audition. Set audition status as accepted.
 
-DELIMITER //
-CREATE PROCEDURE accept_audition (IN audition_id INT) BEGIN
- IF (
+   @params 	audition_id:    The ID of the audition
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS accept_audition //
+CREATE PROCEDURE accept_audition (
+	IN audition_id INT
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF (
 	SELECT
 		a.audition_status
 	FROM
 		audition a
 	WHERE
 		a.audition_id = audition_id
-) <> 'PENDING' THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Audition is not waiting to be resolved';
-
+) <> 'PENDING'
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Audition is not waiting to be resolved';
 ELSEIF (
 	SELECT
 		COUNT(performance_timeslot_id)
@@ -388,104 +404,107 @@ ELSEIF (
 				a.audition_id = audition_id
 		)
 		AND p.performance_status = 'PENDING'
-) > 0 THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Performance slot is taken';
-
+) > 0
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Performance slot is taken';
 ELSE
-UPDATE audition a
-SET
-	a.audition_status = 'PASSED'
-WHERE
-	a.audition_id = audition_id;
+	UPDATE audition a
+	SET
+		a.audition_status = 'PASSED'
+	WHERE
+		a.audition_id = audition_id;
 
-INSERT INTO
-	performance (
-		`performer_id`,
-		`performance_timeslot_id`,
-		`base_quota`,
-		`performance_status`
-	)
-VALUES
-	(
+	INSERT INTO
+		performance (
+			`performer_id`,
+			`performance_timeslot_id`,
+			`base_quota`,
+			`performance_status`
+		)
+	VALUES
 		(
-			SELECT
-				p.performer_id
-			FROM
-				audition a
-				JOIN performer p ON a.performer_id = p.performer_id
-			WHERE
-				a.audition_id = audition_id
-		),
-		(
-			SELECT
-				a.target_timeslot_id
-			FROM
-				audition a
-			WHERE
-				a.audition_id = audition_id
-		),
-		'5000.00',
-		'PENDING'
-	);
-
+			(
+				SELECT
+					p.performer_id
+				FROM
+					audition a
+					JOIN performer p ON a.performer_id = p.performer_id
+				WHERE
+					a.audition_id = audition_id
+			),
+			(
+				SELECT
+					a.target_timeslot_id
+				FROM
+					audition a
+				WHERE
+					a.audition_id = audition_id
+			),
+			'5000.00',
+			'PENDING'
+		);
 END IF;
-
 END //
-DELIMITER;
 
--- Rejecting an audition
-DROP PROCEDURE IF EXISTS reject_audition;
+/* =========================================================================
+   Reject audition. Set audition status as rejected.
 
-DELIMITER //
-CREATE PROCEDURE reject_audition (IN audition_id INT) BEGIN
- IF (
+   @params 	audition_id:    The ID of the audition
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS reject_audition //
+CREATE PROCEDURE reject_audition (
+	IN audition_id INT
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF (
 	SELECT
 		a.audition_status
 	FROM
 		audition a
 	WHERE
 		a.audition_id = audition_id
-) <> 'PENDING' THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Audition is not waiting to be resolved';
-
+) <> 'PENDING'
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Audition is not waiting to be resolved';
 ELSE
-UPDATE audition a
-SET
-	a.audition_status = 'REJECTED'
-WHERE
-	a.audition_id = audition_id;
-
+	UPDATE audition a
+	SET
+		a.audition_status = 'REJECTED'
+	WHERE
+		a.audition_id = audition_id;
 END IF;
-
 END //
-DELIMITER;
 
--- Cancelling a performance
-DROP PROCEDURE IF EXISTS cancel_performance;
+/* =========================================================================
+   Cancel performance. Set performance status as cancelled.
 
-DELIMITER //
-CREATE PROCEDURE cancel_performance (IN performance_id INT) BEGIN
- IF (
+   @params 	performance_id:		The ID of the performance
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS cancel_performance //
+CREATE PROCEDURE cancel_performance (
+	IN performance_id INT
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF (
 	SELECT
 		p.performance_status
 	FROM
 		performance p
 	WHERE
 		p.performance_id = performance_id
-) <> 'PENDING' THEN
-SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
-
+) <> 'PENDING'
+THEN
+	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
 ELSE
-UPDATE performance p
-SET
-	p.performance_status = 'CANCELLED'
-WHERE
-	p.performance_id = performance_id;
-
+	UPDATE performance p
+	SET
+		p.performance_status = 'CANCELLED'
+	WHERE
+		p.performance_id = performance_id;
 END IF;
-
 END //
-DELIMITER;
 
 -- Adding a performer
 DROP PROCEDURE IF EXISTS add_performer;
