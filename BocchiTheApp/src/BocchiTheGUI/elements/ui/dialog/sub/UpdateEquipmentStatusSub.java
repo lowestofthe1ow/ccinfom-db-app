@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import BocchiTheGUI.elements.abstracts.PaneUI;
-import BocchiTheGUI.elements.abstracts.TextFieldsUI;
 
 public class UpdateEquipmentStatusSub  extends PaneUI {
 	 private Object[][] sqlData;
