@@ -26,7 +26,7 @@ public class HomeTabUI extends PaneUI {
 
 		this.setButtonActionCommands("dialog/performer_revenue",
 				"dialog/monthly_livehouse_revenue",
-				"dialog/monthly_rental_sales",
+				"dialog/monthly_rental_revenue",
 				"report/livehouse_schedule",
 				"dialog/staff_salary");
 
