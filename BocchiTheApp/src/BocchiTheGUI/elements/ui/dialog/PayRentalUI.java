@@ -14,4 +14,9 @@ public class PayRentalUI extends TableSelectionUI {
         this.addButtons("Pay rental");
         this.setButtonActionCommands("button/sql/pay_rental");
     }
+
+    @Override
+    public boolean allowEmptyDatasets() {
+        return true;
+    }
 }

@@ -71,8 +71,9 @@ public class SelectPerformerForRental extends TableSelectionUI {
     public Object[][] getSQLParameterInputs() {
         List<Object> params = new ArrayList<>();
 
-        Collections.addAll(params, sqlData[0]);
+        
         params.add(super.getSQLParameterInputs()[0][0]);
+        Collections.addAll(params, sqlData[0]);
 
         params.add(startDate.toString());
         params.add(endDate.toString());

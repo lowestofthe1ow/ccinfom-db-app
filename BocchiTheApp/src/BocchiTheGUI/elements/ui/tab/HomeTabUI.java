@@ -18,7 +18,7 @@ public class HomeTabUI extends PaneUI {
 		main.add(new JLabel("Welcome to Bocchi the App"));
 		this.add(main);
 
-		this.addButtons("Daily performer sales",
+		this.addButtons("Monthly performer sales",
 				"Monthly livehouse sales",
 				"Monthly rental sales",
 				"Weekly livehouse schedule",
@@ -26,7 +26,7 @@ public class HomeTabUI extends PaneUI {
 
 		this.setButtonActionCommands("dialog/performer_revenue",
 				"dialog/monthly_livehouse_revenue",
-				"dialog/monthly_rental_sales",
+				"dialog/monthly_rental_revenue",
 				"report/livehouse_schedule",
 				"dialog/staff_salary");
 
