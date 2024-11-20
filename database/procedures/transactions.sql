@@ -770,6 +770,7 @@ WHERE
 	e.equipment_id = equipment_id;
 
 END //
+<<<<<<< HEAD
 DELIMITER;
 
 -- Change equipment status 
@@ -809,3 +810,6 @@ ORDER BY
 
 END //
 DELIMITER ;
+=======
+DELIMITER;
+>>>>>>> 6e3554e0061b0601622d21787d7be1e86e39ac97

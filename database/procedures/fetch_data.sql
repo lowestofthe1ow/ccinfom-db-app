@@ -11,7 +11,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS get_months_with_performances_by //
 CREATE PROCEDURE get_months_with_performances_by (
     IN performer_id INT
-) 
+)
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
@@ -31,7 +31,7 @@ END //
 /* =========================================================================
    Generates a list of all the months for which there are any recorded
    'COMPLETE' performances.
-  
+
    @return month_on_record: The name of the month (e.g 'January')
            year_on_record:  The year
    ========================================================================= */
@@ -54,7 +54,7 @@ END //
 
 /* =========================================================================
    Generates a list of all the performances for a given month in a year.
-  
+
    @params month_on_record: The name of the month (e.g 'January')
            year_on_record:  The year
 
@@ -68,7 +68,7 @@ END //
    ========================================================================= */
 DROP PROCEDURE IF EXISTS get_performances_in_month //
 CREATE PROCEDURE get_performances_in_month (
-    IN month_name VARCHAR(9), 
+    IN month_name VARCHAR(9),
     IN year_name INT
 )
 -- ----------------------------------------------------------------------------
@@ -343,7 +343,7 @@ END //
    Generates a list of all 'UNDAMAGED' equipment.
 
    @return equipment_id:        The ID of the equipmnet
-           equipment_name:      The name of the equipment (e.g. 'Fender 
+           equipment_name:      The name of the equipment (e.g. 'Fender
                                 Vintera II Tele')
            equipment_type_name: The type of the equipment (e.g. 'Electric
                                 Guitar')
@@ -369,7 +369,7 @@ END //
    Generates a list of all equipment, regardless of status.
 
    @return equipment_id:        The ID of the equipmnet
-           equipment_name:      The name of the equipment (e.g. 'Fender 
+           equipment_name:      The name of the equipment (e.g. 'Fender
                                 Vintera II Tele')
            equipment_type_name: The type of the equipment (e.g. 'Electric
                                 Guitar')
@@ -394,7 +394,7 @@ END //
    Generates a list of all equipment rentals.
 
    @return rental_id:           The ID of the equipmnet
-           equipment_name:      The name of the equipment (e.g. 'Fender 
+           equipment_name:      The name of the equipment (e.g. 'Fender
                                 Vintera II Tele')
            performer_name:      The type of the equipment (e.g. 'Electric
                                 Guitar')
@@ -428,7 +428,7 @@ END //
    Generates a list of all 'NOT_PAID' equipment rentals.
 
    @return rental_id:           The ID of the equipmnet
-           equipment_name:      The name of the equipment (e.g. 'Fender 
+           equipment_name:      The name of the equipment (e.g. 'Fender
                                 Vintera II Tele')
            performer_name:      The type of the equipment (e.g. 'Electric
                                 Guitar')
