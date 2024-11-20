@@ -12,7 +12,7 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import BocchiTheGUI.elements.abstracts.PaneUI;
+
 import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 import BocchiTheGUI.interfaces.DataLoadable;
 
