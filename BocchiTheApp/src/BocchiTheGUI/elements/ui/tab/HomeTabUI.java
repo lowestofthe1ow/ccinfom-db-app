@@ -18,7 +18,7 @@ public class HomeTabUI extends PaneUI {
 		main.add(new JLabel("Welcome to Bocchi the App"));
 		this.add(main);
 
-		this.addButtons("Daily performer sales",
+		this.addButtons("Monthly performer sales",
 				"Monthly livehouse sales",
 				"Monthly rental sales",
 				"Weekly livehouse schedule",
