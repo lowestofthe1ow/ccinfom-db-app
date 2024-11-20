@@ -12,7 +12,7 @@ import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 public class StaffSalaryTab extends TableSelectionUI {
     public StaffSalaryTab(Object[][] sqlData) {
         super("Monthly staff salary", "ID", "Staff name", "Contact no.", "Total monthly salary");
-        this.setLoadDataCommand("sql/get_staff_assignments");
+        this.setLoadDataCommand("sql/get_staff_salary");
         this.setLoadDataParams((String[]) sqlData[0]);
 
         JPanel labelPanel = new JPanel();
