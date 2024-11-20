@@ -107,6 +107,7 @@ public class BocchiTheTabbedPane extends JTabbedPane {
     public BocchiTheTabbedPane(JPanel homePanel) {
         this.addTab("Home", homePanel);
         this.addTab(null, null);
+        this.setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
 
         this.newTabMenu = createNewTabMenu(
                 "Monthly performer sales", "dialog/performer_revenue",

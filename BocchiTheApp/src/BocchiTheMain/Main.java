@@ -22,13 +22,15 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		System.setProperty("flatlaf.menuBarEmbedded", "true");
-		UIManager.put("TabbedPane.buttonInsets", new Insets(0, 0, 0, 0));
+        
+        UIManager.put("TabbedPane.showTabSeparators", true);
+        UIManager.put("TabbedPane.tabsPopupPolicy", "never");
 		UIManager.put("RootPane.background", Color.PINK);
 		// UIManager.put("TitlePane.titleMargins", new Insets(10, 20, 10, 20));
 		UIManager.put("TitlePane.centerTitle", Boolean.TRUE);
-
-		// UIManager.put("TitlePane.titleMargins", new Insets(10, 20, 10, 20));
+		// UIManager.put("TitlePane.titleMargins", new Insets(10, 20, 10, 0));
 		UIManager.put("TitlePane.centerTitle", Boolean.TRUE);
 
 		SwingUtilities.invokeLater(new Runnable() {
