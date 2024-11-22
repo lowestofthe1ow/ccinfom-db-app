@@ -1,13 +1,14 @@
 package BocchiTheGUI.elements.abstracts;
 
-import java.awt.Dimension;
-import java.awt.LayoutManager;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -24,6 +25,7 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
     private List<Object[]> tableRows;
     private String sqlLoadDataCommand;
     private String[] sqlLoadDataParams;
+    private JPanel southPanel;
 
     /**
      * A list of {@link Function}s that are called by the table during
@@ -48,7 +50,8 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
      */
     public TableSelectionUI(String name, String... columnNames) {
         super(name);
-        this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
+        //this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new BorderLayout());
 
         this.filters = new ArrayList<>();
 
@@ -68,11 +71,31 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
         this.table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         this.table.getTableHeader().setReorderingAllowed(false);
         this.table.setAutoCreateRowSorter(true);
+        this.table.setFillsViewportHeight(true);
 
         /* Wrap JTable in JScrollPane and add it */
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(500, 250));
-        this.add(scrollPane);
+        //scrollPane.setPreferredSize(new Dimension(500, 250));
+
+        // Use super implementation for adding the scroll pane
+        super.add(scrollPane, BorderLayout.CENTER);
+
+        this.southPanel = new JPanel();
+        this.southPanel.setLayout(new BoxLayout(this.southPanel, BoxLayout.Y_AXIS));
+        // this.southPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+        // Use super implementation for adding the south panel
+        super.add(southPanel, BorderLayout.SOUTH);
+    }
+
+    @Override
+    public Component add(Component comp) {
+        //if (!(comp instanceof JTable || comp instanceof JScrollPane))
+        //    comp.setPreferredSize(new Dimension(500, 20));
+        this.southPanel.add(comp);
+        this.southPanel.revalidate();
+        this.southPanel.repaint();
+        return comp;
     }
 
     /**

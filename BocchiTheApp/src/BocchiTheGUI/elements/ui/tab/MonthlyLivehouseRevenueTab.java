@@ -25,8 +25,8 @@ public class MonthlyLivehouseRevenueTab extends TableSelectionUI {
         revenueLabel = new JLabel();
         revenueLabel.setFont(new Font("IBM Plex Sans", Font.PLAIN, 18));
 
-        this.addSearchBoxFilter("Filter by performer name", 1);
         this.add(new LabelForm(label, revenueLabel));
+        this.addSearchBoxFilter("Filter by performer name", 1);
     }
 
     @Override

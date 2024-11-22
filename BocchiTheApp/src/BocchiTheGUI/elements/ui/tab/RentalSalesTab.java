@@ -26,7 +26,7 @@ public class RentalSalesTab extends TableSelectionUI {
         revenueLabel.setFont(new Font("IBM Plex Sans", Font.PLAIN, 18));
 
         this.add(new LabelForm(label, revenueLabel));
-
+        this.addSearchBoxFilter("Filter by equipment name", 0);
     }
 
     @Override

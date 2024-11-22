@@ -17,9 +17,8 @@ public class StaffSalaryTab extends TableSelectionUI {
         JLabel label = new JLabel("Monthly salaries for " + (String) sqlData[0][0] + " " + (String) sqlData[0][1]);
         label.setFont(new Font("IBM Plex Sans", Font.BOLD, 18));
 
-        this.addSearchBoxFilter("Filter by staff name", 1);
-
         this.add(new LabelForm(label, new JPanel()));
+        this.addSearchBoxFilter("Filter by staff name", 1);
     }
 
     @Override

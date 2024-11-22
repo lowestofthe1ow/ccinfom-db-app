@@ -115,7 +115,7 @@ public abstract class PaneUI extends JPanel {
         }
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
 
         this.buttons.forEach((button) -> {
             buttonPanel.add(button);
