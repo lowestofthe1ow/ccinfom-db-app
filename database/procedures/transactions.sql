@@ -542,31 +542,6 @@ BEGIN
 END //
 
 /* =========================================================================
-   Adds a new performance timeslot to the system.
-
-   @params start_timestamp:  The start time of the performance
-           end_timestamp:    The end time of the performance
-   ========================================================================= */
-DROP PROCEDURE IF EXISTS add_performance_timeslot //
-CREATE PROCEDURE add_performance_timeslot (
-    IN start_timestamp TIMESTAMP,
-    IN end_timestamp TIMESTAMP
-)
--- ----------------------------------------------------------------------------
-BEGIN
-    INSERT INTO
-        performance_timeslot (
-            `start_timestamp`,
-            `end_timestamp`
-        )
-    VALUES
-        (
-            start_timestamp,
-            end_timestamp
-        );
-END //
-
-/* =========================================================================
    Schedules an audition for a performer in a specific timeslot.
 
    @params performer_id:       The ID of the performer
@@ -1036,5 +1011,51 @@ BEGIN
         AND YEAR(pct.start_timestamp) = year_name;
 END //
 
-DELIMITER ;
 
+DROP PROCEDURE IF EXISTS add_performance_timeslot //
+CREATE PROCEDURE add_performance_timeslot (
+    IN start_date DATE,
+	IN start_time TIME,
+    IN end_date DATE,
+    IN end_time TIME
+)
+BEGIN
+    DECLARE start_timestamp TIMESTAMP;
+    DECLARE end_timestamp TIMESTAMP;
+    
+    IF start_date IS NULL OR end_date IS NULL OR start_time IS NULL OR end_time IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Date and time values cannot be NULL';
+    END IF;
+
+    SET start_timestamp = STR_TO_DATE(CONCAT(start_date, ' ', start_time), '%Y-%m-%d %H:%i:%s');
+    SET end_timestamp = STR_TO_DATE(CONCAT(end_date, ' ', end_time), '%Y-%m-%d %H:%i:%s');
+
+    IF end_timestamp <= start_timestamp THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'End timestamp must be after start timestamp';
+    END IF;
+
+    INSERT INTO performance_timeslot (start_timestamp, end_timestamp)
+    VALUES (start_timestamp, end_timestamp);
+
+END //
+
+
+
+
+DROP PROCEDURE IF EXISTS get_rental_months //
+CREATE PROCEDURE get_rental_months ()
+-- ----------------------------------------------------------------------------
+BEGIN
+SELECT
+	MONTHNAME (er.start_date) AS month_on_record,
+	YEAR (er.start_date) AS year_on_record
+FROM
+	equipment_rental er
+WHERE
+	er.payment_status = 'PAID'
+GROUP BY
+	month_on_record,
+	year_on_record;
+END //
+
+DELIMITER ;
