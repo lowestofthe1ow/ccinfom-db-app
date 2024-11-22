@@ -12,7 +12,7 @@ import BocchiTheGUI.interfaces.DataLoadable;
 public class RentalSalesUI extends PaneUI implements DataLoadable  {
 	 private JComboBox<String> monthSelector;
 	public RentalSalesUI() {
-		super("Generate monthly livehouse revenue report");
+		super("Generate monthly rental sales report");
 
         this.monthSelector = new JComboBox<>();
 
@@ -25,7 +25,7 @@ public class RentalSalesUI extends PaneUI implements DataLoadable  {
 
 	@Override
     public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
-        List<Object[]> data = source.apply("sql/get_months_on_record", null);
+        List<Object[]> data = source.apply("sql/get_rental_months", null);
 
         data.forEach((row) -> {
             monthSelector.addItem((String) row[0] + " " + (Integer) row[1]);
