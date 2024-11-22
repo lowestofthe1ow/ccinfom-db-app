@@ -1,5 +1,7 @@
 package BocchiTheController;
 
+import java.util.function.Supplier;
+
 import BocchiTheGUI.elements.abstracts.PaneUI;
 import BocchiTheGUI.elements.ui.dialog.AddAuditionUI;
 import BocchiTheGUI.elements.ui.dialog.AddEquipmentUI;
@@ -18,9 +20,9 @@ import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.RentEquipmentUI;
 import BocchiTheGUI.elements.ui.dialog.RentalSalesUI;
+import BocchiTheGUI.elements.ui.dialog.StaffSalaryUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateEquipmentStatusUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
-import BocchiTheGUI.elements.ui.dialog.StaffSalaryUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AssignToPerformanceUI;
@@ -49,24 +51,24 @@ public final class PaneUIFactory {
      * ignored when it is not needed.
      * 
      * @param dialogIdentifier The identifier string
-     * @param sqlData          The SQL data to pass to the new dialog, as in
+     * @param dataFetcher.get()          The SQL data to pass to the new dialog, as in
      *                         {@link PaneUI#getSQLParameterInputs()}. Ignored in
      *                         cases where the UI does not require it.
      * @return The newly-created instance ({@code null} if no string matched)
      */
-    public static PaneUI createPaneUI(String dialogIdentifier, Object[][] sqlData) {
+    public static PaneUI createPaneUI(String dialogIdentifier, Supplier<Object[][]> dataFetcher) {
         switch (dialogIdentifier) {
             /* Staff menu */
             case "dialog/hire_staff":
                 return new HireStaffUI();
             case "dialog/hire_staff/select_staff_position":
-                return new SelectStaffPositionUI(sqlData);
+                return new SelectStaffPositionUI(dataFetcher.get());
             case "dialog/remove_staff":
                 return new RemoveStaffUI();
             case "dialog/update_staff_position":
                 return new UpdateStaffPositionUI();
             case "dialog/update_staff_position/select_staff_position":
-                return new SelectUpdatedStaffPositionUI(sqlData);
+                return new SelectUpdatedStaffPositionUI(dataFetcher.get());
             case "dialog/add_position_type":
                 return new AddPositionTypeUI();
 
@@ -78,23 +80,23 @@ public final class PaneUIFactory {
             case "dialog/add_audition":
                 return new AddAuditionUI();
             case "dialog/add_audition/select_timeslot":
-                return new SelectTimeslotUI(sqlData);
+                return new SelectTimeslotUI(dataFetcher.get());
             case "dialog/add_audition/select_timeslot/input_submission":
-                return new InputSubmissionUI(sqlData);
+                return new InputSubmissionUI(dataFetcher.get());
             case "dialog/manage_auditions":
                 return new ManageAuditionsUI();
             case "dialog/manage_performances":
                 return new ManagePerformancesUI();
             case "dialog/manage_performances/record_revenue":
-                return new RecordRevenueUI(sqlData);
+                return new RecordRevenueUI(dataFetcher.get());
             case "dialog/assign_staff":
                 return new AssignStaffUI();
             case "dialog/assign_staff/assign_to_performance":
-                return new AssignToPerformanceUI(sqlData);
+                return new AssignToPerformanceUI(dataFetcher.get());
             case "dialog/assign_staff/assign_to_performance/view_assigned_performances":
-                return new ViewAssignedPerformancesUI(sqlData);
+                return new ViewAssignedPerformancesUI(dataFetcher.get());
             case "dialog/assign_staff/view_assigned_staff":
-                return new ViewAssignedStaffUI(sqlData);
+                return new ViewAssignedStaffUI(dataFetcher.get());
 
             /* Equipment menu */
             case "dialog/add_equipment":
@@ -102,11 +104,11 @@ public final class PaneUIFactory {
             case "dialog/add_equipment/add_equipment_type":
                 return new AddEquipmentTypeUI();
             case "dialog/add_equipment/add_equipment_details":
-                return new AddEquipmentDetailsUI(sqlData);
+                return new AddEquipmentDetailsUI(dataFetcher.get());
             case "dialog/rent_equipment":
                 return new RentEquipmentUI();
             case "dialog/rent_equipment/select_performer":
-                return new SelectPerformerForRental(sqlData);
+                return new SelectPerformerForRental(dataFetcher.get());
             case "dialog/manage_rentals":
                 return new ManageRentalsUI();
             case "dialog/pay_rental":
@@ -116,13 +118,13 @@ public final class PaneUIFactory {
             case "dialog/update_equipment_status":
                 return new UpdateEquipmentStatusUI();
             case "dialog/update_equipment_status/change_equipment_status":
-                return new UpdateEquipmentStatusSub(sqlData);
+                return new UpdateEquipmentStatusSub(dataFetcher.get());
 
             /* Report generation dialogs */
             case "dialog/performer_revenue":
                 return new PerformerRevenueUI();
             case "dialog/performer_revenue/select_performer_month":
-                return new SelectPerformerMonthUI(sqlData);
+                return new SelectPerformerMonthUI(dataFetcher.get());
             case "dialog/monthly_livehouse_revenue":
                 return new MonthlyLivehouseRevenueUI();
             case "dialog/staff_salary":
@@ -132,15 +134,15 @@ public final class PaneUIFactory {
 
             /* Report tabs */
             case "report/performer_report_month":
-                return new PerformerRevenueTab(sqlData);
+                return new PerformerRevenueTab(dataFetcher.get());
             case "report/monthly_livehouse_revenue":
-                return new MonthlyLivehouseRevenueTab(sqlData);
+                return new MonthlyLivehouseRevenueTab(dataFetcher.get());
             case "report/livehouse_schedule":
-                return new ScheduleTab(sqlData);
+                return new ScheduleTab(dataFetcher.get());
             case "report/staff_salary":
-                return new StaffSalaryTab(sqlData);
+                return new StaffSalaryTab(dataFetcher.get());
             case "report/monthly_rental_sales":
-                return new RentalSalesTab(sqlData);
+                return new RentalSalesTab(dataFetcher.get());
         }
         return null;
     }

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.swing.JOptionPane;
 
@@ -75,7 +76,9 @@ public class Controller {
         System.out.println(tabIdentifier);
         PaneUI ui = PaneUIFactory.createPaneUI(
                 tabIdentifier, /* Tab pane name */
-                sqlData);
+                () -> {
+                    return sqlData;
+                });
         /* Load data into the new tab */
         if (this.loadDataFromSQL(ui))
             gui.addTab(ui, tabIdentifier);
@@ -86,7 +89,7 @@ public class Controller {
             return ui.getSQLParameterInputs();
         } catch (Exception e) {
             showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
+            throw e;
         }
     }
 
@@ -98,8 +101,14 @@ public class Controller {
      * @param sqlData          The SQL data to pass to the new dialog, as in
      *                         {@link PaneUI#getSQLParameterInputs()}
      */
-    private void showDialog(String dialogIdentifier, Object[][] sqlData) {
-        PaneUI dialogUI = PaneUIFactory.createPaneUI(dialogIdentifier, sqlData);
+    private void showDialog(String dialogIdentifier, Supplier<Object[][]> dataFetcher) {
+        PaneUI dialogUI;
+
+        try {
+            dialogUI = PaneUIFactory.createPaneUI(dialogIdentifier, dataFetcher);
+        } catch (Exception e) {
+            return;
+        }
 
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, dialogIdentifier, () -> {
@@ -111,12 +120,16 @@ public class Controller {
             dialogUI.addButtonListener((e) -> {
                 String commandIdentifier = e.getActionCommand();
 
-                /* Check if the button pressed was an SQL button */
-                if (commandIdentifier.contains("button/sql/"))
-                    parseButtonCommand(commandIdentifier, catchGetSQLParameterInputs(dialogUI));
-                /* Otherwise, check if it was a report generation button */
-                else if (commandIdentifier.contains("button/report/")) {
-                    showTab(commandIdentifier.substring(7), catchGetSQLParameterInputs(dialogUI));
+                try {
+                    /* Check if the button pressed was an SQL button */
+                    if (commandIdentifier.contains("button/sql/")) {
+                        parseButtonCommand(commandIdentifier, catchGetSQLParameterInputs(dialogUI));
+                    }
+                    /* Otherwise, check if it was a report generation button */
+                    else if (commandIdentifier.contains("button/report/")) {
+                        showTab(commandIdentifier.substring(7), catchGetSQLParameterInputs(dialogUI));
+                    }
+                } catch (Exception err) {
                 }
 
                 /* Check if the button command terminates the window */
@@ -134,8 +147,9 @@ public class Controller {
                                 this.loadDataFromSQL(rootUI);
                             });
                     } else {
-                        showDialog(dialogIdentifier + commandIdentifier.substring(11),
-                                catchGetSQLParameterInputs(dialogUI));
+                        showDialog(dialogIdentifier + commandIdentifier.substring(11), () -> {
+                            return catchGetSQLParameterInputs(dialogUI);
+                        });
                     }
                 } else {
                     if (!this.loadDataFromSQL(dialogUI))
@@ -275,7 +289,7 @@ public class Controller {
     private void parseButtonCommand(String eventString, Object[][] sqlQueries) {
         if (eventString == null || sqlQueries == null)
             return;
-            
+
         try {
             for (Object[] query : sqlQueries) {
                 executeProcedure(eventString.substring(11), query);
