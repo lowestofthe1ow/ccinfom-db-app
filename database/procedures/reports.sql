@@ -30,39 +30,42 @@ CREATE PROCEDURE performer_report_month (
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-    pf.performer_name,
-    DATE_FORMAT (pts.start_timestamp, '%Y-%m') AS performance_month,
-    SUM(pr.ticket_price * pr.tickets_sold) AS total_sales,
+    pr.performer_name,
+    DATE_FORMAT (pct.start_timestamp, '%Y-%m') AS performance_month,
+    SUM(pcr.ticket_price * pcr.tickets_sold) AS total_sales,
     SUM(
         CASE
-            WHEN pr.ticket_price * pr.tickets_sold > p.base_quota THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * (1 - pr.cut_percent)
+            WHEN pcr.ticket_price * pcr.tickets_sold > pc.base_quota
+                THEN (pcr.ticket_price * pcr.tickets_sold - pc.base_quota) * (1 - pcr.cut_percent)
             ELSE 0
         END
     ) AS performer_profit_month,
     SUM(
         CASE
-            WHEN pr.ticket_price * pr.tickets_sold < p.base_quota THEN p.base_quota - pr.ticket_price * pr.tickets_sold
+            WHEN pcr.ticket_price * pcr.tickets_sold < pc.base_quota
+                THEN pc.base_quota - pcr.ticket_price * pcr.tickets_sold
             ELSE 0
         END
     ) AS performer_debt_month,
     SUM(
         CASE
-            WHEN pr.ticket_price * pr.tickets_sold > p.base_quota THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+            WHEN pcr.ticket_price * pcr.tickets_sold > pc.base_quota
+                THEN (pcr.ticket_price * pcr.tickets_sold - pc.base_quota) * pcr.cut_percent
             ELSE 0
         END
     ) AS livehouse_profit_month
 FROM
-    performance_revenue pr
-    JOIN performance p ON pr.performance_id = p.performance_id
-    JOIN performer pf ON p.performer_id = pf.performer_id
-    JOIN performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    performance_revenue pcr
+    JOIN performance pc ON pcr.performance_id = pc.performance_id
+    JOIN performer pr ON pc.performer_id = pr.performer_id
+    JOIN performance_timeslot pct ON pct.performance_timeslot_id = pc.performance_timeslot_id
 WHERE
-    pf.performer_id = performer_id
-    AND MONTHNAME (pts.start_timestamp) = month_name
-    AND YEAR (pts.end_timestamp) = year_name
-    AND p.performance_status = 'COMPLETE'
+    pr.performer_id = performer_id
+    AND MONTHNAME (pct.start_timestamp) = month_name
+    AND YEAR (pct.end_timestamp) = year_name
+    AND pc.performance_status = 'COMPLETE'
 GROUP BY
-    pf.performer_name,
+    pr.performer_name,
     performance_month;
 END //
 
@@ -88,17 +91,17 @@ BEGIN
 SELECT
     SUM(
         CASE
-            WHEN pr.ticket_price * pr.tickets_sold > p.base_quota THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+            WHEN pcr.ticket_price * pcr.tickets_sold > pc.base_quota THEN (pcr.ticket_price * pcr.tickets_sold - pc.base_quota) * pcr.cut_percent
             ELSE 0
         END
     ) AS livehouse_profit_month
 FROM
-    performance_revenue pr
-    JOIN performance p ON pr.performance_id = p.performance_id
-    JOIN performance_timeslot pts ON pts.performance_timeslot_id = p.performance_timeslot_id
+    performance_revenue pcr
+    JOIN performance pc ON pcr.performance_id = pc.performance_id
+    JOIN performance_timeslot pct ON pct.performance_timeslot_id = pc.performance_timeslot_id
 WHERE
-    MONTHNAME (pts.start_timestamp) = month_name
-    AND YEAR (pts.end_timestamp) = YEAR;
+    MONTHNAME (pct.start_timestamp) = month_name
+    AND YEAR (pct.end_timestamp) = YEAR;
 END //
 
 /* =========================================================================
@@ -155,19 +158,19 @@ CREATE PROCEDURE get_schedule ()
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-    pf.performer_name,
-    DAYNAME (pts.start_timestamp) AS day_name,
-    pts.start_timestamp,
-    pts.end_timestamp
+    pr.performer_name,
+    DAYNAME (pct.start_timestamp) AS day_name,
+    pct.start_timestamp,
+    pct.end_timestamp
 FROM
-    performance p
-    JOIN performance_timeslot pts ON p.performance_timeslot_id = pts.performance_timeslot_id
-    JOIN performer pf ON p.performer_id = pf.performer_id
+    performance pc
+    JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+    JOIN performer pr ON pc.performer_id = pr.performer_id
 WHERE
-    p.performance_status = 'PENDING'
-    AND YEARWEEK (pts.start_timestamp) = YEARWEEK (CURDATE())
+    pc.performance_status = 'PENDING'
+    AND YEARWEEK (pct.start_timestamp) = YEARWEEK (CURDATE())
 ORDER BY
-    pts.start_timestamp;
+    pct.start_timestamp;
 END //
 
 /* =========================================================================
@@ -193,21 +196,21 @@ CREATE PROCEDURE get_staff_salary (
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-    sp.staff_id,
+    spo.staff_id,
     CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
     s.contact_no,
-    SUM(pt.salary)
+    SUM(po.salary)
 FROM staff s
-    JOIN staff_position sp ON s.staff_id = sp.staff_id
+    JOIN staff_position spo ON s.staff_id = spo.staff_id
 	JOIN staff_assignment sa ON s.staff_id = sa.staff_id
-	JOIN performance p ON sa.performance_id = p.performance_id
-	JOIN performance_timeslot ps ON p.performance_timeslot_id = ps.performance_timeslot_id
-	JOIN position_type pt ON sp.position_id = pt.position_id
-WHERE ((sp.end_date IS NULL AND DATE(ps.start_timestamp) >= sp.start_date)
-	OR (DATE(ps.start_timestamp) BETWEEN sp.start_date AND sp.end_date))
-	AND YEAR(ps.start_timestamp) = 2024
-	AND MONTHNAME(ps.start_timestamp) = 'November'
-GROUP BY sp.staff_id
+	JOIN performance pc ON sa.performance_id = pc.performance_id
+	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+	JOIN position_type po ON spo.position_id = po.position_id
+WHERE ((spo.end_date IS NULL AND DATE(pct.start_timestamp) >= spo.start_date)
+	OR (DATE(pct.start_timestamp) BETWEEN spo.start_date AND spo.end_date))
+	AND YEAR(pct.start_timestamp) = 2024
+	AND MONTHNAME(pct.start_timestamp) = 'November'
+GROUP BY spo.staff_id
 ORDER BY staff_id;
 END //
 

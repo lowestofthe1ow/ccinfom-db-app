@@ -60,37 +60,37 @@ ELSEIF (
 	SELECT
 		MAX(start_date)
 	FROM
-		staff_position sp
+		staff_position spo
 	WHERE
-		sp.staff_id = staff_id
+		spo.staff_id = staff_id
 ) >= DATE (NOW ())
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 ELSEIF (
 	SELECT
-		sp.end_date
+		spo.end_date
 	FROM
-		staff_position sp
+		staff_position spo
 	WHERE
-		sp.staff_id = staff_id
-		AND sp.start_date = (
+		spo.staff_id = staff_id
+		AND spo.start_date = (
 			SELECT
 				MAX(start_date)
 			FROM
-				staff_position sp
+				staff_position spo
 			WHERE
-				sp.staff_id = staff_id
+				spo.staff_id = staff_id
 		)
 ) IS NOT NULL
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff is not active';
 ELSE
-	UPDATE staff_position sp
+	UPDATE staff_position spo
 	SET
-		sp.end_date = DATE (NOW ())
+		spo.end_date = DATE (NOW ())
 	WHERE
-		sp.end_date IS NULL
-		AND sp.staff_id = staff_id;
+		spo.end_date IS NULL
+		AND spo.staff_id = staff_id;
 END IF;
 END //
 
@@ -117,11 +117,11 @@ THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such staff';
 ELSEIF (
 	SELECT
-		sp.position_id
+		spo.position_id
 	FROM
-		staff_position sp
+		staff_position spo
 	WHERE
-		sp.start_date = (
+		spo.start_date = (
 			SELECT
 				MAX(sp2.start_date)
 			FROM
@@ -129,8 +129,8 @@ ELSEIF (
 			WHERE
 				sp2.staff_id = staff_id
 		)
-		AND sp.staff_id = staff_id
-		AND sp.end_date IS NULL
+		AND spo.staff_id = staff_id
+		AND spo.end_date IS NULL
 ) = position_id
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff is already assigned that position';
@@ -138,19 +138,19 @@ ELSEIF (
 	SELECT
 		MAX(start_date)
 	FROM
-		staff_position sp
+		staff_position spo
 	WHERE
-		sp.staff_id = staff_id
+		spo.staff_id = staff_id
 ) >= DATE (NOW ())
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 ELSE
-	UPDATE staff_position sp
+	UPDATE staff_position spo
 	SET
-		sp.end_date = DATE (NOW ())
+		spo.end_date = DATE (NOW ())
 	WHERE
-		sp.end_date IS NULL
-		AND sp.staff_id = staff_id;
+		spo.end_date IS NULL
+		AND spo.staff_id = staff_id;
 INSERT INTO
 	staff_position (
 		`staff_id`,
@@ -393,9 +393,9 @@ ELSEIF (
 	SELECT
 		COUNT(performance_timeslot_id)
 	FROM
-		performance p
+		performance pc
 	WHERE
-		p.performance_timeslot_id = (
+		pc.performance_timeslot_id = (
 			SELECT
 				a.target_timeslot_id
 			FROM
@@ -403,7 +403,7 @@ ELSEIF (
 			WHERE
 				a.audition_id = audition_id
 		)
-		AND p.performance_status = 'PENDING'
+		AND pc.performance_status = 'PENDING'
 ) > 0
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Performance slot is taken';
@@ -425,10 +425,10 @@ ELSE
 		(
 			(
 				SELECT
-					p.performer_id
+					pr.performer_id
 				FROM
 					audition a
-					JOIN performer p ON a.performer_id = p.performer_id
+					JOIN performer pr ON a.performer_id = pr.performer_id
 				WHERE
 					a.audition_id = audition_id
 			),
@@ -489,20 +489,20 @@ CREATE PROCEDURE cancel_performance (
 BEGIN
 IF (
 	SELECT
-		p.performance_status
+		pc.performance_status
 	FROM
-		performance p
+		performance pc
 	WHERE
-		p.performance_id = performance_id
+		pc.performance_id = performance_id
 ) <> 'PENDING'
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
 ELSE
-	UPDATE performance p
+	UPDATE performance pc
 	SET
-		p.performance_status = 'CANCELLED'
+		pc.performance_status = 'CANCELLED'
 	WHERE
-		p.performance_id = performance_id;
+		pc.performance_id = performance_id;
 END IF;
 END //
 DELIMITER //
@@ -614,11 +614,11 @@ CREATE PROCEDURE assign_staff (
 BEGIN
     IF (
         SELECT
-            p.performance_status
+            pc.performance_status
         FROM
-            performance p
+            performance pc
         WHERE
-            p.performance_id = performance_id
+            pc.performance_id = performance_id
     ) <> 'PENDING' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
     
@@ -660,20 +660,20 @@ CREATE PROCEDURE record_performance_revenue (
 BEGIN
     IF (
         SELECT
-            p.performance_status
+            pc.performance_status
         FROM
-            performance p
+            performance pc
         WHERE
-            p.performance_id = performance_id
+            pc.performance_id = performance_id
     ) <> 'PENDING' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
     
     ELSE
-        UPDATE performance p
+        UPDATE performance pc
         SET
-            p.performance_status = 'COMPLETE'
+            pc.performance_status = 'COMPLETE'
         WHERE
-            p.performance_id = performance_id;
+            pc.performance_id = performance_id;
 
         INSERT INTO
             performance_revenue (
@@ -740,11 +740,11 @@ CREATE PROCEDURE assign_staff (
 BEGIN
     IF (
         SELECT
-            p.performance_status
+            pc.performance_status
         FROM
-            performance p
+            performance pc
         WHERE
-            p.performance_id = performance_id
+            pc.performance_id = performance_id
     ) <> 'PENDING' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
     
@@ -786,20 +786,20 @@ CREATE PROCEDURE record_performance_revenue (
 BEGIN
     IF (
         SELECT
-            p.performance_status
+            pc.performance_status
         FROM
-            performance p
+            performance pc
         WHERE
-            p.performance_id = performance_id
+            pc.performance_id = performance_id
     ) <> 'PENDING' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
     
     ELSE
-        UPDATE performance p
+        UPDATE performance pc
         SET
-            p.performance_status = 'COMPLETE'
+            pc.performance_status = 'COMPLETE'
         WHERE
-            p.performance_id = performance_id;
+            pc.performance_id = performance_id;
 
         INSERT INTO
             performance_revenue (
@@ -976,31 +976,31 @@ CREATE PROCEDURE get_staff_assignments (
 -- ----------------------------------------------------------------------------
 BEGIN
     SELECT
-        sp.staff_id,
+        spo.staff_id,
         CONCAT (s.first_name, ' ', s.last_name) AS staff_name,
         s.contact_no,
-        SUM(pt.salary)
+        SUM(po.salary)
     FROM
         staff s
-        JOIN staff_position sp ON s.staff_id = sp.staff_id
+        JOIN staff_position spo ON s.staff_id = spo.staff_id
         JOIN staff_assignment sa ON s.staff_id = sa.staff_id
-        JOIN performance p ON sa.performance_id = p.performance_id
-        JOIN performance_timeslot ps ON p.performance_timeslot_id = ps.performance_timeslot_id
-        JOIN position_type pt ON sp.position_id = pt.position_id
+        JOIN performance pc ON sa.performance_id = pc.performance_id
+        JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+        JOIN position_type po ON spo.position_id = po.position_id
     WHERE
         (
             (
-                sp.end_date IS NULL
-                AND DATE (ps.start_timestamp) >= sp.start_date
+                spo.end_date IS NULL
+                AND DATE (pct.start_timestamp) >= spo.start_date
             )
             OR (
-                DATE (ps.start_timestamp) BETWEEN sp.start_date AND sp.end_date
+                DATE (pct.start_timestamp) BETWEEN spo.start_date AND spo.end_date
             )
         )
-        AND YEAR (ps.start_timestamp) = YEAR
-        AND MONTHNAME (ps.start_timestamp) = month_name
+        AND YEAR (pct.start_timestamp) = YEAR
+        AND MONTHNAME (pct.start_timestamp) = month_name
     GROUP BY
-        sp.staff_id
+        spo.staff_id
     ORDER BY
         staff_id;
 END //
@@ -1021,19 +1021,19 @@ CREATE PROCEDURE get_performances_by_performer_month (
 -- ----------------------------------------------------------------------------
 BEGIN
 	SELECT
-		p.performer_name,
-        pt.start_timestamp,
+		pr.performer_name,
+        pct.start_timestamp,
         pc.base_quota,
-        pr.ticket_price * pr.tickets_sold
+        pcr.ticket_price * pcr.tickets_sold
     FROM
-		performer p
-        JOIN performance pc ON p.performer_id = pc.performer_id
-        JOIN performance_timeslot pt ON pc.performance_timeslot_id = pt.performance_timeslot_id
-        JOIN performance_revenue pr ON pr.performance_id = pc.performance_id
+		performer pr
+        JOIN performance pc ON pr.performer_id = pc.performer_id
+        JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+        JOIN performance_revenue pcr ON pcr.performance_id = pc.performance_id
 	WHERE
-		p.performer_id = performer_id
-		AND MONTHNAME(pt.start_timestamp) = month_name
-        AND YEAR(pt.start_timestamp) = year_name;
+		pr.performer_id = performer_id
+		AND MONTHNAME(pct.start_timestamp) = month_name
+        AND YEAR(pct.start_timestamp) = year_name;
 END //
 
 DELIMITER ;

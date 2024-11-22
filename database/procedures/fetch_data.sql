@@ -15,14 +15,14 @@ CREATE PROCEDURE get_months_with_performances_by (
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	MONTHNAME (pt.start_timestamp) AS month_on_record,
-	YEAR (pt.start_timestamp) AS year_on_record
+	MONTHNAME (pct.start_timestamp) AS month_on_record,
+	YEAR (pct.start_timestamp) AS year_on_record
 FROM
-	performance p
-	JOIN performance_timeslot pt ON p.performance_timeslot_id = pt.performance_timeslot_id
+	performance pc
+	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
 WHERE
-	p.performance_status = 'COMPLETE'
-	AND p.performer_id = performer_id
+	pc.performance_status = 'COMPLETE'
+	AND pc.performer_id = performer_id
 GROUP BY
 	month_on_record,
 	year_on_record;
@@ -40,13 +40,13 @@ CREATE PROCEDURE get_months_on_record ()
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	MONTHNAME (pt.start_timestamp) AS month_on_record,
-	YEAR (pt.start_timestamp) AS year_on_record
+	MONTHNAME (pct.start_timestamp) AS month_on_record,
+	YEAR (pct.start_timestamp) AS year_on_record
 FROM
-	performance p
-	JOIN performance_timeslot pt ON p.performance_timeslot_id = pt.performance_timeslot_id
+	performance pc
+	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
 WHERE
-	p.performance_status = 'COMPLETE'
+	pc.performance_status = 'COMPLETE'
 GROUP BY
 	month_on_record,
 	year_on_record;
@@ -74,26 +74,27 @@ CREATE PROCEDURE get_performances_in_month (
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	p.performance_id,
-	pf.performer_name,
-	pt.start_timestamp,
+	pc.performance_id,
+	pr.performer_name,
+	pct.start_timestamp,
 	(
 		CASE
-			WHEN pr.ticket_price * pr.tickets_sold > p.base_quota THEN (pr.ticket_price * pr.tickets_sold - p.base_quota) * pr.cut_percent
+			WHEN pcr.ticket_price * pcr.tickets_sold > pc.base_quota
+                THEN (pcr.ticket_price * pcr.tickets_sold - pc.base_quota) * pcr.cut_percent
 			ELSE 0
 		END
 	) AS profit
 FROM
-	performance p
-	JOIN performance_timeslot pt ON p.performance_timeslot_id = pt.performance_timeslot_id
-	JOIN performer pf ON p.performer_id = pf.performer_id
-	JOIN performance_revenue pr ON p.performance_id = pr.performance_id
+	performance pc
+	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+	JOIN performer pr ON pc.performer_id = pr.performer_id
+	JOIN performance_revenue pcr ON pc.performance_id = pcr.performance_id
 WHERE
-	MONTHNAME (pt.start_timestamp) = month_name
-	AND YEAR (pt.start_timestamp) = year_name
-	AND p.performance_status = 'COMPLETE'
+	MONTHNAME (pct.start_timestamp) = month_name
+	AND YEAR (pct.start_timestamp) = year_name
+	AND pc.performance_status = 'COMPLETE'
 ORDER BY
-	pt.start_timestamp DESC;
+	pct.start_timestamp DESC;
 END //
 
 /* =========================================================================
@@ -111,18 +112,18 @@ CREATE PROCEDURE get_pending_performances ()
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	p.performance_id,
+	pc.performance_id,
 	pr.performer_name,
-	pt.start_timestamp,
-	p.performance_status
+	pct.start_timestamp,
+	pc.performance_status
 FROM
-	performance p
-	JOIN performance_timeslot pt ON p.performance_timeslot_id = pt.performance_timeslot_id
-	JOIN performer pr ON p.performer_id = pr.performer_id
+	performance pc
+	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+	JOIN performer pr ON pc.performer_id = pr.performer_id
 WHERE
-	p.performance_status = 'PENDING'
+	pc.performance_status = 'PENDING'
 ORDER BY
-	pt.start_timestamp DESC;
+	pct.start_timestamp DESC;
 END //
 
 /* =========================================================================
@@ -140,16 +141,16 @@ CREATE PROCEDURE get_performances ()
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	p.performance_id,
+	pc.performance_id,
 	pr.performer_name,
-	pt.start_timestamp,
-	p.performance_status
+	pct.start_timestamp,
+	pc.performance_status
 FROM
-	performance p
-	JOIN performance_timeslot pt ON p.performance_timeslot_id = pt.performance_timeslot_id
-	JOIN performer pr ON p.performer_id = pr.performer_id
+	performance pc
+	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+	JOIN performer pr ON pc.performer_id = pr.performer_id
 ORDER BY
-	pt.start_timestamp DESC;
+	pct.start_timestamp DESC;
 END //
 
 /* =========================================================================
@@ -180,20 +181,20 @@ CREATE PROCEDURE get_timeslots ()
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	pt.performance_timeslot_id,
-    pt.start_timestamp,
-    pt.end_timestamp
+	pct.performance_timeslot_id,
+    pct.start_timestamp,
+    pct.end_timestamp
 FROM
-	performance_timeslot pt
+	performance_timeslot pct
 WHERE
 	(
 		SELECT
 			COUNT(*)
 		FROM
-			performance p
+			performance pc
 		WHERE
-			p.performance_timeslot_id = pt.performance_timeslot_id
-			AND p.performance_status <> 'CANCELLED'
+			pc.performance_timeslot_id = pct.performance_timeslot_id
+			AND pc.performance_status <> 'CANCELLED'
 	) = 0;
 END //
 
@@ -211,12 +212,12 @@ CREATE PROCEDURE get_performers ()
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	p.performer_id,
-	p.performer_name,
-	CONCAT (p.contact_first_name, ' ', p.contact_last_name) AS contact_person,
-	p.contact_no
+	pr.performer_id,
+	pr.performer_name,
+	CONCAT (pr.contact_first_name, ' ', pr.contact_last_name) AS contact_person,
+	pr.contact_no
 FROM
-	performer p;
+	performer pr;
 END //
 
 /* =========================================================================
@@ -256,16 +257,16 @@ CREATE PROCEDURE get_auditions ()
 BEGIN
 SELECT
 	a.audition_id,
-	p.performer_name,
+	pr.performer_name,
 	a.submission_link,
-	pt.start_timestamp AS target_datetime,
-	CONCAT (p.contact_first_name, ' ', p.contact_last_name) AS contact_person,
-	p.contact_no,
+	pct.start_timestamp AS target_datetime,
+	CONCAT (pr.contact_first_name, ' ', pr.contact_last_name) AS contact_person,
+	pr.contact_no,
 	a.audition_status
 FROM
 	audition a
-	LEFT JOIN performer p ON p.performer_id = a.performer_id
-	LEFT JOIN performance_timeslot pt ON a.target_timeslot_id = pt.performance_timeslot_id;
+	LEFT JOIN performer pr ON pr.performer_id = a.performer_id
+	LEFT JOIN performance_timeslot pct ON a.target_timeslot_id = pct.performance_timeslot_id;
 END //
 
 /* =========================================================================
@@ -282,25 +283,25 @@ CREATE PROCEDURE get_active_staff ()
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	sp.staff_id,
+	spo.staff_id,
 	CONCAT (first_name, ' ', last_name) AS full_name,
 	s.contact_no,
-	pt.position_name,
-	pt.salary
+	po.position_name,
+	po.salary
 FROM
 	staff s
-	JOIN staff_position sp ON s.staff_id = sp.staff_id
-	JOIN position_type pt ON sp.position_id = pt.position_id
+	JOIN staff_position spo ON s.staff_id = spo.staff_id
+	JOIN position_type po ON spo.position_id = po.position_id
 WHERE
-	sp.start_date = (
+	spo.start_date = (
 		SELECT
 			MAX(start_date)
 		FROM
 			staff_position sp2
 		WHERE
-			sp.staff_id = sp2.staff_id
+			spo.staff_id = sp2.staff_id
 	)
-	AND sp.end_date IS NULL;
+	AND spo.end_date IS NULL;
 END //
 
 /* =========================================================================
@@ -322,21 +323,21 @@ SELECT
 	s.staff_id,
 	CONCAT (first_name, ' ', last_name) AS full_name,
 	s.contact_no,
-	IFNULL (pt.position_name, 'N/A'),
-	IFNULL (pt.salary, 'N/A')
+	IFNULL (po.position_name, 'N/A'),
+	IFNULL (po.salary, 'N/A')
 FROM
 	staff s
-	LEFT JOIN staff_position sp ON s.staff_id = sp.staff_id
-	AND sp.start_date = (
+	LEFT JOIN staff_position spo ON s.staff_id = spo.staff_id
+	AND spo.start_date = (
 		SELECT
 			MAX(start_date)
 		FROM
 			staff_position sp2
 		WHERE
-			sp.staff_id = sp2.staff_id
+			spo.staff_id = sp2.staff_id
 	)
-	AND sp.end_date IS NULL
-	LEFT JOIN position_type pt ON sp.position_id = pt.position_id;
+	AND spo.end_date IS NULL
+	LEFT JOIN position_type po ON spo.position_id = po.position_id;
 END //
 
 /* =========================================================================
@@ -412,14 +413,14 @@ BEGIN
 SELECT
 	er.rental_id,
 	e.equipment_name,
-	p.performer_name,
+	pr.performer_name,
 	er.start_date,
 	er.end_date,
 	er.equipment_status
 FROM
 	equipment_rental er
 	JOIN equipment e ON er.equipment_id = e.equipment_id
-	JOIN performer p ON er.performer_id = p.performer_id
+	JOIN performer pr ON er.performer_id = pr.performer_id
 WHERE
 	er.equipment_status = 'PENDING';
 END //
@@ -446,14 +447,14 @@ BEGIN
 SELECT
 	er.rental_id,
 	e.equipment_name,
-	p.performer_name,
+	pr.performer_name,
 	er.start_date,
 	er.end_date,
 	er.payment_status
 FROM
 	equipment_rental er
 	JOIN equipment e ON er.equipment_id = e.equipment_id
-	JOIN performer p ON er.performer_id = p.performer_id
+	JOIN performer pr ON er.performer_id = pr.performer_id
 WHERE
 	er.payment_status = 'NOT_PAID'
 	AND er.equipment_status <> 'PENDING';
@@ -478,22 +479,22 @@ SELECT
 	s.staff_id,
 	CONCAT (first_name, ' ', last_name) AS full_name,
 	s.contact_no,
-	IFNULL (pt.position_name, 'N/A'),
-	IFNULL (pt.salary, 'N/A')
+	IFNULL (po.position_name, 'N/A'),
+	IFNULL (po.salary, 'N/A')
 FROM
 	staff s
 	JOIN staff_assignment sa ON sa.staff_id = s.staff_id
-	LEFT JOIN staff_position sp ON s.staff_id = sp.staff_id
-	AND sp.start_date = (
+	LEFT JOIN staff_position spo ON s.staff_id = spo.staff_id
+	AND spo.start_date = (
 		SELECT
 			MAX(start_date)
 		FROM
 			staff_position sp2
 		WHERE
-			sp.staff_id = sp2.staff_id
+			spo.staff_id = sp2.staff_id
 	)
-	AND sp.end_date IS NULL
-	LEFT JOIN position_type pt ON sp.position_id = pt.position_id
+	AND spo.end_date IS NULL
+	LEFT JOIN position_type po ON spo.position_id = po.position_id
 WHERE
 	sa.performance_id = performance_id;
 END //
@@ -515,19 +516,19 @@ CREATE PROCEDURE view_assigned_performances (
 -- ----------------------------------------------------------------------------
 BEGIN
 SELECT
-	p.performance_id,
+	pc.performance_id,
 	pr.performer_name,
-	pt.start_timestamp,
-	p.performance_status
+	pct.start_timestamp,
+	pc.performance_status
 FROM
-	performance p
-	JOIN performance_timeslot pt ON p.performance_timeslot_id = pt.performance_timeslot_id
-	JOIN performer pr ON p.performer_id = pr.performer_id
-	JOIN staff_assignment sa ON sa.performance_id = p.performance_id
+	performance pc
+	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id
+	JOIN performer pr ON pc.performer_id = pr.performer_id
+	JOIN staff_assignment sa ON sa.performance_id = pc.performance_id
 WHERE
 	sa.staff_id = staff_id
 ORDER BY
-	pt.start_timestamp DESC;
+	pct.start_timestamp DESC;
 END //
 
 DELIMITER ;
