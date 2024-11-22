@@ -63,7 +63,7 @@ ELSEIF (
 		staff_position spo
 	WHERE
 		spo.staff_id = staff_id
-) >= DATE (NOW ())
+) >= DATE (NOW())
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 ELSEIF (
@@ -87,7 +87,7 @@ THEN
 ELSE
 	UPDATE staff_position spo
 	SET
-		spo.end_date = DATE (NOW ())
+		spo.end_date = DATE (NOW())
 	WHERE
 		spo.end_date IS NULL
 		AND spo.staff_id = staff_id;
@@ -141,13 +141,13 @@ ELSEIF (
 		staff_position spo
 	WHERE
 		spo.staff_id = staff_id
-) >= DATE (NOW ())
+) >= DATE (NOW())
 THEN
 	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Staff must hold a position for at least a day';
 ELSE
 	UPDATE staff_position spo
 	SET
-		spo.end_date = DATE (NOW ())
+		spo.end_date = DATE (NOW())
 	WHERE
 		spo.end_date IS NULL
 		AND spo.staff_id = staff_id;
@@ -159,7 +159,7 @@ INSERT INTO
 		`end_date`
 	)
 VALUES
-	(staff_id, position_id, DATE (NOW ()), NULL);
+	(staff_id, position_id, DATE (NOW()), NULL);
 END IF;
 END //
 
