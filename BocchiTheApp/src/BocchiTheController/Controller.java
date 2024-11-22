@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -197,7 +199,11 @@ public class Controller {
                     cs.setDouble(i + 1, (Double) param);
                 } else if (param instanceof Timestamp) {
                     cs.setTimestamp(i + 1, (Timestamp) param);
-                } else {
+                }else if(param instanceof LocalDate){
+                	cs.setDate(i+1, java.sql.Date.valueOf((LocalDate) param));
+                }else if (param instanceof LocalTime) {
+                    cs.setTime(i + 1, java.sql.Time.valueOf((LocalTime) param));
+                }else {
 
                     throw new IllegalArgumentException("Unsupported parameter type: " + param.getClass().getName());
                 }

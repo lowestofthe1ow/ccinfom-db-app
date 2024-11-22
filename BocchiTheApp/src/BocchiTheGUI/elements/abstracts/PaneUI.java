@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 public abstract class PaneUI extends JPanel {
     private String dialogTitle;
     private String rootDialogUI;
-
-    private List<JButton> buttons;
+    protected JPanel buttonPanel;
+    protected List<JButton> buttons;
     private List<String> terminatingCommands;
 
     /** {@return the action command of the first button tied to this UI} */
@@ -114,7 +114,7 @@ public abstract class PaneUI extends JPanel {
             this.buttons.add(button);
         }
 
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
 
         this.buttons.forEach((button) -> {

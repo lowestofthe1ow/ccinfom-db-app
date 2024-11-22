@@ -135,7 +135,7 @@ FROM
 WHERE
     MONTHNAME (er.start_date) = month_name
     AND YEAR (er.start_date) = YEAR
-    -- AND er.payment_status = 'PAID'
+    AND er.payment_status = 'PAID'
 GROUP BY
     e.equipment_name
 ORDER BY

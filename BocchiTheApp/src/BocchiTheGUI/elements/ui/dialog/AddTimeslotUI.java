@@ -9,6 +9,7 @@ import java.time.LocalTime;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import BocchiTheGUI.elements.abstracts.PaneUI;
@@ -91,30 +92,17 @@ public class AddTimeslotUI extends PaneUI {
 
     @Override
     public Object[][] getSQLParameterInputs() {
-        try {
-            if (startDate == null || startTime == null || endDate == null || endTime == null) {
-                System.out.println("Error: One or more date/time values are null.");
-                return new Object[][] {}; // Return empty array if any value is missing
-            }
-
-            Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(startDate, startTime));
-            Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(endDate, endTime));
-
-            if (endTimestamp.before(startTimestamp)) {
-                System.out.println("Error: End time must be after start time.");
-                return new Object[][] {};
-            }
-
-            System.out.println("Start Timestamp: " + startTimestamp);
-            System.out.println("End Timestamp: " + endTimestamp);
-
+ 
+    	if(startDate == null || startTime == null || endDate == null || endTime == null) {
+    		 JOptionPane.showMessageDialog(null, "Inputs cannot be null");
+    		 return new Object[0][0]; 
+    	}
+    	
+    	
+    	
             return new Object[][] {
-                    { startTimestamp, endTimestamp }
+                    { startDate, startTime, endDate, endTime }
             };
-        } catch (Exception e) {
-            System.out.println("Error while creating SQL parameters: " + e.getMessage());
-            e.printStackTrace();
-            return new Object[][] {};
-        }
+      
     }
 }
