@@ -209,6 +209,10 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
     public Object[][] getSQLParameterInputs() {
         /* Get selected rows and create an empty list */
         int[] selectedRowIndices = table.getSelectedRows();
+
+        if (selectedRowIndices.length == 0)
+            throw new IllegalArgumentException("No item selected");
+
         List<Object[]> retval = new ArrayList<>();
 
         for (int selectedRowIndex : selectedRowIndices) {

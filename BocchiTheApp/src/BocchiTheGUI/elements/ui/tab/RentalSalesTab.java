@@ -52,7 +52,6 @@ public class RentalSalesTab extends TableSelectionUI {
         this.revenueLabel.setText(String.format("PHP %.2f", totalRentalCost));
         this.revenueLabel.revalidate();
         this.revenueLabel.repaint();
-
     }
 
     @Override

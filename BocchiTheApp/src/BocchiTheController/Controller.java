@@ -81,6 +81,15 @@ public class Controller {
             gui.addTab(ui, tabIdentifier);
     }
 
+    private Object[][] catchGetSQLParameterInputs(PaneUI ui) {
+        try {
+            return ui.getSQLParameterInputs();
+        } catch (Exception e) {
+            showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
     /**
      * Creates a {@link CommandDialog} and loads in a {@link PaneUI}.
      * 
@@ -104,10 +113,10 @@ public class Controller {
 
                 /* Check if the button pressed was an SQL button */
                 if (commandIdentifier.contains("button/sql/"))
-                    parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
+                    parseButtonCommand(commandIdentifier, catchGetSQLParameterInputs(dialogUI));
                 /* Otherwise, check if it was a report generation button */
                 else if (commandIdentifier.contains("button/report/")) {
-                    showTab(commandIdentifier.substring(7), dialogUI.getSQLParameterInputs());
+                    showTab(commandIdentifier.substring(7), catchGetSQLParameterInputs(dialogUI));
                 }
 
                 /* Check if the button command terminates the window */
@@ -126,7 +135,7 @@ public class Controller {
                             });
                     } else {
                         showDialog(dialogIdentifier + commandIdentifier.substring(11),
-                                dialogUI.getSQLParameterInputs());
+                                catchGetSQLParameterInputs(dialogUI));
                     }
                 } else {
                     if (!this.loadDataFromSQL(dialogUI))
@@ -199,11 +208,11 @@ public class Controller {
                     cs.setDouble(i + 1, (Double) param);
                 } else if (param instanceof Timestamp) {
                     cs.setTimestamp(i + 1, (Timestamp) param);
-                }else if(param instanceof LocalDate){
-                	cs.setDate(i+1, java.sql.Date.valueOf((LocalDate) param));
-                }else if (param instanceof LocalTime) {
+                } else if (param instanceof LocalDate) {
+                    cs.setDate(i + 1, java.sql.Date.valueOf((LocalDate) param));
+                } else if (param instanceof LocalTime) {
                     cs.setTime(i + 1, java.sql.Time.valueOf((LocalTime) param));
-                }else {
+                } else {
 
                     throw new IllegalArgumentException("Unsupported parameter type: " + param.getClass().getName());
                 }
@@ -264,6 +273,9 @@ public class Controller {
     }
 
     private void parseButtonCommand(String eventString, Object[][] sqlQueries) {
+        if (eventString == null || sqlQueries == null)
+            return;
+            
         try {
             for (Object[] query : sqlQueries) {
                 executeProcedure(eventString.substring(11), query);

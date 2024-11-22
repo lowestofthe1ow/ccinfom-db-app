@@ -46,7 +46,7 @@ public class RentalSalesUI extends PaneUI implements DataLoadable  {
 	@Override
 	public boolean allowEmptyDatasets() {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	@Override
