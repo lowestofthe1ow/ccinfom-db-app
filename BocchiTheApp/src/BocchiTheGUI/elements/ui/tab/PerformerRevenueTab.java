@@ -18,61 +18,41 @@ import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.XChartPanel;
 
-import BocchiTheGUI.elements.abstracts.PaneUI;
-import BocchiTheGUI.interfaces.DataLoadable;
+import BocchiTheGUI.elements.abstracts.TableSelectionUI;
+import BocchiTheGUI.elements.components.LabelForm;
 
-public class PerformerRevenueTab extends PaneUI implements DataLoadable {
+public class PerformerRevenueTab extends TableSelectionUI {
     private Object[][] sqlData;
     private ArrayList<JLabel> labels;
 
     public PerformerRevenueTab(Object[][] sqlData) {
-        super("Performer Report Day");
+        super("Performer Report Day", "Performer name", "Timestamp", "Quota", "Ticket sales");
         this.sqlData = sqlData;
         this.labels = new ArrayList<>();
     }
 
     private void displayItPretty() {
-        /* This should not occur in normal circumstances */
-        if (labels.isEmpty()) {
-            this.add(new JLabel("There is no data to display for this performer on the given date."));
-        }
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        String content = "<html>"
-                + "<body style='font-family: Arial, sans-serif;'>"
-                + "<h1 style='color: #3366cc;'>Sales Information for " + labels.get(0).getText() + " on "
-                + labels.get(1).getText() + "</h1>"
-                + "<p style='font-size: 12px;'>"
-                + "<b>Monthly sales:</b> " + labels.get(2).getText() + "<br>"
-                + "<b>Monthly performer profit:</b> " + labels.get(3).getText() + "<br>"
-                //+ "<b>Monthly unmet sales quotas:</b> " + labels.get(4).getText() + "<br>"
-                + "<b>Monthly livehouse Profit:</b> " + labels.get(5).getText()
-                + "</p>"
-                + "</body>"
-                + "</html>";
-
-        JEditorPane editorPane = new JEditorPane("text/html", content);
-        editorPane.setEditable(false);
-        editorPane.setPreferredSize(new Dimension(600, 200));
-        editorPane.setBackground(Color.white);
-
-        panel.add(editorPane);
-        add(panel);
+        this.add(new LabelForm("Total monthly sales: ", new JLabel("PHP " + labels.get(2).getText())));
+        this.add(new LabelForm("Total monthly performer profit: ", new JLabel("PHP " + labels.get(3).getText())));
+        this.add(new LabelForm("Total monthly unmet sales quotas: ", new JLabel("PHP " + labels.get(4).getText())));
+        this.add(new LabelForm("Total monthly livehouse profit: ", new JLabel("PHP " + labels.get(5).getText())));
+       // this.add(panel);
 
         JPanel chartPanel = new JPanel();
         chartPanel.setLayout(new GridLayout(1, 2));
 
         XChartPanel<PieChart> chartPanel1 = new XChartPanel<>(createPieChart());
+        chartPanel1.setOpaque(false);
         chartPanel.add(chartPanel1);
 
         XChartPanel<PieChart> chartPanel2 = new XChartPanel<>(createPieChart2());
+        chartPanel1.setOpaque(false);
         chartPanel.add(chartPanel2);
 
         this.add(chartPanel);
     }
 
+    // jesus christ why are there two again
     private PieChart createPieChart() {
 
         PieChart chart = new PieChartBuilder().width(400).height(400).build();
@@ -83,6 +63,8 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
         for (Map.Entry<String, Double> entry : data.entrySet()) {
             chart.addSeries(entry.getKey(), entry.getValue());
         }
+
+        chart.getStyler().setChartBackgroundColor(new Color(0, 0, 0, 0));
 
         return chart;
     }
@@ -104,11 +86,17 @@ public class PerformerRevenueTab extends PaneUI implements DataLoadable {
             chart.addSeries(entry.getKey(), entry.getValue());
         }
 
+        chart.getStyler().setChartBackgroundColor(new Color(0, 0, 0, 0));
+
         return chart;
     }
 
     @Override
     public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
+        super.loadData((command, params) -> {
+            return source.apply("sql/get_performances_by_performer_month", sqlData[0]);
+        });
+
         /* Fetch data from Controller using data from previous dialog window */
         List<Object[]> data = source.apply("sql/performer_report_month", sqlData[0]);
 

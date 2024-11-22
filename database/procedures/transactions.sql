@@ -1005,5 +1005,36 @@ BEGIN
         staff_id;
 END //
 
+/* =========================================================================
+   Retrieves a summary of staff assignments for a specific month and year.
+   Returns the staff ID, name, contact number, and total salary.
+
+   @params month_name: The name of the month to filter assignments by
+           YEAR:        The year to filter assignments by
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS get_performances_by_performer_month //
+CREATE PROCEDURE get_performances_by_performer_month (
+    IN performer_id INT,
+    IN month_name VARCHAR(255),
+    IN year_name INT
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+	SELECT
+		p.performer_name,
+        pt.start_timestamp,
+        pc.base_quota,
+        pr.ticket_price * pr.tickets_sold
+    FROM
+		performer p
+        JOIN performance pc ON p.performer_id = pc.performer_id
+        JOIN performance_timeslot pt ON pc.performance_timeslot_id = pt.performance_timeslot_id
+        JOIN performance_revenue pr ON pr.performance_id = pc.performance_id
+	WHERE
+		p.performer_id = performer_id
+		AND MONTHNAME(pt.start_timestamp) = month_name
+        AND YEAR(pt.start_timestamp) = year_name;
+END //
+
 DELIMITER ;
 
