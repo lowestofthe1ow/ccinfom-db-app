@@ -2,6 +2,7 @@ package BocchiTheGUI.elements.ui.tab;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,9 @@ import org.knowm.xchart.XChartPanel;
 
 import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 import BocchiTheGUI.elements.components.LabelForm;
-
+import org.knowm.xchart.style.PieStyler;
+import org.knowm.xchart.style.PieStyler.LabelType;
+import org.knowm.xchart.style.theme.XChartTheme;
 public class PerformerRevenueTab extends TableSelectionUI {
     private Object[][] sqlData;
     private ArrayList<JLabel> labels;
@@ -41,55 +44,56 @@ public class PerformerRevenueTab extends TableSelectionUI {
         JPanel chartPanel = new JPanel();
         chartPanel.setLayout(new GridLayout(1, 2));
 
-        XChartPanel<PieChart> chartPanel1 = new XChartPanel<>(createPieChart());
+        /* pI CHART 1 */
+        Map<String, Double> chartData1 = new HashMap<>();
+        chartData1.put("Monthly performer profit", Double.parseDouble(labels.get(3).getText()));
+        chartData1.put("Monthly livehouse profit", Double.parseDouble(labels.get(5).getText()));
+
+        XChartPanel<PieChart> chartPanel1 = new XChartPanel<>(createStyledPieChart(chartData1));
         chartPanel1.setOpaque(false);
         chartPanel.add(chartPanel1);
 
-        XChartPanel<PieChart> chartPanel2 = new XChartPanel<>(createPieChart2());
-        chartPanel1.setOpaque(false);
+        /* pI CHART 2 */
+        Map<String, Double> chartData2 = new HashMap<>();
+        double monthlyperfsales = Double.parseDouble(labels.get(2).getText());
+        double unmet = Double.parseDouble(labels.get(4).getText());
+        double perfprofit = Double.parseDouble(labels.get(3).getText());
+        double liveprofit = Double.parseDouble(labels.get(5).getText());
+
+        chartData2.put("Monthly performer sales", monthlyperfsales);
+        chartData2.put("Monthly unmet sales quotas", (unmet - perfprofit - liveprofit < 0 ? 0 : unmet - perfprofit - liveprofit));
+
+        XChartPanel<PieChart> chartPanel2 = new XChartPanel<>(createStyledPieChart(chartData2));
+        chartPanel2.setOpaque(false);
         chartPanel.add(chartPanel2);
+
 
         this.add(chartPanel);
     }
-
-    // jesus christ why are there two again
-    private PieChart createPieChart() {
-
+    private PieChart createStyledPieChart(Map<String, Double> data) {
+     
         PieChart chart = new PieChartBuilder().width(400).height(400).build();
-        Map<String, Double> data = new HashMap<>();
-        data.put("Monthly performer profit", Double.parseDouble(labels.get(3).getText()));
-        data.put("Monthly livehouse profit", Double.parseDouble(labels.get(5).getText()));
-
-        for (Map.Entry<String, Double> entry : data.entrySet()) {
-            chart.addSeries(entry.getKey(), entry.getValue());
-        }
-
-        chart.getStyler().setChartBackgroundColor(new Color(0, 0, 0, 0));
-
-        return chart;
-    }
-
-    private PieChart createPieChart2() {
-
-        PieChart chart = new PieChartBuilder().width(400).height(400).build();
-        Map<String, Double> data = new HashMap<>();
-
-        double monthlyperfsales = Double.parseDouble(labels.get(2).getText());
-        double unmet =  Double.parseDouble(labels.get(4).getText());
-        double perfprofit = Double.parseDouble(labels.get(3).getText());
-        double liveprofit = Double.parseDouble(labels.get(5).getText());
         
-        data.put("Monthly performer sales", monthlyperfsales);
-        data.put("Monthly unmet sales quotas",  unmet - perfprofit - liveprofit < 0 ? 0 : unmet - perfprofit - liveprofit);
        
         for (Map.Entry<String, Double> entry : data.entrySet()) {
             chart.addSeries(entry.getKey(), entry.getValue());
         }
 
-        chart.getStyler().setChartBackgroundColor(new Color(0, 0, 0, 0));
+        Color[] sliceColors = new Color[] {new Color(250, 181, 200), new Color(210, 95, 90) };
+        chart.getStyler().setSeriesColors(sliceColors);
+        chart.getStyler().setChartBackgroundColor(getBackground());
+        chart.getStyler().setLegendVisible(true);
+        chart.getStyler().setLegendPosition(PieStyler.LegendPosition.InsideSE);
+        chart.getStyler().setForceAllLabelsVisible(true);
+        chart.getStyler().setLabelsFontColorAutomaticEnabled(true);
+        chart.getStyler().setLabelsFont(new Font("SansSerif", Font.PLAIN, 15)); 
+        chart.getStyler().setLabelType(LabelType.Percentage);
+        chart.getStyler().setPlotContentSize(.65);
+        chart.getStyler().setStartAngleInDegrees(90);
 
         return chart;
     }
+
 
     @Override
     public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
