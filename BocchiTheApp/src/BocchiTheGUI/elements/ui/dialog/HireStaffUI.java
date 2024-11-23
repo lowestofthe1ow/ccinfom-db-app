@@ -14,18 +14,6 @@ public class HireStaffUI extends TextFieldsUI {
         setButtonActionCommands("button/next/select_staff_position");
     }
 
-    private String getFirstName() {
-        return this.formItems.get(0).getText();
-    }
-
-    private String getLastName() {
-        return this.formItems.get(1).getText();
-    }
-
-    private Long getContactNo() {
-        return Long.parseLong(this.formItems.get(2).getText());
-    }
-
     /**
      * {@inheritDoc} Contains only the parameters for a single query, as multiple
      * simultaneous hires are not allowed.
@@ -33,9 +21,9 @@ public class HireStaffUI extends TextFieldsUI {
     @Override
     public Object[][] getSQLParameterInputs() {
         Object[][] retval = { {
-                getFirstName(),
-                getLastName(),
-                getContactNo()
+            this.formItems.get(0).getText(),
+            this.formItems.get(1).getText(),
+            this.formItems.get(2).getText()
         } };
         return retval;
     }

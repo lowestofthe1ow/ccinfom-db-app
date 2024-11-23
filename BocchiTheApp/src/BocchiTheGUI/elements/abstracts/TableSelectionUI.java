@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import BocchiTheGUI.elements.components.TableComboBox;
@@ -41,6 +43,11 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
         this.sqlLoadDataParams = params;
     }
 
+    private void clearSelection() {
+        table.clearSelection();
+        this.disableAllButtons();
+    }
+
     /**
      * Creates a dialog window for table selection.
      * 
@@ -50,7 +57,7 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
      */
     public TableSelectionUI(String name, String... columnNames) {
         super(name);
-        //this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
+        // this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setLayout(new BorderLayout());
 
         this.filters = new ArrayList<>();
@@ -73,9 +80,18 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
         this.table.setAutoCreateRowSorter(true);
         this.table.setFillsViewportHeight(true);
 
+        /* Enable all buttons on selection made */
+        this.table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    enableAllButtons();
+                }
+            }
+        });
+
         /* Wrap JTable in JScrollPane and add it */
         JScrollPane scrollPane = new JScrollPane(table);
-        //scrollPane.setPreferredSize(new Dimension(500, 250));
+        // scrollPane.setPreferredSize(new Dimension(500, 250));
 
         // Use super implementation for adding the scroll pane
         super.add(scrollPane, BorderLayout.CENTER);
@@ -90,8 +106,8 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
 
     @Override
     public Component add(Component comp) {
-        //if (!(comp instanceof JTable || comp instanceof JScrollPane))
-        //    comp.setPreferredSize(new Dimension(500, 20));
+        // if (!(comp instanceof JTable || comp instanceof JScrollPane))
+        // comp.setPreferredSize(new Dimension(500, 20));
         this.southPanel.add(comp);
         this.southPanel.revalidate();
         this.southPanel.repaint();
@@ -165,7 +181,7 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
             }
         }
 
-        table.clearSelection();
+        clearSelection();
     }
 
     /**
@@ -179,7 +195,7 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
 
         /* Reset the table model */
         activeTableModel.setRowCount(0);
-        table.clearSelection();
+        clearSelection();
         tableRows.clear();
 
         for (Object[] row : data) {
@@ -210,9 +226,6 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
         /* Get selected rows and create an empty list */
         int[] selectedRowIndices = table.getSelectedRows();
 
-        if (selectedRowIndices.length == 0)
-            throw new IllegalArgumentException("No item selected");
-
         List<Object[]> retval = new ArrayList<>();
 
         for (int selectedRowIndex : selectedRowIndices) {
@@ -223,8 +236,6 @@ public abstract class TableSelectionUI extends PaneUI implements DataLoadable {
             /* Verify that the ID is an integer */
             if (val[0] instanceof Integer) {
                 retval.add(val);
-            } else {
-                throw new IllegalArgumentException("Selected row(s) does not have an Integer ID.");
             }
         }
 

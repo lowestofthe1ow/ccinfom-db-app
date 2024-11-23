@@ -15,6 +15,7 @@ public abstract class PaneUI extends JPanel {
     protected JPanel buttonPanel;
     protected List<JButton> buttons;
     private List<String> terminatingCommands;
+    private List<String> disableImmuneCommands;
 
     /** {@return the action command of the first button tied to this UI} */
     protected String getDefaultButtonCommand() {
@@ -41,10 +42,35 @@ public abstract class PaneUI extends JPanel {
      * @param enabled {@code true} to enable all buttons, {@code false} to disable
      *                all buttons
      */
-    public void setAllButtonsEnabled(boolean enabled) {
+    public void enableAllButtons() {
         buttons.forEach((button) -> {
-            button.setEnabled(enabled);
+            button.setEnabled(true);
         });
+    }
+
+    /**
+     * Enables or disables all buttons in the UI except for specific commands
+     * 
+     * @param enabled {@code true} to enable all buttons, {@code false} to disable
+     *                all buttons
+     */
+    public void disableAllButtons() {
+        buttons.forEach((button) -> {
+            if (!disableImmuneCommands.contains(button.getActionCommand()))
+                button.setEnabled(false);
+        });
+    }
+
+    /**
+     * Adds an action command string to the list of action commands that cannot be
+     * disabled.
+     * 
+     * @param commands The action command strings to add
+     */
+    protected void addDisableImmuneCommands(String... commands) {
+        for (String command : commands) {
+            disableImmuneCommands.add(command);
+        }
     }
 
     /**
@@ -133,6 +159,7 @@ public abstract class PaneUI extends JPanel {
     public PaneUI(String dialogTitle) {
         this.dialogTitle = dialogTitle;
         this.terminatingCommands = new ArrayList<>();
+        this.disableImmuneCommands = new ArrayList<>();
         this.buttons = new ArrayList<>();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }

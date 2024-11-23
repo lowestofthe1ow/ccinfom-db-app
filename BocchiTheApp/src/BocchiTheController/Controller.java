@@ -30,7 +30,8 @@ public class Controller {
      * specifies. Does nothing if the UI is not a DataLoadable instance.
      * 
      * @param dialogUI The UI to load data into
-     * @return {@code true} if the load operation succeeded, {@code false} otherwise
+     * @return {@code true} if the load operation succeeded or if the UI does not
+     *         accept data, {@code false} otherwise
      */
     private boolean loadDataFromSQL(PaneUI dialogUI) {
         if (dialogUI instanceof DataLoadable) {
@@ -58,11 +59,6 @@ public class Controller {
                 showMessageDialog(null, e.getMessage(), "Database error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-        } else {
-            /* Show a warning that a load operation was attempted when it is not supported */
-            showMessageDialog(null, "Attempted to load SQL data into a feature that does not use it", "Database error",
-                    JOptionPane.ERROR_MESSAGE);
-            return false;
         }
 
         return true;
@@ -74,17 +70,28 @@ public class Controller {
         PaneUI ui = PaneUIFactory.createPaneUI(
                 tabIdentifier, /* Tab pane name */
                 sqlData);
+
         /* Load data into the new tab */
         if (this.loadDataFromSQL(ui))
             gui.addTab(ui, tabIdentifier);
     }
 
-    private Object[][] catchGetSQLParameterInputs(PaneUI ui) {
-        try {
-            return ui.getSQLParameterInputs();
-        } catch (Exception e) {
-            showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
+    private void handleTerminatingCommand(PaneUI ui, String dialogIdentifier, String commandIdentifier) {
+        /* Only do something if the window is the last in the chain */
+        if (!commandIdentifier.contains("button/next/")) {
+            /* Attempt to get the "root dialog" */
+            String rootName = ui.getRoot();
+
+            if (rootName == null)
+                gui.closeAllDialogs();
+            else
+                /* Close all dialogs except the "root", then refresh that */
+                gui.closeAllDialogsExcept(rootName, (rootUI) -> {
+                    this.loadDataFromSQL(rootUI);
+                });
+        } else {
+            showDialog(dialogIdentifier + commandIdentifier.substring(11),
+                    ui.getSQLParameterInputs());
         }
     }
 
@@ -101,7 +108,7 @@ public class Controller {
 
         /* Create the dialog window and wait for the UI to be loaded */
         gui.createDialog(dialogUI, dialogIdentifier, () -> {
-            /* Load data into the UI if it requires it */
+            /* Exit if loading data failed */
             if (!this.loadDataFromSQL(dialogUI))
                 return;
 
@@ -111,33 +118,18 @@ public class Controller {
 
                 /* Check if the button pressed was an SQL button */
                 if (commandIdentifier.contains("button/sql/"))
-                    parseButtonCommand(commandIdentifier, catchGetSQLParameterInputs(dialogUI));
+                    this.parseButtonCommand(commandIdentifier, dialogUI.getSQLParameterInputs());
                 /* Otherwise, check if it was a report generation button */
                 else if (commandIdentifier.contains("button/report/")) {
-                    showTab(commandIdentifier.substring(7), catchGetSQLParameterInputs(dialogUI));
+                    this.showTab(commandIdentifier.substring(7), dialogUI.getSQLParameterInputs());
                 }
 
                 /* Check if the button command terminates the window */
                 if (dialogUI.isTerminatingCommand(commandIdentifier)) {
-                    /* Only do something if the window is the last in the chain */
-                    if (!commandIdentifier.contains("button/next/")) {
-                        /* Attempt to get the "root dialog" */
-                        String rootName = dialogUI.getRoot();
-
-                        if (rootName == null)
-                            gui.closeAllDialogs();
-                        else
-                            /* Close all dialogs except the "root", then refresh that */
-                            gui.closeAllDialogsExcept(rootName, (rootUI) -> {
-                                this.loadDataFromSQL(rootUI);
-                            });
-                    } else {
-                        showDialog(dialogIdentifier + commandIdentifier.substring(11),
-                                catchGetSQLParameterInputs(dialogUI));
-                    }
+                    this.handleTerminatingCommand(dialogUI, dialogIdentifier, commandIdentifier);
                 } else {
-                    if (!this.loadDataFromSQL(dialogUI))
-                        return;
+                    /* Refresh the UI with data (we don't care about return value here) */
+                    this.loadDataFromSQL(dialogUI);
                 }
             });
 
@@ -271,9 +263,11 @@ public class Controller {
     }
 
     private void parseButtonCommand(String eventString, Object[][] sqlQueries) {
-        if (eventString == null || sqlQueries == null)
+        if (eventString == null || sqlQueries == null || sqlQueries.length == 0) {
+            showMessageDialog(null, "Nothing selected", "Error", JOptionPane.ERROR_MESSAGE);
             return;
-            
+        }
+
         try {
             for (Object[] query : sqlQueries) {
                 executeProcedure(eventString.substring(11), query);

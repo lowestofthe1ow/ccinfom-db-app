@@ -14,6 +14,7 @@ public class AddEquipmentUI extends TableSelectionUI {
         this.setButtonActionCommands(
                 "button/next/add_equipment_details",
                 "button/next/add_equipment_type");
+        this.addDisableImmuneCommands("button/next/add_equipment_type");
     }
 
     @Override
