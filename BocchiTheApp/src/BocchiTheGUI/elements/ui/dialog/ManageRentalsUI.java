@@ -50,4 +50,9 @@ public class ManageRentalsUI extends TableSelectionUI {
 
         return retval;
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No Rental data found";
+    }
 }

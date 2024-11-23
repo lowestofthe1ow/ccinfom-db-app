@@ -25,4 +25,9 @@ public class StaffSalaryTab extends TableSelectionUI {
     public Object[][] getSQLParameterInputs() {
         return null;
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No salary data found";
+    }
 }

@@ -8,4 +8,9 @@ public class ViewAssignedPerformancesUI extends TableSelectionUI {
         this.setLoadDataCommand("sql/view_assigned_performances");
         this.setLoadDataParams(sqlData[0][0].toString());
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No Performer data found";
+    }
 }

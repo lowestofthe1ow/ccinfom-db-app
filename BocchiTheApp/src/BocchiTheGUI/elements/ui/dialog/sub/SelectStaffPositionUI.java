@@ -35,4 +35,9 @@ public class SelectStaffPositionUI extends TableSelectionUI {
 
         return retval;
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No staff positions data found";
+    }
 }

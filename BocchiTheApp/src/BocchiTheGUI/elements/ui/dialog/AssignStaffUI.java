@@ -15,4 +15,9 @@ public class AssignStaffUI extends TableSelectionUI {
 
         this.setButtonActionCommands("button/next/assign_to_performance", "button/next/view_assigned_staff");
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No Pending Performance data found";
+    }
 }
