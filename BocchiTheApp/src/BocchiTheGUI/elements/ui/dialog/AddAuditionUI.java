@@ -14,4 +14,8 @@ public class AddAuditionUI extends TableSelectionUI {
         this.addButtons("Confirm");
         this.setButtonActionCommands("button/next/select_timeslot");
     }
+    @Override
+    public String getLoadFailureMessage() {
+        return "No audition data found";
+    }
 }
