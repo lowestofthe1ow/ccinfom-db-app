@@ -18,8 +18,7 @@ public class BocchiTheMenuBar extends JMenuBar {
                 "Hire Staff", "dialog/hire_staff",
                 "Remove Staff", "dialog/remove_staff",
                 "Update Staff Position", "dialog/update_staff_position",
-                "Add Position Type", "dialog/add_position_type",
-                "Cancel Staff Assignment", "dialog/remove_staff_assignment"));
+                "Add Position Type", "dialog/add_position_type"));
 
         menuTitles.add(createMenu("Audition/Performance",
                 "Add Performer", "dialog/add_performer",

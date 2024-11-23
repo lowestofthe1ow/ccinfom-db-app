@@ -11,6 +11,6 @@ public class ViewAssignedPerformancesUI extends TableSelectionUI {
     
     @Override
     public String getLoadFailureMessage() {
-        return "No Performer data found";
+        return "No Performance data found";
     }
 }
