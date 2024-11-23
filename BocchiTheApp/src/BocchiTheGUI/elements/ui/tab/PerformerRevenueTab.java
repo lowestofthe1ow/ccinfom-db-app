@@ -38,8 +38,7 @@ public class PerformerRevenueTab extends TableSelectionUI {
         this.add(new LabelForm("Total monthly performer profit: ", new JLabel("PHP " + labels.get(3).getText())));
         this.add(new LabelForm("Total monthly unmet sales quotas: ", new JLabel("PHP " + labels.get(4).getText())));
         this.add(new LabelForm("Total monthly livehouse profit: ", new JLabel("PHP " + labels.get(5).getText())));
-       // this.add(panel);
-
+ 
         JPanel chartPanel = new JPanel();
         chartPanel.setLayout(new GridLayout(1, 2));
 
