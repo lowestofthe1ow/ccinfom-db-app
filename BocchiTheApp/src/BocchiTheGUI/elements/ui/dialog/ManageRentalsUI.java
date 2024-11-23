@@ -13,21 +13,21 @@ public class ManageRentalsUI extends TableSelectionUI {
 
     public ManageRentalsUI() {
         super("Manage Rentals", "ID", "Equipment Name", "Performer Name",
-            "Start Date", "End Date", "Equipment Status");
+                "Start Date", "End Date", "Equipment Status");
         this.setLoadDataCommand("sql/get_equipment_rentals");
-        
+
         this.addSearchBoxFilter("Filter by equipment name", 1);
         this.addSearchBoxFilter("Filter by performer name", 2);
 
         this.addComboBox("Resolve equipment status as:", "UNDAMAGED", "MIN_DMG", "MAJ_DMG", "MISSING", "PENDING");
 
         this.addButtons("Resolve equipment status");
-		this.setButtonActionCommands("button/sql/resolve_equipment_status");
+        this.setButtonActionCommands("button/sql/resolve_equipment_status");
     }
 
     public void addComboBox(String label, String... options) {
         this.comboBox = new JComboBox<String>();
-        
+
         for (String option : options) {
             this.comboBox.addItem(option);
         }
@@ -45,12 +45,12 @@ public class ManageRentalsUI extends TableSelectionUI {
         System.out.println(params.get(1));
 
         Object[][] retval = {
-            params.toArray()
+                params.toArray()
         };
 
         return retval;
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No Rental data found";

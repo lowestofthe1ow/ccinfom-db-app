@@ -53,7 +53,7 @@ public class SelectPerformerForRental extends TableSelectionUI {
                 }
             }
         });
-        
+
         return new LabelForm(labelText + " Date:", dateEditor);
     }
 
@@ -61,7 +61,6 @@ public class SelectPerformerForRental extends TableSelectionUI {
     public Object[][] getSQLParameterInputs() {
         List<Object> params = new ArrayList<>();
 
-        
         params.add(super.getSQLParameterInputs()[0][0]);
         Collections.addAll(params, sqlData[0]);
 

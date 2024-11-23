@@ -26,8 +26,8 @@ public class ViewAssignedStaffUI extends TableSelectionUI {
 
         for (Object[] row : super.getSQLParameterInputs()) {
             Object[] temp = {
-                row[0], 
-                sqlData[0][0].toString()
+                    row[0],
+                    sqlData[0][0].toString()
             };
             retval.add(temp);
         }

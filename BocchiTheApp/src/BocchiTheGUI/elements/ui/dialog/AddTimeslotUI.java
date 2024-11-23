@@ -2,9 +2,7 @@ package BocchiTheGUI.elements.ui.dialog;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.swing.BorderFactory;
@@ -93,17 +91,15 @@ public class AddTimeslotUI extends PaneUI {
 
     @Override
     public Object[][] getSQLParameterInputs() {
- 
-    	if(startDate == null || startTime == null || endDate == null || endTime == null) {
-    		 JOptionPane.showMessageDialog(null, "Inputs cannot be null");
-    		 return new Object[0][0]; 
-    	}
-    	
-    	
-    	
-            return new Object[][] {
-                    { startDate, startTime, endDate, endTime }
-            };
-      
+
+        if (startDate == null || startTime == null || endDate == null || endTime == null) {
+            JOptionPane.showMessageDialog(null, "Inputs cannot be null");
+            return new Object[0][0];
+        }
+
+        return new Object[][] {
+                { startDate, startTime, endDate, endTime }
+        };
+
     }
 }

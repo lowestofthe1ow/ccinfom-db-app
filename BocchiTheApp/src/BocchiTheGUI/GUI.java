@@ -22,7 +22,7 @@ public class GUI extends JFrame {
 
     public GUI() {
         /* Set up window frame */
-        //this.setTitle("");
+        // this.setTitle("");
         this.setLayout(new BorderLayout());
         this.setSize(960, 600);
 

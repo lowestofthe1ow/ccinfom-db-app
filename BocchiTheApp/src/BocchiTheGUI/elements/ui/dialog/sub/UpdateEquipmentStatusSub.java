@@ -15,13 +15,14 @@ import javax.swing.border.Border;
 
 import BocchiTheGUI.elements.abstracts.PaneUI;
 
-public class UpdateEquipmentStatusSub  extends PaneUI {
-	 private Object[][] sqlData;
-	 private JComboBox<String> comboBox;
-	 public UpdateEquipmentStatusSub (Object[][] sqlData)  {
+public class UpdateEquipmentStatusSub extends PaneUI {
+    private Object[][] sqlData;
+    private JComboBox<String> comboBox;
+
+    public UpdateEquipmentStatusSub(Object[][] sqlData) {
         super("Add equipment status");
         this.sqlData = sqlData;
-        
+
         JPanel comboPanel = new JPanel();
         comboPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5)); // Align left with spacing
 
@@ -30,7 +31,7 @@ public class UpdateEquipmentStatusSub  extends PaneUI {
         comboPanel.add(label);
 
         // Create a JComboBox with a border
-        String[] options = {"UNDAMAGED", "MIN_DMG", "MAJ_DMG", "MISSING"};
+        String[] options = { "UNDAMAGED", "MIN_DMG", "MAJ_DMG", "MISSING" };
         comboBox = new JComboBox<>(options);
 
         // Add a border to the combo box
@@ -47,23 +48,21 @@ public class UpdateEquipmentStatusSub  extends PaneUI {
         this.setRoot("dialog/update_equipment_status");
         setButtonActionCommands("button/sql/change_equipment_status");
         addTerminatingCommands("button/sql/change_equipment_status");
-	        
-	        
-	}
 
-	@Override
-	public Object[][] getSQLParameterInputs() {
-		// TODO Auto-generated method stub
-		List<Object> params = new ArrayList<>();
+    }
+
+    @Override
+    public Object[][] getSQLParameterInputs() {
+        // TODO Auto-generated method stub
+        List<Object> params = new ArrayList<>();
 
         Collections.addAll(params, sqlData[0]);
         params.add(comboBox.getSelectedItem());
-
 
         Object[][] retval = {
                 params.toArray()
         };
         System.out.println("SQL Parameters: " + Arrays.deepToString(retval));
         return retval;
-	}
+    }
 }

@@ -36,7 +36,7 @@ public class SelectTimeslotUI extends TableSelectionUI {
 
         return retval;
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No timeslot data found";

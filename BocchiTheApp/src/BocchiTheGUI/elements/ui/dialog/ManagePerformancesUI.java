@@ -15,7 +15,7 @@ public class ManagePerformancesUI extends TableSelectionUI {
         this.addButtons("Record revenue", "Cancel performance");
         this.setButtonActionCommands("button/next/record_revenue", "button/sql/cancel_performance");
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No Performance data found";

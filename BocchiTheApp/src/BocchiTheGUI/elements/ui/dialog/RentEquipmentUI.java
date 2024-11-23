@@ -13,7 +13,7 @@ public class RentEquipmentUI extends TableSelectionUI {
         this.addButtons("Rent equipment");
         this.setButtonActionCommands("button/next/select_performer");
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No equipment data found";

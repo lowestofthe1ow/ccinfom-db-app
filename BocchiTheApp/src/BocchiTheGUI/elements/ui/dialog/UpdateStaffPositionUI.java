@@ -13,7 +13,7 @@ public class UpdateStaffPositionUI extends TableSelectionUI {
         this.addButtons("Update");
         this.setButtonActionCommands("button/next/select_staff_position");
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No staff data found";

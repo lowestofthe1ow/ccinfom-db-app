@@ -13,7 +13,7 @@ public class RemoveStaffUI extends TableSelectionUI {
         this.addButtons("Remove");
         this.setButtonActionCommands("button/sql/remove_staff");
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No staff data found";

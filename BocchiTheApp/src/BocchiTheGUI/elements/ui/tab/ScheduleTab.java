@@ -8,7 +8,7 @@ public class ScheduleTab extends TableSelectionUI {
         this.setLoadDataCommand("sql/get_schedule");
         this.addSearchBoxFilter("Sort by performer name", 0);
     }
-    
+
     @Override
     public Object[][] getSQLParameterInputs() {
         return null;

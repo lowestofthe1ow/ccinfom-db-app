@@ -28,14 +28,14 @@ public class PerformerRevenueUI extends TableSelectionUI {
     }
 
     @Override
-	public boolean allowEmptyDatasets() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean allowEmptyDatasets() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public String getLoadFailureMessage() {
-		// TODO Auto-generated method stub
-		return "There are currently no recorded performances by any performer in the database";
-	}
+    @Override
+    public String getLoadFailureMessage() {
+        // TODO Auto-generated method stub
+        return "There are currently no recorded performances by any performer in the database";
+    }
 }

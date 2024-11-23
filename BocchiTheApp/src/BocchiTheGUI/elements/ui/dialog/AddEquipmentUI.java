@@ -21,6 +21,5 @@ public class AddEquipmentUI extends TableSelectionUI {
     public boolean allowEmptyDatasets() {
         return true;
     }
-    
-   
+
 }

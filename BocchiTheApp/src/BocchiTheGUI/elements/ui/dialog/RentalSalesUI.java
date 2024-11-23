@@ -9,10 +9,11 @@ import BocchiTheGUI.elements.abstracts.PaneUI;
 import BocchiTheGUI.elements.components.LabelForm;
 import BocchiTheGUI.interfaces.DataLoadable;
 
-public class RentalSalesUI extends PaneUI implements DataLoadable  {
-	 private JComboBox<String> monthSelector;
-	public RentalSalesUI() {
-		super("Generate monthly rental sales report");
+public class RentalSalesUI extends PaneUI implements DataLoadable {
+    private JComboBox<String> monthSelector;
+
+    public RentalSalesUI() {
+        super("Generate monthly rental sales report");
 
         this.monthSelector = new JComboBox<>();
 
@@ -21,9 +22,9 @@ public class RentalSalesUI extends PaneUI implements DataLoadable  {
         this.addButtons("Confirm");
         this.setButtonActionCommands("button/report/monthly_rental_sales");
         this.addTerminatingCommands("button/report/monthly_rental_sales");
-	}
+    }
 
-	@Override
+    @Override
     public void loadData(BiFunction<Object, Object[], List<Object[]>> source) {
         List<Object[]> data = source.apply("sql/get_rental_months", null);
 
@@ -36,23 +37,23 @@ public class RentalSalesUI extends PaneUI implements DataLoadable  {
         monthSelector.repaint();
     }
 
-	@Override
-	public Object[][] getSQLParameterInputs() {
-		Object[][] retval = { 
-				((String) this.monthSelector.getSelectedItem()).split(" ")};
+    @Override
+    public Object[][] getSQLParameterInputs() {
+        Object[][] retval = {
+                ((String) this.monthSelector.getSelectedItem()).split(" ") };
         return retval;
-	}
+    }
 
-	@Override
-	public boolean allowEmptyDatasets() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean allowEmptyDatasets() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public String getLoadFailureMessage() {
-		// TODO Auto-generated method stub
-		return "There are currently no recorded sales";
-	}
-	 
+    @Override
+    public String getLoadFailureMessage() {
+        // TODO Auto-generated method stub
+        return "There are currently no recorded sales";
+    }
+
 }

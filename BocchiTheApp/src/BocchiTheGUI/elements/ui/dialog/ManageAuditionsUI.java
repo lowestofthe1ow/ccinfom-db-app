@@ -44,7 +44,7 @@ public class ManageAuditionsUI extends TableSelectionUI {
 
         return retval.toArray(new Object[retval.size()][]);
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No Audition data found";

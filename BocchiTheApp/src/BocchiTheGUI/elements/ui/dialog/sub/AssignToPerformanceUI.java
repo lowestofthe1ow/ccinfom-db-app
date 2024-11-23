@@ -13,7 +13,7 @@ public class AssignToPerformanceUI extends TableSelectionUI {
         this.sqlData = sqlData;
         this.setLoadDataCommand("sql/get_active_staff");
         this.setRoot("dialog/assign_staff");
-        // this.setLoadDataParams(sqlData[0][0].toString());
+
         this.addSearchBoxFilter("Filter by staff name", 1);
         this.addButtons("Assign to performance", "View assigned performances");
         this.setButtonActionCommands("button/sql/assign_staff", "button/next/view_assigned_performances");
@@ -33,7 +33,7 @@ public class AssignToPerformanceUI extends TableSelectionUI {
 
         return retval_list.toArray(new Object[retval_list.size()][]);
     }
-    
+
     @Override
     public String getLoadFailureMessage() {
         return "No staff data found";
