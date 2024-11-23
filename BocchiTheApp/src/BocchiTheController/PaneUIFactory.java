@@ -18,14 +18,15 @@ import BocchiTheGUI.elements.ui.dialog.PerformerRevenueUI;
 import BocchiTheGUI.elements.ui.dialog.RemoveStaffUI;
 import BocchiTheGUI.elements.ui.dialog.RentEquipmentUI;
 import BocchiTheGUI.elements.ui.dialog.RentalSalesUI;
+import BocchiTheGUI.elements.ui.dialog.StaffSalaryUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateEquipmentStatusUI;
 import BocchiTheGUI.elements.ui.dialog.UpdateStaffPositionUI;
-import BocchiTheGUI.elements.ui.dialog.StaffSalaryUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentDetailsUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AddEquipmentTypeUI;
 import BocchiTheGUI.elements.ui.dialog.sub.AssignToPerformanceUI;
 import BocchiTheGUI.elements.ui.dialog.sub.InputSubmissionUI;
 import BocchiTheGUI.elements.ui.dialog.sub.RecordRevenueUI;
+import BocchiTheGUI.elements.ui.dialog.sub.RemoveAssignedPerformances;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerForRental;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectPerformerMonthUI;
 import BocchiTheGUI.elements.ui.dialog.sub.SelectStaffPositionUI;
@@ -95,7 +96,9 @@ public final class PaneUIFactory {
                 return new ViewAssignedPerformancesUI(sqlData);
             case "dialog/assign_staff/view_assigned_staff":
                 return new ViewAssignedStaffUI(sqlData);
-
+            case "dialog/remove_staff_assignment/view_assigned_performances":
+            	return new RemoveAssignedPerformances(sqlData);
+             
             /* Equipment menu */
             case "dialog/add_equipment":
                 return new AddEquipmentUI();

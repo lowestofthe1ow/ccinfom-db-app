@@ -2,24 +2,16 @@ package BocchiTheGUI.elements.ui.tab;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.github.weisj.jsvg.nodes.Image;
-
 import BocchiTheGUI.elements.abstracts.PaneUI;
-import BocchiTheMain.Main;
 
 public class HomeTabUI extends PaneUI {
-
     public HomeTabUI() {
         super("Generate Reports");
 
