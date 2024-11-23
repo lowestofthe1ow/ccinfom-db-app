@@ -10,6 +10,8 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import BocchiTheGUI.elements.components.LabelForm;
 
@@ -26,6 +28,17 @@ public abstract class TextFieldsUI extends PaneUI {
         super.add(this.northPanel, BorderLayout.NORTH);
     }
 
+    private void onTextUpdate() {
+        boolean hasEmptyForm = formItems.stream().map(formItem -> formItem.getText()).anyMatch(string -> {
+            return string == null || string.length() == 0;
+        });
+        
+        if (hasEmptyForm)
+            this.disableAllButtons();
+        else
+            this.enableAllButtons();
+    }
+
     /**
      * Adds {@link JTextField} forms to the UI
      * 
@@ -38,6 +51,24 @@ public abstract class TextFieldsUI extends PaneUI {
             JTextField formItemTextField = new JTextField();
             formItemTextField.setColumns(15);
             formItemTextField.setMaximumSize(formItemTextField.getPreferredSize());
+
+            formItemTextField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    onTextUpdate();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    onTextUpdate();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    onTextUpdate();
+                }
+            });
+
             this.formItems.add(formItemTextField);
 
             this.add(new LabelForm(formItemLabel, formItemTextField));
@@ -46,11 +77,10 @@ public abstract class TextFieldsUI extends PaneUI {
 
     @Override
     public Component add(Component comp) {
-        // if (!(comp instanceof JTable || comp instanceof JScrollPane))
-        // comp.setPreferredSize(new Dimension(500, 20));
         this.northPanel.add(comp);
         this.northPanel.revalidate();
         this.northPanel.repaint();
+        this.disableAllButtons();
         return comp;
     }
 
@@ -66,5 +96,11 @@ public abstract class TextFieldsUI extends PaneUI {
             formItem.addActionListener(listener);
             formItem.setActionCommand(this.getDefaultButtonCommand());
         });
+    }
+
+    @Override
+    public Object[][] getSQLParameterInputs() {
+        Object[][] retval = { this.formItems.stream().map(formItem -> formItem.getText()).toArray() };
+        return retval;
     }
 }

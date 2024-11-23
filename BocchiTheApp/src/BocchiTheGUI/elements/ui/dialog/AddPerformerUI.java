@@ -11,16 +11,4 @@ public class AddPerformerUI extends TextFieldsUI {
         setButtonActionCommands("button/sql/add_performer");
         addTerminatingCommands("button/sql/add_performer");
     }
-
-    @Override
-    public Object[][] getSQLParameterInputs() {
-        Object[][] retval = { {
-                /* TODO: Data type validation */
-                this.formItems.get(0).getText(),
-                this.formItems.get(1).getText(),
-                this.formItems.get(2).getText(),
-                this.formItems.get(3).getText()
-        } };
-        return retval;
-    }
 }
