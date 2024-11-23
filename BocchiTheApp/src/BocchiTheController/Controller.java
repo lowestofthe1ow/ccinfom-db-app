@@ -27,32 +27,24 @@ public class Controller {
 
     /**
      * Loads a {@link DataLoadable} with data obtained using the command that it
-     * specifies. Does nothing if the UI is not a DataLoadable instance. If the UI
-     * does not specify an SQL command, it
-     * loads an empty dataset.
+     * specifies. Does nothing if the UI is not a DataLoadable instance.
      * 
      * @param dialogUI The UI to load data into
-     * @return {@code true} if the load operation succeeded {@code false} otherwise
+     * @return {@code true} if the load operation succeeded, {@code false} otherwise
      */
     private boolean loadDataFromSQL(PaneUI dialogUI) {
         if (dialogUI instanceof DataLoadable) {
+            /* Accept a DataLoadable PaneUI */
             DataLoadable loadableUI = (DataLoadable) dialogUI;
-            try {
-                loadableUI.loadData((sqlIdentifier, sqlParams) -> {
-                    /* If there is no SQL command for loading data, return an empty dataset */
-                    if (sqlIdentifier == null) {
-                        return new ArrayList<Object[]>();
-                    }
 
+            try {
+                /* Pass the data loader to UI */
+                loadableUI.loadData((sqlIdentifier, sqlParams) -> {
                     String sqlCommand = ((String) sqlIdentifier).substring(4);
                     List<Object[]> data;
 
-                    /* Check whether to use the passed parameters */
-                    if (sqlParams == null) {
-                        data = this.executeProcedure(sqlCommand);
-                    } else {
-                        data = this.executeProcedure(sqlCommand, sqlParams);
-                    }
+                    /* Pass an empty parameters array if sqlParams is null */
+                    data = this.executeProcedure(sqlCommand, sqlParams == null ? new Object[0] : sqlParams);
 
                     /* Throw a checked exception if attempting to load an empty dataset */
                     if (data.size() == 0 && !loadableUI.allowEmptyDatasets()) {
@@ -61,12 +53,18 @@ public class Controller {
 
                     return data;
                 });
-            } catch (Exception e) {
-                showMessageDialog(null, e.getMessage(), "Database error",
-                        JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException e) {
+                /* Catch the previous exception with a dialog message */
+                showMessageDialog(null, e.getMessage(), "Database error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
+        } else {
+            /* Show a warning that a load operation was attempted when it is not supported */
+            showMessageDialog(null, "Attempted to load SQL data into a feature that does not use it", "Database error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
         }
+
         return true;
     }
 
