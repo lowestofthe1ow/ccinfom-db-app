@@ -49,6 +49,6 @@ public class StaffSalaryUI extends PaneUI implements DataLoadable {
 
     @Override
     public String getLoadFailureMessage() {
-        return "There are no recorded performances in the database";
+        return "There are no recorded performances with staff assigned in the database";
     }
 }

@@ -26,4 +26,16 @@ public class PerformerRevenueUI extends TableSelectionUI {
         };
         return retval;
     }
+
+    @Override
+	public boolean allowEmptyDatasets() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getLoadFailureMessage() {
+		// TODO Auto-generated method stub
+		return "There are currently no recorded performances by any performer in the database";
+	}
 }

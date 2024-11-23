@@ -52,7 +52,7 @@ public class RentalSalesUI extends PaneUI implements DataLoadable  {
 	@Override
 	public String getLoadFailureMessage() {
 		// TODO Auto-generated method stub
-		return "Failure to load";
+		return "There are currently no recorded sales";
 	}
 	 
 }
