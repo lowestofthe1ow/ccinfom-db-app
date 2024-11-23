@@ -127,8 +127,10 @@ CREATE PROCEDURE equipment_rental_report (
 BEGIN
 SELECT
     e.equipment_name,
-    COUNT(er.rental_id) AS rentals_month,
-    SUM(e.rental_fee) AS rental_costs_month
+    COUNT(er.rental_id) AS rentals_count,
+    -- SUM(er.end_date - er.start_date) AS rental_days,
+    SUM(e.rental_fee * (er.end_date - er.start_date)) AS rental_costs_month
+    -- e.rental_fee AS rental_fee
 FROM
     equipment_rental er
     JOIN equipment e ON er.equipment_id = e.equipment_id
@@ -137,7 +139,7 @@ WHERE
     AND YEAR (er.start_date) = YEAR
     AND er.payment_status = 'PAID'
 GROUP BY
-    e.equipment_name
+    e.equipment_name, rental_fee
 ORDER BY
     rental_costs_month DESC;
 END //
@@ -208,8 +210,10 @@ FROM staff s
 	JOIN position_type po ON spo.position_id = po.position_id
 WHERE ((spo.end_date IS NULL AND DATE(pct.start_timestamp) >= spo.start_date)
 	OR (DATE(pct.start_timestamp) BETWEEN spo.start_date AND spo.end_date))
-	AND YEAR(pct.start_timestamp) = 2024
-	AND MONTHNAME(pct.start_timestamp) = 'November'
+    AND sa.assignment_status = 'ASSIGNED'
+    AND pc.performance_status = 'COMPLETE'
+	AND YEAR(pct.start_timestamp) = year
+	AND MONTHNAME(pct.start_timestamp) = month_name
 GROUP BY spo.staff_id
 ORDER BY staff_id;
 END //

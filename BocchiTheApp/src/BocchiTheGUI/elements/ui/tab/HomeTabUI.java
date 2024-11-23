@@ -16,6 +16,7 @@ public class HomeTabUI extends PaneUI {
 	public HomeTabUI() {
 		super("Generate Reports");
 
+
 		JPanel main = new JPanel();
 		main.setLayout(new BoxLayout(main, BoxLayout.LINE_AXIS));
 		
