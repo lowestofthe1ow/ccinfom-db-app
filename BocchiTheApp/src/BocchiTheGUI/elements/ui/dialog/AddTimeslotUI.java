@@ -46,6 +46,7 @@ public class AddTimeslotUI extends PaneUI {
 
         addButtons("Confirm");
         setButtonActionCommands("button/sql/add_performance_timeslot");
+        addTerminatingCommands("button/sql/add_performance_timeslot");
     }
 
     private JPanel createDateTimePickerPanel(String labelText) {

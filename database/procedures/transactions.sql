@@ -1045,7 +1045,18 @@ BEGIN
     IF end_timestamp <= start_timestamp THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'End timestamp must be after start timestamp';
     END IF;
-
+    
+    IF (
+		SELECT COUNT(*)
+		FROM
+			performance_timeslot pct
+		WHERE
+			pct.start_timestamp = start_timestamp
+            AND pct.end_timestamp = end_timestamp
+	) > 0 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Duplicate timestamp';
+	END IF;
+        
     INSERT INTO performance_timeslot (start_timestamp, end_timestamp)
     VALUES (start_timestamp, end_timestamp);
 
