@@ -210,11 +210,8 @@ FROM staff s
 	JOIN position_type po ON spo.position_id = po.position_id
 WHERE ((spo.end_date IS NULL AND DATE(pct.start_timestamp) >= spo.start_date)
 	OR (DATE(pct.start_timestamp) BETWEEN spo.start_date AND spo.end_date))
-<<<<<<< HEAD
-=======
     AND sa.assignment_status = 'ASSIGNED'
     AND pc.performance_status = 'COMPLETE'
->>>>>>> branch 'main' of git@github.com:lowestofthe1ow/ccinfom-db-app.git
 	AND YEAR(pct.start_timestamp) = year
 	AND MONTHNAME(pct.start_timestamp) = month_name
 GROUP BY spo.staff_id
