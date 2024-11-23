@@ -98,7 +98,7 @@ ELSE
 		SET sa.assignment_status = 'CANCELLED'
     WHERE 
 		staff_id = sa.staff_id
-        AND DATE(pct.start_timestamp) >= DATE(NOW());
+        AND pc.performance_status != 'COMPLETE';
 		
 END IF;
 END //
