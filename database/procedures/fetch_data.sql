@@ -135,6 +135,7 @@ END //
                             takes place
            performance:     The status of the performance ('PENDING',
                             'COMPLETE', or 'CANCELLED')
+           base_quota:      The quota that the performance must meet
    ========================================================================= */
 DROP PROCEDURE IF EXISTS get_performances //
 CREATE PROCEDURE get_performances ()
@@ -144,7 +145,8 @@ SELECT
 	pc.performance_id,
 	pr.performer_name,
 	pct.start_timestamp,
-	pc.performance_status
+	pc.performance_status,
+    pc.base_quota
 FROM
 	performance pc
 	JOIN performance_timeslot pct ON pc.performance_timeslot_id = pct.performance_timeslot_id

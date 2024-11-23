@@ -4,7 +4,7 @@ import BocchiTheGUI.elements.abstracts.TableSelectionUI;
 
 public class ManagePerformancesUI extends TableSelectionUI {
     public ManagePerformancesUI() {
-        super("Manage performances", "ID", "Performer", "Timeslot", "Status");
+        super("Manage performances", "ID", "Performer", "Timeslot", "Status", "Quota");
 
         this.setLoadDataCommand("sql/get_performances");
 

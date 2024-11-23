@@ -372,10 +372,12 @@ END //
    Accept audition. Set audition status as accepted.
 
    @params 	audition_id:    The ID of the audition
+            base_quota:     The quota that the performance must meet
    ========================================================================= */
 DROP PROCEDURE IF EXISTS accept_audition //
 CREATE PROCEDURE accept_audition (
-	IN audition_id INT
+	IN audition_id INT,
+    IN base_quota DECIMAL(10, 2)
 )
 -- ----------------------------------------------------------------------------
 BEGIN
@@ -440,7 +442,7 @@ ELSE
 				WHERE
 					a.audition_id = audition_id
 			),
-			'5000.00',
+			base_quota,
 			'PENDING'
 		);
 END IF;
