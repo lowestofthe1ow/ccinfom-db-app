@@ -119,7 +119,7 @@ public abstract class PaneUI extends JPanel {
      * 
      * @param actionCommands Array of action command strings to add to each button
      */
-    protected void setButtonActionCommands(String... actionCommands) {
+    public void setButtonActionCommands(String... actionCommands) {
         int i = 0;
         for (String actionCommand : actionCommands) {
             this.buttons.get(i).setActionCommand(actionCommand);
@@ -133,7 +133,7 @@ public abstract class PaneUI extends JPanel {
      * 
      * @param buttonLabels The labels for each button
      */
-    protected void addButtons(String... buttonLabels) {
+    public void addButtons(String... buttonLabels) {
         for (String actionCommand : buttonLabels) {
             JButton button = new JButton();
             button.setText(actionCommand);

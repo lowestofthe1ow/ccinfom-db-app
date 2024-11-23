@@ -1,59 +1,60 @@
 package BocchiTheGUI.elements.ui.tab;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import com.github.weisj.jsvg.nodes.Image;
 
 import BocchiTheGUI.elements.abstracts.PaneUI;
+import BocchiTheMain.Main;
 
 public class HomeTabUI extends PaneUI {
 
-	public HomeTabUI() {
-		super("Generate Reports");
+    public HomeTabUI() {
+        super("Generate Reports");
 
-		JPanel main = new JPanel();
-		main.setLayout(new BoxLayout(main, BoxLayout.LINE_AXIS));
-		
-		JLabel welcomeLabel = new JLabel("BOCCHI THE APP");
-		welcomeLabel.setFont(new Font("Impact", Font.BOLD, 72)); 
-		welcomeLabel.setForeground(Color.WHITE); 
-		welcomeLabel.setAlignmentX(CENTER_ALIGNMENT); 
-		
-		
-		main.add(welcomeLabel);
-		main.setBackground(Color.PINK);
-		
-		
-		this.add(main);
-		
+        this.setLayout(new BorderLayout());
 
-		this.addButtons("Monthly performer sales",
-				"Monthly livehouse sales",
-				"Monthly rental sales",
-				"Weekly livehouse schedule",
-				"Staff salary report");
-		buttonPanel.setBackground(Color.PINK);
-		
-		this.setButtonActionCommands("dialog/performer_revenue",
-				"dialog/monthly_livehouse_revenue",
-				"dialog/monthly_rental_revenue",
-				"report/livehouse_schedule",
-				"dialog/staff_salary");
-				
-		this.setPreferredSize(new Dimension(400, 150));
-		this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-		this.setBackground(Color.PINK);
-	}
-	
+        ImageIcon imageIcon = new ImageIcon(getClass().getClassLoader().getResource("BocchiTheAssets/logo.png"));
+        ImageIcon scaled = new ImageIcon(
+                imageIcon.getImage().getScaledInstance(512, -1, java.awt.Image.SCALE_SMOOTH));
 
-	@Override
-	public Object[][] getSQLParameterInputs() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        JPanel panel = new JPanel();
+        panel.add(new JLabel(scaled));
+        panel.setBorder(new EmptyBorder(50, 50, 50, 50));
+        panel.setBackground(new Color(255, 255, 255));
+
+        this.add(panel, BorderLayout.NORTH);
+
+        this.addButtons("Monthly performer sales",
+                "Monthly livehouse sales",
+                "Monthly rental sales",
+                "Weekly livehouse schedule",
+                "Staff salary report");
+
+        this.setButtonActionCommands("dialog/performer_revenue",
+                "dialog/monthly_livehouse_revenue",
+                "dialog/monthly_rental_revenue",
+                "report/livehouse_schedule",
+                "dialog/staff_salary");
+
+        this.buttonPanel.setBackground(new Color(255, 255, 255));
+        this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        this.setBackground(Color.PINK);
+    }
+
+    @Override
+    public Object[][] getSQLParameterInputs() {
+        return null;
+    }
 }
