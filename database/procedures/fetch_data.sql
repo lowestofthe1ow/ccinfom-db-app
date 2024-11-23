@@ -498,7 +498,8 @@ FROM
 	AND spo.end_date IS NULL
 	LEFT JOIN position_type po ON spo.position_id = po.position_id
 WHERE
-	sa.performance_id = performance_id;
+	sa.performance_id = performance_id
+    AND sa.assignment_status = 'ASSIGNED';
 END //
 
 /* =========================================================================
@@ -529,6 +530,7 @@ FROM
 	JOIN staff_assignment sa ON sa.performance_id = pc.performance_id
 WHERE
 	sa.staff_id = staff_id
+    AND sa.assignment_status = 'ASSIGNED'
 ORDER BY
 	pct.start_timestamp DESC;
 END //

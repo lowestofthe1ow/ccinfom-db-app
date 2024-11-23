@@ -26,7 +26,7 @@ INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('5', '2', '25', '5000.00', 'COMPLETE'); --
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('6', '5', '17', '5000.00', 'COMPLETE'); --
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('7', '11', '21', '5000.00', 'COMPLETE');
-INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('8', '1', '33', '5000.00', 'COMPLETE'); -- mika misono
+INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('8', '1', '33', '5000.00', 'PENDING'); -- mika misono
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('9', '17', '2', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('10', '4', '32', '5000.00', 'COMPLETE');
 INSERT INTO performance (`performance_id`, `performer_id`, `performance_timeslot_id`, `base_quota`, `performance_status`) VALUES ('11', '12', '35', '5000.00', 'PENDING');
@@ -56,30 +56,30 @@ INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `star
 INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('10', '2', '16', '2024-11-17', '2024-11-18', 'PENDING', 'NOT_PAID');
 INSERT INTO equipment_rental (`rental_id`, `performer_id`, `equipment_id`, `start_date`, `end_date`, `equipment_status`, `payment_status`) VALUES ('11', '1', '5', '2024-11-19', '2024-11-20', 'PENDING', 'NOT_PAID');
 
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('4', '1');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('7', '1');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('12', '2');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('10', '2');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('8', '3');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('6', '3');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('2', '4');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('11', '4');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('8', '5');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('9', '5');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('10', '5');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('5', '6');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('9', '6');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('3', '7');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('9', '8');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('1', '8');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('7', '9');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('2', '9');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('14', '10');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('5', '10');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('1', '11');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('4', '11');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('15', '12');
-INSERT INTO staff_assignment (`staff_id`, `performance_id`) VALUES ('6', '12');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('4', '1', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('7', '1', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('12', '2', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('10', '2', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('8', '3', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('6', '3', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('2', '4', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('11', '4', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('8', '5', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('9', '5', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('10', '5', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('5', '6', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('9', '6', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('3', '7', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('9', '8', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('1', '8', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('7', '9', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('2', '9', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('14', '10', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('5', '10', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('1', '11', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('4', '11', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('15', '12', 'ASSIGNED');
+INSERT INTO staff_assignment (`staff_id`, `performance_id`, `assignment_status`) VALUES ('6', '12', 'ASSIGNED');
 
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('1', '1', '2024-09-01', '2024-09-30');
 INSERT INTO staff_position (`staff_id`, `position_id`, `start_date`, `end_date`) VALUES ('1', '2', '2024-10-01', NULL);

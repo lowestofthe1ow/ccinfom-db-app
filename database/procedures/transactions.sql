@@ -91,6 +91,15 @@ ELSE
 	WHERE
 		spo.end_date IS NULL
 		AND spo.staff_id = staff_id;
+        
+	UPDATE staff_assignment sa
+    JOIN performance pc ON sa.performance_id = pc.performance_id
+    JOIN performance_timeslot pct ON pct.performance_timeslot_id = pc.performance_timeslot_id
+		SET sa.assignment_status = 'CANCELLED'
+    WHERE 
+		staff_id = sa.staff_id
+        AND pc.performance_status != 'COMPLETE';
+		
 END IF;
 END //
 
@@ -310,7 +319,7 @@ END IF;
 END //
 
 /* =========================================================================
-   Resolve equipment status. Create a new position record for the staff.
+   Resolve equipment status. 
 
    @params 	rental_id:    		The ID of the equipment rental
 			equipment_status:	The status of the equipment
@@ -516,6 +525,11 @@ ELSE
 		pc.performance_status = 'CANCELLED'
 	WHERE
 		pc.performance_id = performance_id;
+	UPDATE staff_assignment sa
+    SET 
+		sa.assignment_status = 'CANCELLED'
+	WHERE 
+		sa.performance_id = performance_id;
 END IF;
 END //
 DELIMITER //
@@ -585,9 +599,105 @@ BEGIN
         );
 END //
 
+
+
+
+/* =========================================================================
+   Records the revenue generated from ticket sales for a performance.
+   Updates the performance status to 'COMPLETE' if successful.
+
+   @params performance_id: The ID of the performance
+           ticket_price:   The price per ticket for the performance
+           tickets_sold:   The number of tickets sold
+           cut_percent:    The percentage cut for the livehouse
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS record_performance_revenue //
+CREATE PROCEDURE record_performance_revenue (
+    IN performance_id INT,
+    IN ticket_price DECIMAL(10, 2),
+    IN tickets_sold INT,
+    IN cut_percent DECIMAL(2, 2)
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+    IF (
+        SELECT
+            pc.performance_status
+        FROM
+            performance pc
+        WHERE
+            pc.performance_id = performance_id
+    ) <> 'PENDING' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Performance has already been completed or has already been cancelled';
+    
+    ELSE
+        UPDATE performance pc
+        SET
+            pc.performance_status = 'COMPLETE'
+        WHERE
+            pc.performance_id = performance_id;
+
+        INSERT INTO
+            performance_revenue (
+                `performance_id`,
+                `ticket_price`,
+                `tickets_sold`,
+                `cut_percent`
+            )
+        VALUES
+            (
+                performance_id,
+                ticket_price,
+                tickets_sold,
+                cut_percent
+            );
+    END IF;
+END //
+
+/* =========================================================================
+   Adds a new piece of equipment to the system with the specified details.
+
+   @params equipment_type_id: The ID of the equipment type
+           equipment_name:    The name of the equipment
+           rental_fee:        The rental fee for the equipment
+   ========================================================================= */
+DROP PROCEDURE IF EXISTS add_equipment //
+CREATE PROCEDURE add_equipment (
+    IN equipment_type_id INT,
+    IN equipment_name VARCHAR(255),
+    IN rental_fee DECIMAL(10, 2)
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+    INSERT INTO
+        equipment (
+            `equipment_type_id`,
+            `equipment_name`,
+            `rental_fee`,
+            `equipment_status`
+        )
+    VALUES
+        (
+            equipment_type_id,
+            equipment_name,
+            rental_fee,
+            'UNDAMAGED'
+        );
+END //
+
+
 /* =========================================================================
    Assigns a staff member to a performance. Ensures the performance is still
    in a 'PENDING' status and that the staff member is not already assigned.
+
+   @params staff_id:       The ID of the staff member
+           performance_id: The ID of the performance
+   ========================================================================= */
+DELIMITER //
+
+/* =========================================================================
+   Assigns a staff member to a performance. Checks if the performance is
+   still pending and if the staff is already assigned to the performance.
 
    @params staff_id:       The ID of the staff member
            performance_id: The ID of the performance
@@ -616,14 +726,29 @@ BEGIN
             staff_assignment sa
         WHERE
             sa.performance_id = performance_id
+            AND sa.assignment_status = 'ASSIGNED'
+            
     ) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Staff member is already assigned to this performance';
-    
+    ELSEIF staff_id IN  (
+		SELECT
+            sa.staff_id
+        FROM
+            staff_assignment sa
+        WHERE
+            sa.performance_id = performance_id 
+            AND sa.assignment_status = 'CANCELLED'
+    ) THEN 
+		UPDATE staff_assignment sa
+        SET assignment_status = 'ASSIGNED'
+        WHERE sa.staff_id = staff_id
+          AND sa.performance_id = performance_id
+          AND assignment_status = 'CANCELLED';
     ELSE
         INSERT INTO
-            staff_assignment (`staff_id`, `performance_id`)
+            staff_assignment (`staff_id`, `performance_id`, `assignment_status`)
         VALUES
-            (staff_id, performance_id);
+            (staff_id, performance_id, 'ASSIGNED');
     END IF;
 END //
 
@@ -860,6 +985,7 @@ BEGIN
         )
         AND YEAR (pct.start_timestamp) = YEAR
         AND MONTHNAME (pct.start_timestamp) = month_name
+        AND sa.assignment_status = 'ASSIGNED'
     GROUP BY
         spo.staff_id
     ORDER BY
@@ -945,3 +1071,50 @@ GROUP BY
 END //
 
 DELIMITER ;
+
+
+
+        
+DELIMITER //
+DROP PROCEDURE IF EXISTS remove_staff_assignment //
+CREATE PROCEDURE remove_staff_assignment (
+    IN staff_id INT,
+    IN performance_id INT
+)
+-- ----------------------------------------------------------------------------
+BEGIN
+IF staff_id NOT IN (
+    SELECT
+        staff_id
+    FROM
+        staff
+)
+THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No such staff';
+ELSEIF (
+    SELECT
+        spo.end_date
+    FROM
+        staff_position spo
+    WHERE
+        spo.staff_id = staff_id
+        AND spo.start_date = (
+            SELECT
+                MAX(start_date)
+            FROM
+                staff_position spo
+            WHERE
+                spo.staff_id = staff_id
+        )
+) IS NOT NULL
+THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Staff is not active';
+ELSE
+	UPDATE staff_assignment sa
+    JOIN performance pc ON sa.performance_id = pc.performance_id
+    SET sa.assignment_status = 'CANCELLED'
+    WHERE 
+        sa.staff_id = staff_id
+        AND pc.performance_id = performance_id;
+END IF;
+END //

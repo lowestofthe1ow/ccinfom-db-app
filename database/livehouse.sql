@@ -131,6 +131,10 @@ CREATE TABLE equipment_rental (
 CREATE TABLE staff_assignment (
 	staff_id INT NOT NULL,
     performance_id INT NOT NULL,
+    assignment_status ENUM (
+		'ASSIGNED',
+        'CANCELLED'
+    ) NOT NULL,
     PRIMARY KEY (staff_id, performance_id),
     FOREIGN KEY (staff_id) REFERENCES staff(staff_id),
     FOREIGN KEY (performance_id) REFERENCES performance(performance_id)
