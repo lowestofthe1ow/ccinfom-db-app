@@ -16,6 +16,6 @@ public class AddAuditionUI extends TableSelectionUI {
     }
     @Override
     public String getLoadFailureMessage() {
-        return "No audition data found";
+        return "No Performer data found";
     }
 }
