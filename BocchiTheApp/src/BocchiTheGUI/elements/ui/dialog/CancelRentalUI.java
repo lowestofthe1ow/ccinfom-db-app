@@ -14,4 +14,9 @@ public class CancelRentalUI extends TableSelectionUI {
         this.addButtons("Cancel rental");
         this.setButtonActionCommands("button/sql/cancel_rental");
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No Equipment rental data found";
+    }
 }

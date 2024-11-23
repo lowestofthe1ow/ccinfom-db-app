@@ -33,4 +33,9 @@ public class AssignToPerformanceUI extends TableSelectionUI {
 
         return retval_list.toArray(new Object[retval_list.size()][]);
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No staff data found";
+    }
 }

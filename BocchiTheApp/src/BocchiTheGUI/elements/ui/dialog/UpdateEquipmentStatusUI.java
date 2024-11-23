@@ -18,4 +18,9 @@ public class UpdateEquipmentStatusUI extends TableSelectionUI {
         
         this.setButtonActionCommands("button/next/change_equipment_status");
 	}
+	
+	@Override
+    public String getLoadFailureMessage() {
+        return "No equipment data found";
+    }
 }

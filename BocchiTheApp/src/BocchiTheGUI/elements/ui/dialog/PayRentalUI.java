@@ -19,4 +19,9 @@ public class PayRentalUI extends TableSelectionUI {
     public boolean allowEmptyDatasets() {
         return true;
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No Unpaid rental data found";
+    }
 }

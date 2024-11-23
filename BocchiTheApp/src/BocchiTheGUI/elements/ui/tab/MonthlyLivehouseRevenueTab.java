@@ -43,4 +43,9 @@ public class MonthlyLivehouseRevenueTab extends TableSelectionUI {
         this.revenueLabel.revalidate();
         this.revenueLabel.repaint();
     }
+    
+    @Override
+    public String getLoadFailureMessage() {
+        return "No revenue data found";
+    }
 }
