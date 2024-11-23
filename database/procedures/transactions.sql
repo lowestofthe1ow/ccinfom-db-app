@@ -1023,7 +1023,19 @@ BEGIN
         AND YEAR(pct.start_timestamp) = year_name;
 END //
 
+/* =========================================================================
+   Adds a new performance timeslot to the database.
 
+   This procedure accepts start and end date/time as input, validates the 
+   provided data, and inserts the corresponding timestamps into the 
+   `performance_timeslot` table.
+
+   @params start_date: The start date of the performance
+           start_time: The start time of the performance
+           end_date:   The end date of the performance
+           end_time:   The end time of the performance
+
+   ========================================================================= */
 DROP PROCEDURE IF EXISTS add_performance_timeslot //
 CREATE PROCEDURE add_performance_timeslot (
     IN start_date DATE,
@@ -1031,6 +1043,7 @@ CREATE PROCEDURE add_performance_timeslot (
     IN end_date DATE,
     IN end_time TIME
 )
+-- -----------------------------------------------------------------------
 BEGIN
     DECLARE start_timestamp TIMESTAMP;
     DECLARE end_timestamp TIMESTAMP;
@@ -1062,8 +1075,11 @@ BEGIN
 
 END //
 
+/* =========================================================================
+   Retrieves a list of months with rent
 
-
+   @returns: A list of unique month-year pairs from rentals that have been paid.
+   ========================================================================= */
 
 DROP PROCEDURE IF EXISTS get_rental_months //
 CREATE PROCEDURE get_rental_months ()
@@ -1083,9 +1099,14 @@ END //
 
 DELIMITER ;
 
+/* =========================================================================
+   Removes a staff assignment from a performance by updating its status.
 
-
-        
+   @params staff_id: The ID of the staff member whose assignment is to be removed
+           performance_id: The ID of the performance from which the staff is being removed
+           
+   ========================================================================= */
+       
 DELIMITER //
 DROP PROCEDURE IF EXISTS remove_staff_assignment //
 CREATE PROCEDURE remove_staff_assignment (
