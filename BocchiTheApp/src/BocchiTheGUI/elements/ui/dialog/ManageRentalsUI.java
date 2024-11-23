@@ -55,4 +55,9 @@ public class ManageRentalsUI extends TableSelectionUI {
     public String getLoadFailureMessage() {
         return "No Rental data found";
     }
+
+    @Override
+    public boolean allowEmptyDatasets() {
+        return true;
+    }
 }
