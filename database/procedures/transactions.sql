@@ -315,57 +315,68 @@ END //
    @params 	rental_id:    		The ID of the equipment rental
 			equipment_status:	The status of the equipment
    ========================================================================= */
+DELIMITER //
+
 DROP PROCEDURE IF EXISTS resolve_equipment_status //
 CREATE PROCEDURE resolve_equipment_status (
-	IN rental_id INT,
-	IN equipment_status ENUM (
-		'UNDAMAGED',
-		'MIN_DMG',
-		'MAJ_DMG',
-		'MISSING',
-		'PENDING'
-	)
+    IN rental_id INT,
+    IN equipment_status ENUM (
+        'UNDAMAGED',
+        'MIN_DMG',
+        'MAJ_DMG',
+        'MISSING',
+        'PENDING'
+    )
 )
--- ----------------------------------------------------------------------------
 BEGIN
-IF rental_id NOT IN (
-	SELECT
-		rental_id
-	FROM
-		equipment_rental
-)
-THEN
-	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'No such rental';
+    DECLARE current_status VARCHAR(10);
+    DECLARE cancel_period INT;
+    DECLARE equipment_id INT;
 
-ELSEIF (
-	SELECT
-		er.equipment_status
-	FROM
-		equipment_rental er
-	WHERE
-		er.rental_id = rental_id
-) <> 'PENDING'
-THEN
-	SIGNAL SQLSTATE '45000' SET  MESSAGE_TEXT = 'Rental has already been returned and evaluated';
-ELSE
-	UPDATE equipment_rental er
-	SET
-		er.equipment_status = equipment_status
-	WHERE
-		er.rental_id = rental_id;
-	UPDATE equipment e
-	SET
-		e.equipment_status = equipment_status
-	WHERE
-		e.equipment_id = (
-			SELECT
-				er.equipment_id
-			FROM
-				equipment_rental er
-			WHERE
-				er.rental_id = rental_id
-		);
-END IF;
+    IF rental_id NOT IN (
+        SELECT rental_id FROM equipment_rental
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No such rental';
+    ELSEIF (
+        SELECT er.equipment_status 
+        FROM equipment_rental er 
+        WHERE er.rental_id = rental_id
+    ) <> 'PENDING' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Rental has already been returned and evaluated';
+    ELSE
+        SELECT er.equipment_id
+        INTO equipment_id
+        FROM equipment_rental er
+        WHERE er.rental_id = rental_id;
+
+        IF equipment_status = 'MIN_DMG' THEN
+            SET cancel_period = 7;
+        ELSEIF equipment_status = 'MAJ_DMG' THEN
+            SET cancel_period = 14;
+        ELSEIF equipment_status = 'MISSING' THEN
+            SET cancel_period = 0;
+        ELSE
+            SET cancel_period = NULL;
+        END IF;
+
+        UPDATE equipment_rental er
+        SET er.equipment_status = equipment_status
+        WHERE er.rental_id = rental_id;
+        
+        IF cancel_period IS NOT NULL THEN
+            UPDATE equipment_rental er
+            SET er.payment_status = 'CANCELLED'
+            WHERE er.equipment_id = equipment_id
+            AND (
+                cancel_period = 0
+                OR er.start_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL cancel_period DAY)
+            );
+        END IF;
+        
+        UPDATE equipment e
+        SET e.equipment_status = equipment_status
+        WHERE e.equipment_id = equipment_id;
+    END IF;
 END //
 
 /* =========================================================================
